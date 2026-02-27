@@ -1,0 +1,14 @@
+<div class="sectionHeader">Create New Forum</div>
+<div class="text-danger" *ngFor="let e of errors">{{ e }}</div>
+<form #f="ngForm" (ngSubmit)="submit(f)" id="addPostForm">
+  <div class="form-group">
+    <label>Forum Title</label>
+    <dx-input name="title" [(ngModel)]="model.title" required class="form-control" placeholder="Choose a Forum Title" />
+  </div>
+  <div class="form-group">
+    <label>Description</label>
+    <dx-input name="description" [(ngModel)]="model.description" class="form-control"
+           placeholder="Write a brief description here." />
+  </div>
+  <button type="submit" class="btn btn-primary">Create</button>
+</form>

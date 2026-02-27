@@ -1,0 +1,16 @@
+<div class="container sectionHeader"><h3 class="sectionHeading">New Users</h3></div>
+<div class="container body-content border-bottom" *ngFor="let user of users">
+  <div class="row userProfile">
+    <div class="col-md-4">
+      <img *ngIf="!user.imagePath" src="assets/images/blankpicture.png" id="userProfileImage" style="background-size:100%" />
+      <div *ngIf="user.imagePath" id="userProfileImage"
+           [style.background-image]="'url(' + user.imagePath + ')'" style="background-size:100%"></div>
+    </div>
+    <div class="col-md-8">
+      <a id="userName" [routerLink]="['/profile', user.id]">{{ user.userName }}</a>
+      <span id="userRating">Current Rating: </span>
+      <span class="badge rounded-circle" style="background-color:skyblue"> {{ user.rating }} </span>
+      <span id="userCreatedLabel">Member Since: {{ user.memberSince }}</span>
+    </div>
+  </div>
+</div>

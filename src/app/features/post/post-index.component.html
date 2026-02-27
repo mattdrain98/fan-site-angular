@@ -1,0 +1,147 @@
+<div class="container body-content">
+  @if (post) {
+    <div class="row postHeader">
+      <div class="postHeading">
+        <span class="postIndexTitle">{{ post.title }}</span>
+        <span id="headingBtn">
+          <a [routerLink]="['/forum', post.forumId]">
+            <span class="material-icons" style="color:black; float:right">
+              arrow_back
+            </span>
+          </a>
+        </span>
+      </div>
+    </div>
+
+    <div class="row" id="postIndexContent">
+      <!-- Author sidebar -->
+      <div class="col-md-3 postAuthorContainer">
+        <div
+          class="postAuthorImage"
+          [style.background-image]="
+            post.authorImageUrl
+              ? 'url(' + post.authorImageUrl + ')'
+              : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'
+          "
+          style="background-size:100%">
+        </div>
+
+        <a [routerLink]="['/profile', post.authorId]">
+          <strong>{{ post.authorName }}</strong>
+        </a>
+
+        <span class="badge rounded-circle" style="background-color:skyblue">
+          {{ post.authorRating }}
+        </span>
+        <br />
+        <span class="postDate">{{ post.date }}</span>
+      </div>
+
+      <!-- Content -->
+      <div class="col-md-9 postContentContainer">
+        @if (currentUser$ | async) {
+          <a
+            id="likeBtn"
+            class="material-icons"
+            style="float:right; cursor:pointer"
+            (click)="toggleLike()">
+            {{ post.userHasLiked ? 'favorite' : 'favorite_border' }}
+          </a>
+          <div id="postLikes" style="float:right">
+            {{ post.totalLikes }}
+          </div>
+        } @else {
+          <a
+            class="material-icons"
+            style="float:right; cursor:pointer"
+            (click)="notSignedIn()">
+            favorite_border
+          </a>
+          <div style="float:right">
+            {{ post.totalLikes }}
+          </div>
+        }
+
+        <div class="postContent" [innerHTML]="post.postContent"></div>
+
+        @if ((currentUser$ | async)?.userName === post.authorName) {
+          <a
+            [routerLink]="['/post/edit', post.id]"
+            style="float:right">
+            Edit
+          </a>
+        }
+      </div>
+    </div>
+
+    <div class="row" id="replyDivider"></div>
+
+    <div class="row postReplyContent">
+      @if (currentUser$ | async) {
+        <div class="row" id="replyRow">
+          <span>
+            <a
+              [routerLink]="['/reply/create', post.id]"
+              class="btn btn-reply btn-4 btn-sep icon-reply">
+              Reply
+            </a>
+          </span>
+        </div>
+      }
+
+      @if (post.replies.length > 0) {
+        @for (reply of post.replies; track reply.id) {
+          <div class="row replyContent">
+            <div class="col-md-3 replyAuthorContainer">
+              <div
+                class="postAuthorImage"
+                [style.background-image]="
+                  reply.authorImageUrl
+                    ? 'url(' + reply.authorImageUrl + ')'
+                    : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'
+                "
+                style="background-size:100%">
+              </div>
+
+              <a [routerLink]="['/profile', reply.authorId]">
+                <strong>{{ reply.authorName }}</strong>
+              </a>
+
+              <span class="badge rounded-circle" style="background-color:skyblue">
+                {{ reply.authorRating }}
+              </span>
+              <br />
+              <span class="postDate">{{ reply.date }}</span>
+            </div>
+
+            <div class="col-md-9 replyContentContainer">
+              <div
+                class="postContent"
+                [innerHTML]="reply.replyContent">
+              </div>
+
+              @if ((currentUser$ | async)?.userName === reply.authorName) {
+                <a
+                  (click)="deleteReply(reply.id)"
+                  class="btn btn-link"
+                  style="float:right; cursor:pointer">
+                  Delete
+                </a>
+                <a
+                  [routerLink]="['/reply/edit', reply.id]"
+                  class="btn btn-link"
+                  style="float:right">
+                  Edit
+                </a>
+              }
+            </div>
+          </div>
+        }
+      } @else {
+        <div class="noPosts">
+          <h3>There are no replies to this post.</h3>
+        </div>
+      }
+    </div>
+  }
+</div>

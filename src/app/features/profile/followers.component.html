@@ -1,0 +1,45 @@
+<div class="sectionHeader">
+  <h3>Followers</h3>
+</div>
+
+@if (profile) {
+  @for (follow of profile.follows; track follow.follower?.id) {
+    <div class="container body-content border-bottom">
+      <div class="row userProfile">
+        <div class="col-md-4">
+          @if (!follow.follower?.imagePath) {
+            <img
+              src="assets/images/blankpicture.png"
+              id="userProfileImage"
+              alt="Default profile image" />
+          } @else {
+            <div
+              id="userProfileImage"
+              [style.background-image]="'url(' + (follow.follower?.imagePath ?? '') + ')'"
+              style="background-size:100%">
+            </div>
+          }
+        </div>
+
+        <div class="col-md-8">
+          <a
+            id="userName"
+            [routerLink]="['/profile', follow.follower?.id]">
+            {{ follow.follower?.userName }}
+          </a>
+
+          <span id="userRating">Current Rating:</span>
+          <span
+            class="badge rounded-circle"
+            style="background-color:skyblue">
+            {{ follow.follower?.rating }}
+          </span>
+
+          <span id="userCreatedLabel">
+            Member Since: {{ follow.follower?.memberSince }}
+          </span>
+        </div>
+      </div>
+    </div>
+  }
+}

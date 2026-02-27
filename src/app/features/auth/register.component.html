@@ -1,0 +1,27 @@
+<div class="container body-content">
+  <div class="row sectionHeader">
+    <div class="sectionHeading"><h1>User Registration</h1></div>
+  </div>
+  <div class="row register">
+    <form #f="ngForm" (ngSubmit)="submit(f)">
+      <div class="text-danger" *ngFor="let e of errors">{{ e }}</div>
+      <div class="form-group">
+        <label>Username</label>
+        <input name="userName" [(ngModel)]="model.userName" required class="form-control" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <dinput name="email" [(ngModel)]="model.email" required type="email" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input name="password" [(ngModel)]="model.password" required type="password" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input name="confirmPassword" [(ngModel)]="model.confirmPassword" required type="password" class="form-control" />
+      </div>
+      <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+  </div>
+</div>

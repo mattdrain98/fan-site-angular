@@ -1,0 +1,71 @@
+<div class="container body-content">
+  <div class="row sectionHeader">
+    <div class="sectionHeading">
+      <span class="postIndexTitle">Screenshots</span>
+
+      @if (currentUser$ | async) {
+        <span id="headingBtn">
+          <a routerLink="/screenshots/create" class="btn btn-newScreenshot">
+            Create Screenshot
+          </a>
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="row forumIndexContent">
+    @if (screenshots.length > 0) {
+      @for (s of screenshots; track s.id) {
+        <div class="row screenshotContent">
+          <h1><b>{{ s.title }}</b></h1>
+
+          <img
+            class="myImg screenshots"
+            [src]="s.imageUrl"
+            [alt]="s.content"
+            (click)="openModal(s.imageUrl, s.content)"
+            style="cursor:pointer"
+          />
+          <br />
+
+          <span>{{ s.datePosted }}</span>
+          <span>{{ s.authorName }}</span>
+          {{ s.content }}
+
+          @if ((currentUser$ | async)?.userName === s.authorName) {
+            <a
+              class="delete"
+              style="text-align:right; cursor:pointer"
+              (click)="delete(s.id)">
+              Delete
+            </a>
+          }
+          <br />
+        </div>
+      }
+    } @else {
+      <div class="noPosts">
+        <i class="material-icons">photo</i>
+        <h3>
+          It looks like there are no screenshots to be found.
+          @if (currentUser$ | async) {
+            Why not <a routerLink="/screenshots/create">create one</a>
+          }
+        </h3>
+      </div>
+    }
+  </div>
+
+  <!-- Lightbox modal -->
+  <div
+    id="myModal"
+    class="modal"
+    [style.display]="showModal ? 'block' : 'none'">
+
+    <span class="close" (click)="closeModal()">&times;</span>
+
+    <img class="modal-content" [src]="lightboxSrc" />
+
+    <div id="caption">{{ lightboxCaption }}</div>
+  </div>
+</div>

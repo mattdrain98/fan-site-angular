@@ -1,59 +1,122 @@
-# FanSiteAngular
+# FanWebsite — Angular Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.0.
+Full Angular 17 conversion of all Razor views. Every component maps 1-to-1 to its original `.cshtml` file.
 
-## Development server
+## View → Component Map
 
-To start a local development server, run:
+| Razor View | Angular Component |
+|---|---|
+| `_Layout.cshtml` | `AppComponent` + `NavbarComponent` |
+| `Home/Index.cshtml` | `HomeComponent` |
+| `Account/Login.cshtml` | `LoginComponent` |
+| `Account/Register.cshtml` | `RegisterComponent` |
+| `Account/ChangePassword.cshtml` | `ChangePasswordComponent` |
+| `Account/NewUsers.cshtml` | `NewUsersComponent` |
+| `Forum/Index.cshtml` | `ForumIndexComponent` |
+| `Forum/Topic.cshtml` | `ForumTopicComponent` |
+| `Forum/Create.cshtml` | `ForumCreateComponent` |
+| `Post/Index.cshtml` | `PostIndexComponent` |
+| `Post/Create.cshtml` | `PostCreateComponent` |
+| `Post/Edit.cshtml` | `PostEditComponent` |
+| `Post/UserPosts.cshtml` | `UserPostsComponent` |
+| `Post/TopPosts.cshtml` | `TopPostsComponent` |
+| `Reply/Create.cshtml` | `ReplyCreateComponent` |
+| `Screenshot/Index.cshtml` | `ScreenshotIndexComponent` |
+| `Screenshot/UserScreenshots.cshtml` | `UserScreenshotsComponent` |
+| `Screenshot/Create.cshtml` | `ScreenshotCreateComponent` |
+| `Profile/Detail.cshtml` | `ProfileDetailComponent` |
+| `Profile/EditBio.cshtml` | `EditBioComponent` |
+| `Profile/EditUserName.cshtml` | `EditUsernameComponent` |
+| `Profile/Followers.cshtml` | `FollowersComponent` |
+| `Profile/Following.cshtml` | `FollowingComponent` |
+| `ProfileComment/Create.cshtml` | `ProfileCommentCreateComponent` |
+| `Search/Results.cshtml` | `SearchResultsComponent` |
 
+---
+
+## Setup
+
+### 1. Install
 ```bash
-ng serve
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+### 2. Set your API URL
+`src/environments/environment.ts`:
+```ts
+apiBaseUrl: 'https://localhost:7001/api'  // your Web API port
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
+### 3. Copy your static assets
+Copy from your MVC project's `wwwroot/` into `src/assets/`:
+```
+wwwroot/css/site.css        → src/assets/css/site.css
+wwwroot/css/images.css      → src/assets/css/images.css
+wwwroot/images/             → src/assets/images/
+wwwroot/videos/             → src/assets/videos/
 ```
 
-## Building
+### 4. CORS in Program.cs (required for cookie auth)
+```csharp
+builder.Services.AddCors(options => {
+    options.AddPolicy("Angular", policy => policy
+        .WithOrigins("http://localhost:4200")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());   // ← essential for cookie auth
+});
 
-To build the project run:
-
-```bash
-ng build
+app.UseCors("Angular");         // before UseAuthentication
+app.UseAuthentication();
+app.UseAuthorization();
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
+### 5. Run
 ```bash
-ng test
+ng serve   # http://localhost:4200
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## Auth Notes
 
-```bash
-ng e2e
+Your API uses **ASP.NET Identity cookie auth** (not JWT). The `CredentialsInterceptor` 
+sends `withCredentials: true` on every request so the browser includes the auth cookie 
+automatically. No token storage needed.
+
+After login, call a `/api/account/me` endpoint (you'll need to add this) to get the 
+current user's id, username, and imagePath to store in `AuthService.currentUser$`.
+This powers the navbar dropdown and own-content checks throughout the app.
+
+A minimal endpoint to add to `AccountController`:
+```csharp
+[HttpGet("me")]
+[Authorize]
+public async Task<ActionResult> Me()
+{
+    var user = await _userManager.GetUserAsync(User);
+    if (user == null) return Unauthorized();
+    return Ok(new { userId = user.Id, userName = user.UserName, imagePath = user.ImagePath });
+}
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Then in `AuthService.login()`, after the login succeeds, call `/api/account/me` and 
+pass the result to `setCurrentUser()`.
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Top Posts
+
+Your API doesn't currently have a `GET /api/post/top` endpoint.
+`TopPostsComponent` calls it — add this to `PostController`:
+```csharp
+[HttpGet("top")]
+public ActionResult<IEnumerable<PostListingModel>> GetTopPosts()
+{
+    var posts = postService.GetAll()
+        .OrderByDescending(p => p.TotalLikes)
+        .Take(20)
+        .Select(post => new PostListingModel { ... });
+    return Ok(posts);
+}
+```

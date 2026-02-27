@@ -1,0 +1,70 @@
+<div class="container body-content">
+  <div class="row sectionHeader">
+    <div class="sectionHeading">
+      <span>Search Results for: {{ result?.searchQuery }} Forum</span>
+
+      <div class="searchForm">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          placeholder="Search..."
+          class="searchBar"
+          (focus)="searchQuery=''" />
+
+        <button
+          type="button"
+          class="btn buttonSearch"
+          (click)="submit()">
+          <i class="material-icons">search</i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  @if (result) {
+
+    @if (!result.emptySearchResults) {
+      <table
+        class="table table-hover table-bordered"
+        id="searchIndexTable"
+        style="background-color:white">
+
+        <tbody>
+          @for (post of result.posts; track post.id) {
+            <tr>
+              <td>
+                <div class="postData">
+                  <div class="postTitle">
+                    <a [routerLink]="['/post', post.id]">{{ post.title }}</a>
+                  </div>
+                  <div class="forumSubTitle">
+                    <span class="postAuthor">
+                      <a [routerLink]="['/profile', post.authorId]">{{ post.authorName }}</a>
+                    </span>
+                    ({{ post.authorRating }}) on
+                    <span class="postData">{{ post.datePosted }}</span>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <div class="forumPostContent">
+                  Replies: {{ post.repliesCount }}
+                </div>
+              </td>
+
+              <td>
+                <div class="postData">{{ post.datePosted }}</div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <div class="noPosts">
+        <i class="material-icons md-72">question_answer</i>
+        <h3>No search results found for {{ result.searchQuery }}</h3>
+      </div>
+    }
+  }
+</div>

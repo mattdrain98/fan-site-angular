@@ -1,0 +1,170 @@
+@if (profile) {
+  <div class="container body-content">
+    <div class="row sectionHeader">
+      <div class="sectionHeading noBorder">User Profile</div>
+    </div>
+
+    <div class="row userProfile">
+      <!-- Left: avatar + actions -->
+      <div class="col-md-4">
+        @if (!profile.profileImageUrl) {
+          <img
+            src="assets/images/blankpicture.png"
+            id="userProfileImage"
+            alt="Default profile image"
+            style="background-size:100%" />
+        } @else {
+          <div
+            id="userProfileImage"
+            [style.background-image]="'url(' + (profile.profileImageUrl ?? '') + ')'"
+            style="background-size:100%">
+          </div>
+        }
+
+        @if (currentUser$ | async; as cu) {
+
+          <!-- Other user: not following -->
+          @if (cu.userName !== profile.userName && !isFollowing) {
+            <br />
+            <i
+              class="inline-icon material-icons"
+              style="cursor:pointer; display:inline-block"
+              (click)="toggleFollow()">
+              person_add_alt
+            </i>
+
+            <a
+              class="inline-icon material-icons"
+              [routerLink]="['/profile-comment/create', profile.userId]"
+              style="color:black; background:white; display:inline-block; text-decoration:none">
+              mode_comment
+            </a>
+          }
+
+          <!-- Other user: following -->
+          @if (cu.userName !== profile.userName && isFollowing) {
+            <br />
+            <i
+              class="inline-icon material-icons"
+              style="cursor:pointer; display:inline-block"
+              (click)="toggleFollow()">
+              person_remove
+            </i>
+
+            <a
+              class="inline-icon material-icons"
+              [routerLink]="['/profile-comment/create', profile.userId]"
+              style="color:black; background:white; display:inline-block; text-decoration:none">
+              mode_comment
+            </a>
+          }
+
+          <!-- Own profile -->
+          @if (cu.userName === profile.userName) {
+            <div id="upload">
+              <label class="btn btn-default btn-file">
+                Browse
+                <input
+                  type="file"
+                  name="file"
+                  accept="image/*"
+                  style="display:none"
+                  (change)="onImageSelected($event)" />
+              </label>
+            </div>
+
+            <a
+              [routerLink]="['/profile/edit-bio', profile.userId]"
+              style="text-decoration:none; color:black">
+              Add bio
+            </a>
+          }
+        }
+      </div>
+
+      <!-- Right: user info -->
+      <div class="col-md-8">
+        <span id="userName">
+          {{ profile.userName }}
+          <a
+            id="userEditLabel"
+            class="inline-icon material-icons"
+            [routerLink]="['/profile/edit-username', profile.userId]"
+            style="text-decoration:none; display:inline-block; color:black">
+            edit
+          </a>
+        </span>
+
+        <span id="userRating">Current Rating:</span>
+        <span class="badge rounded-circle" style="background-color:skyblue">
+          {{ profile.userRating }}
+        </span>
+
+        <span id="userCreatedLabel">
+          Member Since: {{ profile.memberSince }}
+        </span>
+
+        <a
+          [routerLink]="['/profile/followers', profile.userId]"
+          style="cursor:pointer; text-decoration:none; color:#444">
+          Followers
+        </a>
+        <span id="getFollowers">: {{ profile.followers }}</span>
+
+        <a
+          [routerLink]="['/profile/following', profile.userId]"
+          style="cursor:pointer; text-decoration:none; color:#444; margin-left:15px">
+          Following
+        </a>
+        <span>: {{ profile.following }}</span>
+
+        <span id="userBioLabel">{{ profile.bio }}</span>
+      </div>
+    </div>
+  </div>
+}
+
+<div id="replyDivider"></div>
+
+@if (profile) {
+  <div class="postReplyContent">
+    @if (profile.profileComments.length > 0) {
+      @for (comment of profile.profileComments; track comment.id) {
+        <div class="row replyContent">
+          <div class="col-md-4 replyAuthorContainer">
+            <div
+              class="postAuthorImage"
+              [style.background-image]="
+                comment.authorImageUrl
+                  ? 'url(' + comment.authorImageUrl + ')'
+                  : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'
+              "
+              style="background-size:100%">
+            </div>
+
+            <a [routerLink]="['/profile', comment.authorId]">
+              <strong>{{ comment.authorName }}</strong>
+            </a>
+
+            <span class="badge rounded-circle" style="background-color:skyblue">
+              {{ comment.authorRating }}
+            </span>
+            <br />
+            <span class="postDate">{{ comment.date }}</span>
+          </div>
+
+          <div class="col-md-8 replyContentContainer">
+            <div
+              class="postContent"
+              [innerHTML]="comment.commentContent">
+            </div>
+          </div>
+        </div>
+      }
+    } @else {
+      <div class="noPosts">
+        <h3>There are no comments on this profile.</h3>
+      </div>
+    }
+  </div>
+}

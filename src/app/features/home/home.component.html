@@ -1,0 +1,86 @@
+<div class="row frontPageContent">
+  <div class="container body-content">
+    <div class="row sectionHeading">
+      <div class="sectionHeader">
+        <h3 id="latestPosts">Latest Posts</h3>
+
+        <div class="searchForm">
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            placeholder="Search..."
+            class="searchBar"
+            (focus)="searchQuery = ''"
+          />
+          <button type="button" class="btn buttonSearch" (click)="search()">
+            <i class="material-icons">search</i>
+          </button>
+        </div>
+      </div>
+
+      <table class="table table-hover" id="latestPostsTable">
+        <tbody>
+          @for (post of latestPosts; track post.id) {
+            <tr>
+              <td>
+                <div class="postTitle">
+                  <a [routerLink]="['/post', post.id]">
+                    {{ post.title }}
+                  </a>
+                </div>
+
+                <div class="postSubTitle">
+                  @if (post.repliesCount === 0) {
+                    <span>No Replies</span>
+                  } @else if (post.repliesCount === 1) {
+                    <span>1 Reply</span>
+                  } @else {
+                    <span>{{ post.repliesCount }} Replies</span>
+                  }
+
+                  <span class="postUser">
+                    <a [routerLink]="['/profile', post.authorId]">
+                      {{ post.authorName }}
+                    </a>
+                  </span>
+
+                  <span
+                    class="badge rounded-circle"
+                    style="background-color: skyblue"
+                  >
+                    {{ post.authorRating }}
+                  </span>
+
+                  in
+                  @if (post.forum) {
+                    <span class="postForum">
+                      <a [routerLink]="['/forum', post.forum.id]">
+                        {{ post.forum.name }}
+                      </a>
+                    </span>
+                  }
+
+                  on
+                  <span class="postDate">
+                    {{ post.datePosted }}
+                  </span>
+                </div>
+              </td>
+
+              <td>
+                <div style="float: right;">
+                  <div class="material-icons">
+                    <span class="inline-icon" style="font-size: 16px">
+                      {{ post.totalLikes }}
+                    </span>
+                    favorite
+                  </div>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

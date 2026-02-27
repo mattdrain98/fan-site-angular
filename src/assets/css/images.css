@@ -1,0 +1,56 @@
+﻿.screenshots{
+    width: 50%; 
+    height: 50%; 
+}
+
+.logo{
+    width: 25%; 
+    height: 25%; 
+}
+
+.chocobo {
+    height: 4%;
+    width: 4%;
+}
+
+.cactuar {
+    height: 5%;
+    width: 5%;
+}
+
+.pfp {
+    display: inline-block; 
+    width: 100px; 
+    height: 100px; 
+    background-color: #ddd; 
+}
+
+.postAuthorImage{
+    height: 80px; 
+    width: 80px; 
+    background-size: 100%; 
+}
+
+.postAuthorContainer{
+    padding: 12px; 
+    color: #444; 
+    font-family: 'Roboto'; 
+    width: 190px;
+}
+
+.postIndexTitle{
+    font-size: 1.4em; 
+}
+
+#postContentContainer{
+    font-family: 'Roboto'; 
+    color: #222; 
+    padding: 22px; 
+    border-left: 1px solid #ddd;  
+}
+
+.postAuthorRating{
+    font-size: 0.9em; 
+    color: #159; 
+    font-family: 'Roboto Mono'; 
+}

@@ -1,0 +1,10 @@
+<div class="sectionHeader"><h1>Edit Profile | {{ userName }}</h1></div>
+<form #f="ngForm" (ngSubmit)="submit(f)" id="addPostForm">
+  <div class="addPost">
+    <div class="form-group">
+      <label>Bio</label>
+      <textarea name="bio" [(ngModel)]="bio" rows="5" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Edit Profile</button>
+  </div>
+</form>

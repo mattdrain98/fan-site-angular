@@ -1,0 +1,10 @@
+<div class="sectionHeader"><h1>Change Username | {{ currentUserName }}</h1></div>
+<form #f="ngForm" (ngSubmit)="submit(f)" id="addPostForm">
+  <div class="addPost">
+    <div class="form-group">
+      <label>Username</label>
+      <input name="userName" [(ngModel)]="userName" required class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Change Username</button>
+  </div>
+</form>

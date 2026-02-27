@@ -1,0 +1,647 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+.btn-reply {
+    border: none;
+    font-size: 12px;
+    color: inherit;
+    background: none;
+    cursor: pointer;
+    display: inline-block;
+    letter-spacing: 1px;
+    font-weight: 700;
+    outline: none;
+    position: relative;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+    .btn-reply:after {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        -webkit-transition: all 0.3s;
+        -moz-transition: all 0.3s;
+        transition: all 0.3s;
+    }
+
+    /* Pseudo elements for icons */
+    .btn-reply:before {
+        font-family: 'FontAwesome';
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        position: relative;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .btn-reply.icon-reply {
+        position: relative;
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 0 0 0;
+    }
+
+        .btn-reply.icon-reply:before {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            margin-right: 6px;
+        }
+
+/* Provide sufficient contrast against white background */
+a {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.btn-forumSearch {
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    font: inherit;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-image: url(../images/Ra9b34e28bcaac3c6c79fa8782fce737c.jfif);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+
+.delete {
+    float: right;
+}
+
+.logoutbutton {
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.searchBar {
+    background-color: #333;
+    width: 10%;
+    transition: ease .3s;
+    border: none;
+}
+
+    .searchBar:focus {
+        color: black;
+        width: 40%;
+        background-color: #fff;
+    }
+
+.userProfile {
+    padding: 32px 0 64px 24px;
+    background-color: #fff;
+}
+
+#userRating {
+    display: inline;
+    color: #444;
+    font-family: 'Roboto';
+    padding-top: 3px;
+}
+
+#userEmailLabel, #userBioLabel, #userCreatedLabel, #userActiveLabel {
+    display: block;
+    color: #444;
+    font-family: 'Roboto';
+    padding-top: 3px;
+}
+
+#userEditLabel {
+    display: block;
+    padding-top: 3px;
+}
+
+#getFollowing {
+    display: inline-block;
+    color: #444;
+    font-family: 'Roboto';
+    padding-top: 3px;
+}
+
+#getFollowers {
+    display: inline-block;
+    color: #444;
+    font-family: 'Roboto';
+    padding-top: 3px;
+}
+
+#getFollowers2 {
+    display: inline-block;
+    color: #444;
+    font-family: 'Roboto';
+    padding-top: 3px;
+}
+
+#userName {
+    display: block;
+    color: crimson;
+    font-family: 'Roboto';
+    font-size: 1.7em;
+}
+
+.body-content {
+}
+
+.sectionHeader {
+    display: block;
+    background-color: skyblue;
+    padding: 15px;
+}
+
+.homeSectionHeader {
+    display: block;
+    background-color: orangered;
+    padding: 15px;
+}
+
+.sectionHeading {
+    display: block;
+    color: #000;
+    padding: 3px;
+}
+
+
+
+.btn-newPost {
+    padding: 5px;
+    background: crimson;
+    color: white;
+    border: ridge;
+}
+
+btn-newPost:hover {
+    padding: 4px;
+    background: darkred;
+    color: #333;
+    border: ridge;
+}
+
+.createPostButton {
+    display: inline-block;
+    float: right;
+}
+
+.postHeader {
+    display: block;
+    background-color: skyblue;
+    padding: 15px;
+}
+
+#postIndexContent {
+    background-color: white;
+}
+
+.postAuthorContainer {
+    padding: 10px;
+    border-right: thin;
+}
+
+.postContentContainer {
+    background-color: white;
+    border-left: medium;
+    padding: 10px;
+}
+
+.btn-back {
+    display: inline-block;
+    border: ridge;
+    float: right;
+    background: #333;
+    color: #fff;
+    padding: 5px;
+}
+
+
+.btn-newReply {
+    padding: 5px;
+    background-color: crimson;
+    text-align: center;
+    flex: initial;
+    border-color: white;
+}
+
+.postReplyContent {
+    border-top: thick;
+    display: block;
+    background-color: white;
+    padding: 15px;
+}
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+img.profile-img {
+    object-fit: cover;
+    display: block;
+}
+
+div.profile-img {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.profile-img-box {
+    width: 150px;
+    height: 150px;
+    overflow: hidden; 
+    margin-bottom: 10px; 
+}
+
+.profile-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.postAuthorImage {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.postContent {
+    margin: 10px;
+}
+
+#headingBtn {
+    text-align: right;
+}
+
+#addPostForm {
+    display: block;
+    background-color: white;
+    padding: 15px;
+}
+
+#replyDivider {
+    display: block;
+    background-color: #333;
+    padding: 15px;
+}
+
+#replyContentDivider {
+    display: block;
+    padding: 15px;
+    background-color: white;
+}
+
+#replyRow {
+    display: flex;
+    padding: 15px;
+    height: 80px;
+}
+
+#latestPostsTable {
+    width: 100%;
+    height: auto;
+    background-color: white;
+}
+
+.inline-icon {
+    vertical-align: text-bottom;
+}
+
+.noPosts {
+    width: 100%;
+    display: block;
+    background-color: white;
+    padding: 15px;
+}
+
+.videoTrailer {
+    width: 50%;
+    height: auto;
+    display: inline;
+}
+
+video {
+    display: inline-block;
+    margin: 0 auto;
+    width: 50%;
+    height: auto;
+}
+
+.clive {
+    height: 200px;
+}
+
+.responsive {
+    height: 100%;
+    width: auto;
+}
+
+.changePassword {
+    display: block;
+    background-color: #6cffce;
+    padding: 15px;
+}
+
+
+.btn-4 {
+    background: #34495e;
+    color: #fff;
+}
+
+    .btn-4:hover {
+        background: #2c3e50;
+    }
+
+    .btn-4:active {
+        background: #2c3e50;
+        top: 2px;
+    }
+
+    .btn-4:before {
+        position: absolute;
+        height: 100%;
+        left: 0;
+        top: 0;
+        font-size: 140%;
+        width: 30px;
+    }
+/* Icon separator */
+.btn-sep {
+    padding: 10px 5px 10px 40px;
+}
+
+    .btn-sep:before {
+        background: rgba(0,0,0,0.15);
+    }
+
+.icon-reply:before {
+    font-family: 'FontAwesome';
+    content: "\f112"; /* your arrow */
+    display: inline-block; /* ensures it respects flex centering */
+    vertical-align: middle; /* backup vertical alignment */
+    font-size: 16px; /* adjust size to match text */
+    margin-right: 5px; /* spacing before the “Reply” text */
+}
+
+.icon-cart:before {
+    content: "\f07a";
+}
+
+.icon-heart:before {
+    content: "\f55a";
+}
+
+.icon-info:before {
+    content: "\f05a";
+}
+
+.icon-send:before {
+    content: "\f1d8";
+}
+
+.form-control {
+    display: block;
+    background-color: lightgray;
+    transition: ease .3s;
+    padding: 15px;
+}
+
+    .form-control:focus {
+        color: black;
+        background-color: white;
+    }
+
+.replyOriginalPost {
+    display: block;
+    background-color: white;
+    padding: 15px;
+}
+
+.authorBlock {
+    display: block;
+    padding-left: 15px;
+    padding-top: 15px;
+    border-top: thin;
+}
+
+.authorBlockName {
+    color: red;
+}
+
+.btn-submitPost {
+    background: #cb0a31;
+    color: #333;
+}
+
+
+.btn-newScreenshot {
+    display: inline-block;
+    float: right;
+    padding: 5px;
+    background: crimson;
+    color: white;
+    border: ridge;
+}
+
+    .btn-newScreenshot:hover {
+        padding: 5px;
+        background: #be0c30;
+        color: #333;
+        transition: ease 0.3s;
+        border: ridge;
+    }
+
+#screenshotRow {
+    text-align: right;
+}
+
+.createScreenshotButton {
+    display: inline-block;
+    float: right;
+}
+
+.screenshotContent {
+    display: block;
+    padding: 15px;
+    background-color: white;
+}
+
+.register {
+    display: block;
+    padding: 15px;
+    background-color: white;
+}
+
+#createForumForm {
+    display: block;
+    background-color: white;
+    padding: 15px;
+}
+
+.postMeta {
+    display: flex;
+    align-items: center; /* vertically centers everything */
+    gap: 8px; /* spacing between author, date, likes */
+    flex-wrap: wrap; /* prevent overflow on small screens */
+}
+
+.like-container {
+    margin-left: auto; /* pushes likes to the right end */
+    display: flex; /* keep number and icon inline */
+    align-items: center; /* vertically center them */
+    gap: 5px; /* space between number and heart */
+}
+
+.like-number {
+    font-weight: bold;
+}
+
+.like-icon {
+    color: crimson;
+    font-size: 18px; /* adjust as needed */
+}
+
+.like:hover {
+    cursor: pointer;
+}
+
+.deleteBtn:hover {
+    cursor: pointer;
+}
+
+
+/* Heart button */
+#likeBtn {
+    font-family: 'Material Icons';
+    font-size: 24px;
+    color: crimson;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+    #likeBtn:hover {
+        transform: scale(1.1);
+        color: #ff4d4d;
+    }
+
+    #likeBtn.pop {
+        animation: pop 0.3s forwards;
+    }
+
+.burst-circles {
+    position: absolute;
+    left: 45%;
+    top: 40%;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+    .burst-circles span {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        border-radius: 50%;
+        top: 0;
+        left: 0;
+        opacity: 1;
+    }
+
+/* Pop animation for heart */
+@keyframes pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
