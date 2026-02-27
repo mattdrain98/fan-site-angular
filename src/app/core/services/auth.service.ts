@@ -19,9 +19,15 @@ export class AuthService {
 
   get currentUser(): CurrentUser | null { return this.userSubject.value; }
 
-  login(payload: { userName: string; password: string; rememberMe: boolean }): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.base}/login`, payload);
-  }
+login(payload: { userName: string; password: string; rememberMe: boolean }): Observable<{ message: string }> {
+  return this.http.post<{ message: string; user: CurrentUser }>(`${this.base}/login`, payload).pipe(
+    tap(response => {
+      if (response.user) {
+        this.setCurrentUser(response.user);
+      }
+    })
+  );
+}
 
   register(userName: string, email: string, password: string, file?: File): Observable<{ message: string; userId: string }> {
     const fd = new FormData();
