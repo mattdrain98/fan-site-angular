@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterOutlet, RouterLink } from '@angular/router';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, RouterLink, NavbarComponent],
   template: `
     <div class="text-center" style="background:skyblue">
       <img src="assets/images/chocobo.png" class="chocobo" alt="chocobo" />
@@ -18,7 +22,7 @@ import { Component } from '@angular/core';
     </div>
     <footer class="border-top footer text-muted bg-white">
       <div class="container">
-        &copy; 2021 - Final Fantasy Fan Site - <a routerLink="/privacy">Privacy</a>
+        &copy; 2026 - Final Fantasy Fan Site - <a routerLink="/privacy">Privacy</a>
       </div>
     </footer>
   `

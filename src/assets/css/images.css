@@ -1,6 +1,5 @@
 ﻿.screenshots{
     width: 50%; 
-    height: 50%; 
 }
 
 .logo{
@@ -26,9 +25,13 @@
 }
 
 .postAuthorImage{
-    height: 80px; 
-    width: 80px; 
-    background-size: 100%; 
+    width: 100px;       /* Square width */
+    height: 100px;      /* Square height */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px; /* optional rounded corners */
+    box-shadow: 0 0 4px rgba(0,0,0,0.2); /* subtle shadow */
 }
 
 .postAuthorContainer{

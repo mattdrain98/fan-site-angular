@@ -2,29 +2,54 @@
   <div class="row sectionHeader">
     <div class="sectionHeading">User Posts</div>
   </div>
+
   <div class="row forumIndexContent">
-    <table class="table table-hover table-bordered" *ngIf="posts.length > 0">
-      <tbody>
-        <tr *ngFor="let post of posts">
-          <td>
-            <div class="postTitle"><a [routerLink]="['/post', post.id]">{{ post.title }}</a></div>
-            <div class="forumSubTitle">
-              <a [routerLink]="['/profile', post.authorId]">{{ post.authorName }}</a>
-              <span class="badge rounded-circle" style="background-color:skyblue"> {{ post.authorRating }} </span>
-              on {{ post.datePosted }}
-            </div>
-          </td>
-          <td>Replies: {{ post.repliesCount }}</td>
-          <td>
-            {{ post.datePosted }}
-            <a class="delete" (click)="delete(post.id)" style="cursor:pointer">Delete</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="noPosts" *ngIf="posts.length === 0">
-      <i class="material-icons md-72">question_answer</i>
-      <h3>It looks like there are no posts to be found. Why not create one in <a routerLink="/forum">forums</a></h3>
-    </div>
+    @if (posts.length > 0) {
+      <table class="table table-hover table-bordered">
+        <tbody style="background-color: white">
+          @for (post of posts; track post.id) {
+            <tr>
+              <td>
+                <div class="postTitle">
+                  <a [routerLink]="['/post', post.id]">{{ post.title }}</a>
+                </div>
+
+                <div class="forumSubTitle">
+                  <a [routerLink]="['/profile', post.authorId]">{{ post.authorName }}</a>
+                  <span
+                    class="badge rounded-circle"
+                    style="background-color: skyblue"
+                  >
+                    {{ post.authorRating }}
+                  </span>
+                  on {{ post.datePosted }}
+                </div>
+              </td>
+
+              <td>Replies: {{ post.repliesCount }}</td>
+
+              <td>
+                {{ post.datePosted }}
+                <a
+                  class="delete"
+                  style="cursor: pointer"
+                  (click)="delete(post.id)"
+                >
+                  Delete
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <div class="noPosts text-center">
+        <i class="material-icons md-72">question_answer</i>
+        <h3>
+          It looks like there are no posts to be found. Why not create one in
+          <a routerLink="/forum">forums</a>?
+        </h3>
+      </div>
+    }
   </div>
 </div>

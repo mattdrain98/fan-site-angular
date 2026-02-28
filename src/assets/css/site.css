@@ -14,57 +14,54 @@ a.navbar-brand {
 }
 
 .btn-reply {
-    border: none;
     font-size: 12px;
-    color: inherit;
-    background: none;
     cursor: pointer;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     letter-spacing: 1px;
     font-weight: 700;
     outline: none;
-    position: relative;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
+    border-radius: 999px;
+    height: 40px;
+    overflow: hidden;
     transition: all 0.3s;
+    border: none;
+    padding: 0;
+    text-decoration: none;
 }
 
-    .btn-reply:after {
-        content: '';
-        position: absolute;
-        z-index: -1;
-        -webkit-transition: all 0.3s;
-        -moz-transition: all 0.3s;
-        transition: all 0.3s;
-    }
+.reply-icon-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.15);
+    height: 100%;
+    padding: 0 6px;
+    border-radius: 999px 0 0 999px;
+}
 
-    /* Pseudo elements for icons */
-    .btn-reply:before {
-        font-family: 'FontAwesome';
-        speak: none;
-        font-style: normal;
-        font-weight: normal;
-        font-variant: normal;
-        text-transform: none;
-        position: relative;
-        -webkit-font-smoothing: antialiased;
-    }
+.reply-text-section {
+    padding: 0 16px;
+    color: #fff;
+}
 
-    .btn-reply.icon-reply {
-        position: relative;
-        display: inline-block;
-        height: 40px;
-        line-height: 40px;
-        padding: 0 0 0 0;
-    }
+.btn-4 {
+    background: #34495e;
+    color: #fff;
+    border-radius: 999px;
+}
 
-        .btn-reply.icon-reply:before {
-            position: relative;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 16px;
-            margin-right: 6px;
-        }
+.btn-4:hover {
+    background: #34495e;
+}
+
+.btn-4:hover .reply-text-section {
+    color: #cfd8e3;
+}
+
+.btn-4:hover .reply-icon-section {
+    background: rgba(0,0,0,0.2);
+}
 
 /* Provide sufficient contrast against white background */
 a {
@@ -219,9 +216,6 @@ body {
     font-size: 1.7em;
 }
 
-.body-content {
-}
-
 .sectionHeader {
     display: block;
     background-color: skyblue;
@@ -285,7 +279,6 @@ btn-newPost:hover {
 .btn-back {
     display: inline-block;
     border: ridge;
-    float: right;
     background: #333;
     color: #fff;
     padding: 5px;
@@ -324,25 +317,24 @@ div.profile-img {
     background-repeat: no-repeat;
 }
 
+
 .profile-img-box {
-    width: 150px;
-    height: 150px;
-    overflow: hidden; 
-    margin-bottom: 10px; 
+    width: 120px;           
+    height: 120px;          
+    background-size: cover;  
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px;      
+    background-color: #f5f5f5;
 }
 
 .profile-img-box img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover;      
     object-position: center;
     display: block;
-    margin-bottom: 10px;
-}
-
-.postAuthorImage {
-    padding-top: 30px;
-    padding-bottom: 30px;
+    border-radius: 8px;      
 }
 
 .postContent {
@@ -589,6 +581,17 @@ video {
     cursor: pointer;
 }
 
+#likeBtnNotSignedIn {
+    font-family: 'Material Icons';
+    font-size: 24px;
+    color: crimson;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
 
 /* Heart button */
 #likeBtn {
@@ -613,23 +616,36 @@ video {
     }
 
 .burst-circles {
-    position: absolute;
-    left: 45%;
-    top: 40%;
-    width: 0;
-    height: 0;
-    pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
 }
 
-    .burst-circles span {
-        position: absolute;
-        width: 2px;
-        height: 2px;
-        border-radius: 50%;
-        top: 0;
-        left: 0;
-        opacity: 1;
-    }
+.burst-circles span {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background-color: #ff4d4d;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  animation: burst 0.4s forwards ease-out;
+}
+
+@keyframes burst {
+  0% {
+    transform: translate(0,0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y));
+    opacity: 0;
+  }
+}
 
 /* Pop animation for heart */
 @keyframes pop {
@@ -638,10 +654,100 @@ video {
     }
 
     50% {
-        transform: scale(1.3);
+        transform: scale(1.2);
     }
 
     100% {
         transform: scale(1.1);
     }
 }
+
+          .action-btn-follow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.84rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+          }
+          .action-btn-follow.follow {
+            border: none;
+            background: #87ceeb;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(135,206,235,0.4);
+          }
+          .action-btn-follow.follow:hover {
+            background: #5bb8e0;
+            box-shadow: 0 4px 14px rgba(135,206,235,0.55);
+            transform: translateY(-1px);
+          }
+          .action-btn-follow.unfollow {
+            border: 2px solid #e05555;
+            background: #fff;
+            color: #e05555;
+          }
+          .action-btn-follow.unfollow:hover {
+            background: #e05555;
+            color: #fff;
+            transform: translateY(-1px);
+          }
+          .action-btn-comment {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            border: 2px solid #ccc;
+            background: #fff;
+            color: #444;
+            font-weight: 600;
+            font-size: 0.84rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+          }
+          .action-btn-comment:hover {
+            border-color: #888;
+            color: #222;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          }
+          .follower-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border: 1px solid #dee2e6;
+            border-radius: 999px;
+            text-decoration: none;
+            color: #444;
+            background: #f8f9fa;
+            transition: background 0.2s, border-color 0.2s;
+          }
+          .follower-pill:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+            color: #222;
+          }
+          .follower-pill-count {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #222;
+          }
+          .follower-pill-label {
+            font-size: 0.8rem;
+            color: #666;
+          }
+          .btn-outline-dark:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+          }
+          label.btn-dark:hover {
+            background: #444 !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateY(-1px);
+          }

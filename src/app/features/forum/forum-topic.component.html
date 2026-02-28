@@ -11,7 +11,7 @@
         </span>
       }
       <div class="searchForm">
-        <dx-input type="text" [(ngModel)]="searchQuery" placeholder="Search..." class="searchBar"
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Search..." class="searchBar"
                (focus)="searchQuery = ''" />
         <button type="button" class="btn buttonSearch" (click)="search()">
           <i class="material-icons">search</i>

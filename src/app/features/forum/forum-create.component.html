@@ -1,14 +1,25 @@
-<div class="sectionHeader">Create New Forum</div>
-<div class="text-danger" *ngFor="let e of errors">{{ e }}</div>
-<form #f="ngForm" (ngSubmit)="submit(f)" id="addPostForm">
-  <div class="form-group">
-    <label>Forum Title</label>
-    <dx-input name="title" [(ngModel)]="model.title" required class="form-control" placeholder="Choose a Forum Title" />
+<div class="container sectionHeader">
+  <h3 class="sectionHeading">New Users</h3>
+</div>
+
+@for (user of users; track user.id) {
+  <div class="container body-content border-bottom">
+    <div class="row userProfile">
+      <div class="col-md-4">
+        <div
+          class="profile-img-box"
+          [style.background-image]="'url(' + (user.imagePath || defaultImage) + ')'"
+        ></div>
+      </div>
+      <div class="col-md-8">
+        <a routerLink="['/profile', user.id]">{{ user.userName }}</a>
+        <span class="badge rounded-circle" style="background-color: skyblue">
+          {{ user.rating }}
+        </span>
+        <span>Member Since: {{ user.memberSince }}</span>
+      </div>
+    </div>
   </div>
-  <div class="form-group">
-    <label>Description</label>
-    <dx-input name="description" [(ngModel)]="model.description" class="form-control"
-           placeholder="Write a brief description here." />
-  </div>
-  <button type="submit" class="btn btn-primary">Create</button>
-</form>
+} @empty {
+  <p class="text-muted">No new users found.</p>
+}

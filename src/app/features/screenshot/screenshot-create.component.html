@@ -1,24 +1,31 @@
-<h1>New Screenshot</h1>
+<div class="container body-content ">
+  <div class="row sectionHeader">
+    <div class="sectionHeading">
+      <span class="postIndexTitle">New Screenshot</span>
+    </div>  
+  </div>
+
 @for (e of errors; track e) {
   <div class="text-danger">{{ e }}</div>
 }
-<form #f="ngForm" (ngSubmit)="submit(f)" id="addPostForm">
-  <div class="form-group">
-    <label>Title</label>
-    <dx-input name="title" [(ngModel)]="model.title" required class="form-control" />
-  </div>
-  <div id="upload">
-    <label>Upload Screenshot</label><br />
-    <label class="btn btn-default btn-file">
-      Browse <input type="file" style="display:none" (change)="onFileChange($event)" accept="image/*" />
-    </label>
-    @if (selectedFile; as f) {
-      <span>{{ f.name }}</span>
-    }
-  </div>
-  <div class="form-group">
-    <label>Content</label>
-    <dx-textarea name="content" [(ngModel)]="model.content" rows="5" class="form-control"></dx-textarea>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit Screenshot</button>
-</form>
+  <form #f="ngForm" (ngSubmit)="submit(f)" id="addPostForm">
+    <div class="form-group mb-3">
+      <label>Title</label>
+      <input name="title" [(ngModel)]="model.title" required class="form-control" />
+    </div>
+    <div id="upload">
+      <label>Upload Screenshot</label><br />
+      <label class="btn btn-default btn-file btn-dark">
+        Browse <input type="file" style="display:none" (change)="onFileChange($event)" accept="image/*" id="profileImageInput"/>
+      </label>
+      @if (selectedFile; as f) {
+        <span>{{ f.name }}</span>
+      }
+    </div>
+    <div class="form-group">
+      <label>Content</label>
+      <textarea name="content" [(ngModel)]="model.content" rows="5" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" id="registerBtn">Submit Screenshot</button>
+  </form>
+</div>  

@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProfileService } from '../../core/services/services';
-import { ProfileModel } from '../../core/models';
+import { FollowDto } from '../../core/models';
 
 @Component({
   selector: 'app-following',
@@ -12,10 +12,13 @@ import { ProfileModel } from '../../core/models';
 export class FollowingComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private svc = inject(ProfileService);
-  profile: ProfileModel | null = null;
+
+  followings: FollowDto[] = [];
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;
-    this.svc.getProfile(id).subscribe(p => this.profile = p);
+    this.svc.getFollowing(id).subscribe(data => {
+      this.followings = (data.following as unknown as FollowDto[]).filter(f => f.id !== id);
+    });
   }
 }

@@ -98,15 +98,18 @@ export interface ProfileModel {
   memberSince: string;
   following: number;
   followers: number;
-  follows: FollowModel[];
-  followings: FollowModel[];
+  follows: FollowDto[];
+  followings: FollowDto[];
   profileComments: ProfileCommentModel[];
   bio?: string;
 }
 
-export interface FollowModel {
-  follower?: { id: string; userName: string; imagePath?: string; rating: number; memberSince: string };
-  following?: { id: string; userName: string; imagePath?: string; rating: number; memberSince: string };
+export interface FollowDto {
+  id: string;
+  userName: string;
+  imagePath?: string;
+  rating: number;
+  memberSince: string;
 }
 
 export interface ProfileCommentModel {
@@ -143,4 +146,10 @@ export interface ApplicationUser {
   memberSince: string;
   followers: number;
   following: number;
+}
+
+export interface ProfileEditModel {
+  userId: string;
+  userName: string;
+  bio?: string;
 }

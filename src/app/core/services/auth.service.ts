@@ -31,9 +31,10 @@ login(payload: { userName: string; password: string; rememberMe: boolean }): Obs
 
   register(userName: string, email: string, password: string, file?: File): Observable<{ message: string; userId: string }> {
     const fd = new FormData();
-    fd.append('userName', userName);
-    fd.append('email', email);
-    fd.append('password', password);
+    fd.append('UserName', userName);
+    fd.append('Email', email);
+    fd.append('Password', password);
+    fd.append('ConfirmPassword', password);  // ← required by the DTO
     if (file) fd.append('file', file);
     return this.http.post<{ message: string; userId: string }>(`${this.base}/register`, fd);
   }
@@ -58,10 +59,6 @@ login(payload: { userName: string; password: string; rememberMe: boolean }): Obs
     return this.http.post<{ message: string }>(`${this.base}/edit-profile`, fd);
   }
 
-  getLatestUsers(): Observable<ApplicationUser[]> {
-    return this.http.get<ApplicationUser[]>(`${this.base}/new-users`);
-  }
-
   setCurrentUser(user: CurrentUser): void {
     this.userSubject.next(user);
     localStorage.setItem('currentUser', JSON.stringify(user));
@@ -70,5 +67,10 @@ login(payload: { userName: string; password: string; rememberMe: boolean }): Obs
   private loadStored(): CurrentUser | null {
     const s = localStorage.getItem('currentUser');
     return s ? JSON.parse(s) : null;
+  }
+
+  
+    getLatestUsers(): Observable<ApplicationUser[]> {
+    return this.http.get<ApplicationUser[]>(`${this.base}/new-users`);
   }
 }

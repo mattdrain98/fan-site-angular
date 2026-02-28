@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ProfileModel, ProfileEditModel } from '../models';
+import { ProfileModel, ProfileEditModel, ApplicationUser, FollowDto } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
@@ -34,23 +34,18 @@ export class ProfileService {
 
   /**
    * GET /api/profile/Followers/{id}
-   * Returns: { userName, followersCount, followers: string[] }
    */
-  getFollowers(userId: string): Observable<{ userName: string; followersCount: number; followers: string[] }> {
-    return this.http.get<{ userName: string; followersCount: number; followers: string[] }>(
-      `${this.base}/Followers/${userId}`
-    );
-  }
+getFollowers(userId: string): Observable<{ userName: string; followersCount: number; followers: FollowDto[] }> {
+  return this.http.get<{ userName: string; followersCount: number; followers: FollowDto[] }>(
+    `${this.base}/Followers/${userId}`
+  );
+}
 
-  /**
-   * GET /api/profile/Following/{id}
-   * Returns: { userName, followingCount, following: string[] }
-   */
-  getFollowing(userId: string): Observable<{ userName: string; followingCount: number; following: string[] }> {
-    return this.http.get<{ userName: string; followingCount: number; following: string[] }>(
-      `${this.base}/Following/${userId}`
-    );
-  }
+getFollowing(userId: string): Observable<{ userName: string; followingCount: number; following: FollowDto[] }> {
+  return this.http.get<{ userName: string; followingCount: number; following: FollowDto[] }>(
+    `${this.base}/Following/${userId}`
+  );
+}
 
   /**
    * PUT /api/profile/EditBio

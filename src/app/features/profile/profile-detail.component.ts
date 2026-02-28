@@ -21,6 +21,7 @@ export class ProfileDetailComponent implements OnInit {
   currentUser$ = this.auth.currentUser$;
   isFollowing = false;
   isOwnProfile = false;
+currentUser: any;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;
@@ -29,17 +30,26 @@ export class ProfileDetailComponent implements OnInit {
       const cu = this.auth.currentUser;
       if (cu) {
         this.isOwnProfile = cu.userId === p.userId;
-        this.isFollowing = p.follows.some(f => f.follower?.id === cu.userId && f.following?.id === p.userId);
+        this.isFollowing = p.follows.some(f => f.id === cu.userId);  // ← flat check
       }
     });
   }
 
   toggleFollow(): void {
     if (!this.profile) return;
-    this.profileService.toggleFollow(this.profile.userId).subscribe(res => {
-      if (this.profile) {
-        this.profile.followers = res.followers;
+
+    // Optimistic update — react instantly
+    this.isFollowing = !this.isFollowing;
+    this.profile.followers += this.isFollowing ? 1 : -1;
+
+    this.profileService.toggleFollow(this.profile.userId).subscribe({
+      next: res => {
+        if (this.profile) this.profile.followers = res.followers;
+      },
+      error: () => {
+        // Revert on failure
         this.isFollowing = !this.isFollowing;
+        if (this.profile) this.profile.followers += this.isFollowing ? 1 : -1;
       }
     });
   }

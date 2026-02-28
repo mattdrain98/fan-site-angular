@@ -22,8 +22,7 @@
             post.authorImageUrl
               ? 'url(' + post.authorImageUrl + ')'
               : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'
-          "
-          style="background-size:100%">
+          ">
         </div>
 
         <a [routerLink]="['/profile', post.authorId]">
@@ -40,23 +39,25 @@
       <!-- Content -->
       <div class="col-md-9 postContentContainer">
         @if (currentUser$ | async) {
-          <a
-            id="likeBtn"
-            class="material-icons"
-            style="float:right; cursor:pointer"
-            (click)="toggleLike()">
-            {{ post.userHasLiked ? 'favorite' : 'favorite_border' }}
-          </a>
+        <button
+          id="likeBtn"
+          class="material-icons"
+          style="float:right; cursor:pointer; position: relative; overflow: visible;"
+          (click)="toggleLike()">
+          {{ post.userHasLiked ? 'favorite' : 'favorite_border' }}
+          <div class="burst-circles"></div>
+        </button>
           <div id="postLikes" style="float:right">
             {{ post.totalLikes }}
           </div>
         } @else {
-          <a
+          <button
+            id="likeBtnNotSignedIn"
             class="material-icons"
             style="float:right; cursor:pointer"
             (click)="notSignedIn()">
             favorite_border
-          </a>
+          </button>
           <div style="float:right">
             {{ post.totalLikes }}
           </div>
@@ -80,11 +81,13 @@
       @if (currentUser$ | async) {
         <div class="row" id="replyRow">
           <span>
-            <a
-              [routerLink]="['/reply/create', post.id]"
-              class="btn btn-reply btn-4 btn-sep icon-reply">
-              Reply
-            </a>
+          <a [routerLink]="['/reply/create', post.id]"
+            class="btn btn-reply btn-4">
+            <span class="reply-icon-section">
+              <i class="material-icons" style="font-size:16px;">reply</i>
+              </span>
+              <span class="reply-text-section">Reply</span>
+          </a>
           </span>
         </div>
       }
@@ -99,8 +102,7 @@
                   reply.authorImageUrl
                     ? 'url(' + reply.authorImageUrl + ')'
                     : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'
-                "
-                style="background-size:100%">
+                ">
               </div>
 
               <a [routerLink]="['/profile', reply.authorId]">
@@ -145,3 +147,4 @@
     </div>
   }
 </div>
+

@@ -2,11 +2,12 @@ import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { ApplicationUser } from '../../core/models';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-new-users',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, DatePipe],
   templateUrl: './new-users.component.html'
 })
 export class NewUsersComponent implements OnInit {

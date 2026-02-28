@@ -1,19 +1,41 @@
+<div class="container body-content">
 <div class="container sectionHeader">
   <h1 class="sectionHeading">Forums</h1>
-  <a routerLink="/forum/create" *ngIf="currentUser$ | async">Create Forum</a>
+
+  @if (currentUser$ | async) {
+    <a routerLink="/forum/create">Create Forum</a>
+  }
 </div>
 
-<table class="table table-hover" id="forumIndexTable" style="background-color:white">
+<table
+  class="table table-hover"
+  id="forumIndexTable"
+  style="background-color: white"
+>
   <tbody>
-    <tr *ngFor="let forum of forums">
-      <td>
-        <a [routerLink]="['/forum', forum.id]">{{ forum.name }}</a>
-      </td>
-      <td>
-        {{ forum.description }}
-        <a *ngIf="(currentUser$ | async)?.userName === forum.authorName"
-           class="delete btn btn-link" (click)="delete(forum.id)" style="cursor:pointer">Delete</a>
-      </td>
-    </tr>
+    @for (forum of forums; track forum.id) {
+      <tr>
+        <td>
+          <a [routerLink]="['/forum', forum.id]">
+            {{ forum.name }}
+          </a>
+        </td>
+
+        <td>
+          {{ forum.description }}
+
+          @if ((currentUser$ | async)?.userName === forum.authorName) {
+            <a
+              class="delete btn btn-link"
+              style="cursor: pointer"
+              (click)="delete(forum.id)"
+            >
+              Delete
+            </a>
+          }
+        </td>
+      </tr>
+    }
   </tbody>
 </table>
+</div>

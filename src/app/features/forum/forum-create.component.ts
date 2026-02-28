@@ -15,6 +15,8 @@ export class ForumCreateComponent {
 
   model = { title: '', description: '' };
   errors: string[] = [];
+  users: any;
+  defaultImage: any;
 
   submit(form: NgForm): void {
     if (form.invalid) return;

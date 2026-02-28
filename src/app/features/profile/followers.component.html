@@ -1,45 +1,39 @@
-<div class="sectionHeader">
-  <h3>Followers</h3>
-</div>
+<div class="container body-content">
+  <div class="sectionHeader">
+    <h3>Followers</h3>
+  </div>
 
-@if (profile) {
-  @for (follow of profile.follows; track follow.follower?.id) {
+  @for (follow of followers; track follow.id) {
     <div class="container body-content border-bottom">
       <div class="row userProfile">
         <div class="col-md-4">
-          @if (!follow.follower?.imagePath) {
+          @if (!follow.imagePath) {
             <img
               src="assets/images/blankpicture.png"
-              id="userProfileImage"
+              class="profile-img-box"
               alt="Default profile image" />
           } @else {
             <div
-              id="userProfileImage"
-              [style.background-image]="'url(' + (follow.follower?.imagePath ?? '') + ')'"
-              style="background-size:100%">
-            </div>
+              class="profile-img-box"
+              [style.background-image]="'url(' + follow.imagePath + ')'"
+            ></div>
           }
         </div>
-
         <div class="col-md-8">
-          <a
-            id="userName"
-            [routerLink]="['/profile', follow.follower?.id]">
-            {{ follow.follower?.userName }}
+          <a [routerLink]="['/profile', follow.id]">
+            {{ follow.userName }}
           </a>
-
           <span id="userRating">Current Rating:</span>
-          <span
-            class="badge rounded-circle"
-            style="background-color:skyblue">
-            {{ follow.follower?.rating }}
+          <span class="badge rounded-circle" style="background-color:skyblue">
+            {{ follow.rating }}
           </span>
-
           <span id="userCreatedLabel">
-            Member Since: {{ follow.follower?.memberSince }}
+            Member Since: {{ follow.memberSince }}
           </span>
         </div>
       </div>
     </div>
+  } @empty {
+    <p class="text-muted">No followers yet.</p>
   }
-}
+</div>
