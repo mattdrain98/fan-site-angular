@@ -1,25 +1,39 @@
-<div class="container sectionHeader">
-  <h3 class="sectionHeading">New Users</h3>
-</div>
-
-@for (user of users; track user.id) {
-  <div class="container body-content border-bottom">
-    <div class="row userProfile">
-      <div class="col-md-4">
-        <div
-          class="profile-img-box"
-          [style.background-image]="'url(' + (user.imagePath || defaultImage) + ')'"
-        ></div>
-      </div>
-      <div class="col-md-8">
-        <a routerLink="['/profile', user.id]">{{ user.userName }}</a>
-        <span class="badge rounded-circle" style="background-color: skyblue">
-          {{ user.rating }}
-        </span>
-        <span>Member Since: {{ user.memberSince }}</span>
-      </div>
-    </div>
+<div class="container body-content">
+  <div class="sectionHeader">
+    Create New Forum
   </div>
-} @empty {
-  <p class="text-muted">No new users found.</p>
-}
+
+  <form #addForumForm="ngForm" (ngSubmit)="submit(addForumForm)"   id="addPostForm">
+    @if (errors.length) {
+      <div class="text-danger">
+        @for (error of errors; track error) {
+          <p>{{ error }}</p>
+        }
+      </div>
+    }
+
+    <div class="form-group">
+      <label for="title">Forum Title</label>
+      <input
+        id="title"
+        name="title"
+        [(ngModel)]="model.title"
+        class="form-control"
+        placeholder="Choose a Forum Title"
+        required />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input
+        id="description"
+        name="description"
+        [(ngModel)]="model.description"
+        class="form-control"
+        placeholder="Write a brief description here."
+        required />
+    </div>
+
+    <button type="submit" id="registerBtn" class="btn btn-primary">Create</button>
+  </form>
+</div>

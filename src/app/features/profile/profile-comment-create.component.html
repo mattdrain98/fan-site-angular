@@ -2,7 +2,7 @@
 <div class="container body-content">
   <div class="row sectionHeader">
     <div class="sectionHeading" style="padding-bottom:15px">
-      Comment | {{ t.otherUserName }}
+      Comment | {{ t.profileUserName }}
       <span id="headingBtn">
         <a routerLink="['/profile', t.userId]">
           <span class="material-icons" style="color:black; float:right">arrow_back</span>
@@ -13,7 +13,7 @@
   <div class="row" style="background-color:white">
     <div class="createPostSection">
       <div class="authorBlock">
-        You're submitting this comment as <span class="authorBlockName">{{ t.authorName }}</span>
+        You're submitting this comment as <span class="authorBlockName">{{ t.commentUserName }}</span>
       </div>
       <form #f="ngForm" (ngSubmit)="submit(f)" id="addPostForm">
         @for (e of errors; track e) {

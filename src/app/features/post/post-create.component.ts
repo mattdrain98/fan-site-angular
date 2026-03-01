@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PostService } from '../../core/services/services';
+import { PostService, ForumService } from '../../core/services/services';
 
 @Component({
   selector: 'app-post-create',
@@ -12,6 +12,7 @@ import { PostService } from '../../core/services/services';
 export class PostCreateComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private postService = inject(PostService);
+  private forumService = inject(ForumService);
   private router = inject(Router);
 
   forumId!: number;
@@ -21,6 +22,10 @@ export class PostCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.forumId = +this.route.snapshot.paramMap.get('forumId')!;
+    this.forumService.getById(this.forumId).subscribe({
+      next: (forum) => this.forumName = forum.forum.name,
+      error: () => this.errors = ['Failed to load forum']
+    });
   }
 
   submit(form: NgForm): void {

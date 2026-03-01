@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import {
   ForumListingModel, ForumTopicModel,
   PostIndexModel, PostListingModel, PostReplyDto,
-  ScreenshotDto, ProfileModel, ProfileCommentModel,
+  ScreenshotDto, ProfileModel, ProfileCommentDto,
   HomeIndexModel, SearchResultModel, ApplicationUser
 } from '../models';
 
@@ -154,12 +154,12 @@ export class ProfileCommentService {
   private http = inject(HttpClient);
   private base = `${environment.apiBaseUrl}/profilecomment`;
 
-  getTemplate(profileUserId: string): Observable<ProfileCommentModel> {
-    return this.http.get<ProfileCommentModel>(`${this.base}/${profileUserId}`);
+  getTemplate(profileUserId: string): Observable<ProfileCommentDto> {
+    return this.http.get<ProfileCommentDto>(`${this.base}/${profileUserId}`);
   }
 
-  add(payload: ProfileCommentModel): Observable<ProfileCommentModel> {
-    return this.http.post<ProfileCommentModel>(this.base, payload);
+  add(payload: ProfileCommentDto): Observable<ProfileCommentDto> {
+    return this.http.post<ProfileCommentDto>(this.base, payload);
   }
 }
 

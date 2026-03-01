@@ -100,8 +100,9 @@ export interface ProfileModel {
   followers: number;
   follows: FollowDto[];
   followings: FollowDto[];
-  profileComments: ProfileCommentModel[];
+  profileComments: ProfileCommentDto [];
   bio?: string;
+  isFollowing: boolean; 
 }
 
 export interface FollowDto {
@@ -112,18 +113,18 @@ export interface FollowDto {
   memberSince: string;
 }
 
-export interface ProfileCommentModel {
+export interface ProfileCommentDto  {
   id?: number;
-  authorImageUrl?: string;
-  authorName: string;
-  authorId: string;
-  authorRating: number;
+  profileUserImageUrl?: string;
+  profileUserName: string;
+  profileUserId: string;
+  profileUserRating: number;
   date?: string;
   commentContent: string;
-  otherUserImagePath?: string;
-  otherUserName?: string;
-  otherUserRating?: number;
-  userId: string;
+  commentUserImagePath?: string;
+  commentUserName?: string;
+  commentUserRating?: number;
+  commentUserId: string;
 }
 
 export interface HomeIndexModel {

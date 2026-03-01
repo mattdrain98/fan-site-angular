@@ -20,7 +20,6 @@
           ></div>
         }
 
-        <!-- Change Photo always appears under the picture for own profile -->
         @if (currentUser$ | async; as cu) {
           @if (cu.userName === profile.userName) {
             <label
@@ -62,7 +61,6 @@
         </div>
       </div>
 
-      <!-- Right: user info -->
       <div class="col-md-8" style="display:flex; flex-direction:column; justify-content:center;">
         <span id="userName">
           {{ profile.userName }}
@@ -85,33 +83,28 @@
         </div>
 
         <span id="userCreatedLabel">
-          Member Since: {{ profile.memberSince }}
+          Member Since: {{ profile.memberSince | date: 'mediumDate' }}
         </span>
 
         <div style="display:flex; gap:12px; margin-top:10px;">
           <a
             [routerLink]="['/profile/followers', profile.userId]"
-            class="follower-pill">
+            class="follower-pill" style="text-decoration: none;">
             <i class="material-icons" style="font-size:16px">group</i>
             <span class="follower-pill-count">{{ profile.followers }}</span>
             <span class="follower-pill-label">Followers</span>
           </a>
           <a
             [routerLink]="['/profile/following', profile.userId]"
-            class="follower-pill">
+            class="follower-pill" style="text-decoration: none;">
             <i class="material-icons" style="font-size:16px">person_add</i>
             <span class="follower-pill-count">{{ profile.following }}</span>
             <span class="follower-pill-label">Following</span>
           </a>
         </div>
 
-        <style>
-
-        </style>
-
         <div id="userBioLabel" style="margin-top:12px; margin-bottom:4px;">{{ profile.bio }}</div>
 
-        <!-- Edit Bio button -->
         @if (currentUser$ | async; as cu) {
           @if (cu.userName === profile.userName) {
             <div style="margin-top:10px;">
@@ -139,29 +132,77 @@
           <div
             class="postAuthorImage"
             [style.background-image]="
-              comment.authorImageUrl
-                ? 'url(' + comment.authorImageUrl + ')'
+              comment.commentUserImagePath
+                ? 'url(' + comment.commentUserImagePath + ')'
                 : 'url(assets/images/blankpicture.png)'
             "
             style="background-size:100%">
           </div>
 
-          <a [routerLink]="['/profile', comment.authorId]">
-            <strong>{{ comment.authorName }}</strong>
+          <a [routerLink]="['/profile', comment.commentUserId]">
+            <strong>{{ comment.commentUserName }}</strong>
           </a>
 
           <span class="badge rounded-circle" style="background-color:skyblue">
-            {{ comment.authorRating }}
+            {{ comment.commentUserRating }}
           </span>
           <br />
-          <span class="postDate">{{ comment.date }}</span>
+          <span class="postDate">{{ comment.date | date: 'mediumDate' }}</span>
         </div>
 
         <div class="col-md-8 replyContentContainer">
-          <div
-            class="postContent"
-            [innerHTML]="comment.commentContent">
-          </div>
+
+          <!-- View mode -->
+          @if (editingCommentId !== comment.id) {
+            <div class="postContent" [innerHTML]="comment.commentContent"></div>
+
+            <!-- Show edit/delete only to comment author -->
+            @if (currentUser$ | async; as cu) {
+              @if (cu.userId === comment.commentUserId) {
+                <div style="display:flex; gap:8px; margin-top:8px;">
+                  <button
+                    class="btn btn-sm btn-outline-secondary"
+                    style="display:inline-flex; align-items:center; gap:4px;"
+                    (click)="startEdit(comment)">
+                    <i class="material-icons" style="font-size:14px">edit</i>
+                    Edit
+                  </button>
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    style="display:inline-flex; align-items:center; gap:4px;"
+                    (click)="deleteComment(comment.id!)">
+                    <i class="material-icons" style="font-size:14px">delete</i>
+                    Delete
+                  </button>
+                </div>
+              }
+            }
+
+          } @else {
+            <!-- Inline edit mode -->
+            <textarea
+              class="form-control"
+              rows="4"
+              [(ngModel)]="editContent"
+            ></textarea>
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <button
+                class="btn btn-sm btn-primary"
+                style="display:inline-flex; align-items:center; gap:4px;"
+                (click)="saveEdit(comment.id!)">
+                <i class="material-icons" style="font-size:14px">save</i>
+                Save
+              </button>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+                style="display:inline-flex; align-items:center; gap:4px;"
+                (click)="cancelEdit()">
+                <i class="material-icons" style="font-size:14px">close</i>
+                Cancel
+              </button>
+            </div>
+          }
+
         </div>
       </div>
     } @empty {

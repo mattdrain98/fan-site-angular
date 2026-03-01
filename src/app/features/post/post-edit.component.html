@@ -16,7 +16,7 @@
   <div class="addPost">
     <div class="form-group">
       <label>Title</label>
-      <dx-input
+      <input
         name="title"
         [(ngModel)]="model.title"
         required
@@ -26,12 +26,12 @@
 
     <div class="form-group">
       <label>Content</label>
-      <dx-textarea
+      <textarea
         name="content"
         [(ngModel)]="model.content"
         rows="8"
         class="form-control"
-      ></dx-textarea>
+      ></textarea>
     </div>
 
     <button
