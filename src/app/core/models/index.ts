@@ -154,3 +154,20 @@ export interface ProfileEditModel {
   userName: string;
   bio?: string;
 }
+
+export interface NewPostModel {
+  title: string;
+  content: string;
+  forumId: number;
+}
+
+export interface PostTopicModel {
+  forumId: number;
+  forumName: string;
+  posts: PostListingModel[];
+}
+
+export interface PostEditModel {
+  title: string;
+  content: string;
+}

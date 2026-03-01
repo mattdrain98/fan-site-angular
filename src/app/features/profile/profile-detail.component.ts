@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProfileService } from '../../core/services/services';
+import { ProfileService } from 'src/app/core/services/profile.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ProfileModel, ProfileCommentDto } from '../../core/models';
 import { ProfileCommentService } from 'src/app/core/services/profile-comment.service';
@@ -29,6 +29,8 @@ export class ProfileDetailComponent implements OnInit {
 
   editingCommentId: number | null | undefined = null;
   editContent = '';
+  isEditingBio = false;
+  editBioContent = '';
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;
@@ -94,6 +96,31 @@ export class ProfileDetailComponent implements OnInit {
         }
       },
       error: () => this.errors = ['Failed to delete comment']
+    });
+  }
+
+  startEditBio(): void {
+    this.isEditingBio = true;
+    this.editBioContent = this.profile?.bio || '';
+  }
+
+  cancelEditBio(): void {
+    this.isEditingBio = false;
+    this.editBioContent = '';
+  } 
+
+  saveEditBio(): void {
+    if (!this.profile) return;
+    this.profileService.editBio({ 
+      userId: this.profile.userId, 
+      userName: this.profile.userName, 
+      bio: this.editBioContent 
+    }).subscribe({
+      next: () => {
+        this.profile!.bio = this.editBioContent;
+        this.cancelEditBio();
+      },
+      error: () => this.errors = ['Failed to update bio']
     });
   }
 }

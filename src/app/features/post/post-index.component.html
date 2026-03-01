@@ -2,13 +2,11 @@
   @if (post) {
     <div class="row postHeader">
       <div class="postHeading">
-        <span class="postIndexTitle">{{ post.title }}</span>
+        <span class="postIndexTitle">{{ post.forumName }} Forum</span>
         <span id="headingBtn">
-          <a [routerLink]="['/forum', post.forumId]">
-            <span class="material-icons" style="color:black; float:right">
-              arrow_back
-            </span>
-          </a>
+          <button (click)="goBack()" style="background:none; border:none; cursor:pointer; float:right">
+            <span class="material-icons" style="color:black">arrow_back</span>
+          </button>
         </span>
       </div>
     </div>
@@ -24,32 +22,28 @@
               : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'
           ">
         </div>
-
         <a [routerLink]="['/profile', post.authorId]">
           <strong>{{ post.authorName }}</strong>
         </a>
-
         <span class="badge rounded-circle" style="background-color:skyblue">
           {{ post.authorRating }}
         </span>
         <br />
-        <span class="postDate">{{ post.date }}</span>
+        <span class="postDate">{{ post.date | date: 'short' }}</span>
       </div>
 
-      <!-- Content -->
+      <!-- Post content -->
       <div class="col-md-9 postContentContainer">
         @if (currentUser$ | async) {
-        <button
-          id="likeBtn"
-          class="material-icons"
-          style="float:right; cursor:pointer; position: relative; overflow: visible;"
-          (click)="toggleLike()">
-          {{ post.userHasLiked ? 'favorite' : 'favorite_border' }}
-          <div class="burst-circles"></div>
-        </button>
-          <div id="postLikes" style="float:right">
-            {{ post.totalLikes }}
-          </div>
+          <button
+            id="likeBtn"
+            class="material-icons"
+            style="float:right; cursor:pointer; position:relative; overflow:visible;"
+            (click)="toggleLike()">
+            {{ post.userHasLiked ? 'favorite' : 'favorite_border' }}
+            <div class="burst-circles"></div>
+          </button>
+          <div id="postLikes" style="float:right">{{ post.totalLikes }}</div>
         } @else {
           <button
             id="likeBtnNotSignedIn"
@@ -58,19 +52,56 @@
             (click)="notSignedIn()">
             favorite_border
           </button>
-          <div style="float:right">
-            {{ post.totalLikes }}
-          </div>
+          <div style="float:right">{{ post.totalLikes }}</div>
         }
 
-        <div class="postContent" [innerHTML]="post.postContent"></div>
+        <!-- View mode -->
+        @if (!isEditingPost) {
+          <div class="postContent" [innerHTML]="post.postContent"></div>
 
-        @if ((currentUser$ | async)?.userName === post.authorName) {
-          <a
-            [routerLink]="['/post/edit', post.id]"
-            style="float:right">
-            Edit
-          </a>
+          @if (currentUser$ | async; as cu) {
+            @if (cu.userName === post.authorName) {
+              <div style="display:flex; gap:8px; margin-top:8px;">
+                <button
+                  class="btn btn-sm btn-outline-secondary"
+                  style="display:inline-flex; align-items:center; gap:4px;"
+                  (click)="startEditPost()">
+                  <i class="material-icons" style="font-size:14px">edit</i>
+                  Edit
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  style="display:inline-flex; align-items:center; gap:4px;"
+                  (click)="deletePost()">
+                  <i class="material-icons" style="font-size:14px">delete</i>
+                  Delete
+                </button>
+              </div>
+            }
+          }
+        } @else {
+          <!-- Inline edit mode -->
+          <textarea
+            class="form-control"
+            rows="6"
+            [(ngModel)]="editPostContent">
+          </textarea>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button
+              class="btn btn-sm btn-primary"
+              style="display:inline-flex; align-items:center; gap:4px;"
+              (click)="saveEditPost()">
+              <i class="material-icons" style="font-size:14px">save</i>
+              Save
+            </button>
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              style="display:inline-flex; align-items:center; gap:4px;"
+              (click)="cancelEditPost()">
+              <i class="material-icons" style="font-size:14px">close</i>
+              Cancel
+            </button>
+          </div>
         }
       </div>
     </div>
@@ -78,73 +109,124 @@
     <div class="row" id="replyDivider"></div>
 
     <div class="row postReplyContent">
-      @if (currentUser$ | async) {
-        <div class="row" id="replyRow">
-          <span>
-          <a [routerLink]="['/reply/create', post.id]"
-            class="btn btn-reply btn-4">
-            <span class="reply-icon-section">
-              <i class="material-icons" style="font-size:16px;">reply</i>
-              </span>
-              <span class="reply-text-section">Reply</span>
-          </a>
+
+      <!-- Inline reply box -->
+@if (currentUser$ | async) {
+  <div class="row" id="replyRow">
+    @if (!isReplying) {
+      <span>
+        <button class="btn btn-reply btn-4" (click)="startReply()">
+          <span class="reply-icon-section">
+            <i class="material-icons" style="font-size:16px;">reply</i>
           </span>
+          <span class="reply-text-section">Reply</span>
+        </button>
+      </span>
+    } @else {
+      <div class="replyInputWrapper">
+        <textarea
+          class="form-control"
+          rows="4"
+          [(ngModel)]="newReplyContent"
+          placeholder="Write your reply...">
+        </textarea>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button
+            class="btn btn-sm btn-primary"
+            style="display:inline-flex; align-items:center; gap:4px;"
+            (click)="submitReply()">
+            <i class="material-icons" style="font-size:14px">send</i>
+            Submit
+          </button>
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            style="display:inline-flex; align-items:center; gap:4px;"
+            (click)="cancelReply()">
+            <i class="material-icons" style="font-size:14px">close</i>
+            Cancel
+          </button>
         </div>
-      }
+      </div>
+    }
+  </div>
+}
+@if (post.replies.length > 0) {
+  @for (reply of post.replies; track reply.id) {
+    <div class="row replyContent">
+      <div class="col-md-3 replyAuthorContainer">
+        <div
+          class="postAuthorImage"
+          [style.background-image]="
+            reply.authorImageUrl
+              ? 'url(' + reply.authorImageUrl + ')'
+              : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'
+          ">
+        </div>
+        <a [routerLink]="['/profile', reply.authorId]">
+          <strong>{{ reply.authorName }}</strong>
+        </a>
+        <span class="badge rounded-circle" style="background-color:skyblue">
+          {{ reply.authorRating }}
+        </span>
+        <br />
+        <span class="postDate">{{ reply.date | date: 'short' }}</span>
+      </div>
 
-      @if (post.replies.length > 0) {
-        @for (reply of post.replies; track reply.id) {
-          <div class="row replyContent">
-            <div class="col-md-3 replyAuthorContainer">
-              <div
-                class="postAuthorImage"
-                [style.background-image]="
-                  reply.authorImageUrl
-                    ? 'url(' + reply.authorImageUrl + ')'
-                    : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'
-                ">
-              </div>
+      <div class="col-md-9 replyContentContainer">
+        @if (editingReplyId !== reply.id) {
+          <div class="postContent" [innerHTML]="reply.replyContent"></div>
 
-              <a [routerLink]="['/profile', reply.authorId]">
-                <strong>{{ reply.authorName }}</strong>
-              </a>
-
-              <span class="badge rounded-circle" style="background-color:skyblue">
-                {{ reply.authorRating }}
-              </span>
-              <br />
-              <span class="postDate">{{ reply.date }}</span>
-            </div>
-
-            <div class="col-md-9 replyContentContainer">
-              <div
-                class="postContent"
-                [innerHTML]="reply.replyContent">
-              </div>
-
-              @if ((currentUser$ | async)?.userName === reply.authorName) {
-                <a
-                  (click)="deleteReply(reply.id)"
-                  class="btn btn-link"
-                  style="float:right; cursor:pointer">
-                  Delete
-                </a>
-                <a
-                  [routerLink]="['/reply/edit', reply.id]"
-                  class="btn btn-link"
-                  style="float:right">
+          @if (currentUser$ | async; as cu) {
+            @if (cu.userId === reply.authorId) {
+              <div style="display:flex; gap:8px; margin-top:8px;">
+                <button
+                  class="btn btn-sm btn-outline-secondary"
+                  style="display:inline-flex; align-items:center; gap:4px;"
+                  (click)="startEditReply(reply)">
+                  <i class="material-icons" style="font-size:14px">edit</i>
                   Edit
-                </a>
-              }
-            </div>
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  style="display:inline-flex; align-items:center; gap:4px;"
+                  (click)="deleteReply(reply.id)">
+                  <i class="material-icons" style="font-size:14px">delete</i>
+                  Delete
+                </button>
+              </div>
+            }
+          }
+        } @else {
+          <textarea
+            class="form-control"
+            rows="4"
+            [(ngModel)]="editReplyContent">
+          </textarea>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button
+              class="btn btn-sm btn-primary"
+              style="display:inline-flex; align-items:center; gap:4px;"
+              (click)="saveEditReply(reply.id)">
+              <i class="material-icons" style="font-size:14px">save</i>
+              Save
+            </button>
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              style="display:inline-flex; align-items:center; gap:4px;"
+              (click)="cancelEditReply()">
+              <i class="material-icons" style="font-size:14px">close</i>
+              Cancel
+            </button>
           </div>
         }
-      } @else {
-        <div class="noPosts">
-          <h3>There are no replies to this post.</h3>
-        </div>
-      }
+      </div>
+    </div>
+  }
+} @else if (!isReplying) {
+  <div class="noPosts">
+    <h3>There are no replies to this post.</h3>
+  </div>
+}
     </div>
   }
 </div>
-

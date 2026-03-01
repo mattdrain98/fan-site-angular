@@ -570,7 +570,6 @@ video {
 
 .like-icon {
     color: crimson;
-    font-size: 18px; /* adjust as needed */
 }
 
 .like:hover {
@@ -751,3 +750,16 @@ video {
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             transform: translateY(-1px);
           }
+
+#replyRow {
+  display: flex;
+  padding: 15px;
+  height: auto;
+  width: 100%;
+}
+
+.replyInputWrapper {
+  background-color: white;
+  padding: 15px;
+  width: 100%;
+}

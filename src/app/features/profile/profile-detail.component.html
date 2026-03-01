@@ -103,21 +103,52 @@
           </a>
         </div>
 
-        <div id="userBioLabel" style="margin-top:12px; margin-bottom:4px;">{{ profile.bio }}</div>
+@if (currentUser$ | async; as cu) {
+  @if (cu.userName === profile.userName) {
 
-        @if (currentUser$ | async; as cu) {
-          @if (cu.userName === profile.userName) {
-            <div style="margin-top:10px;">
-              <a
-                [routerLink]="['/profile/edit-bio', profile.userId]"
-                class="btn btn-sm btn-outline-dark"
-                style="display:inline-flex; align-items:center; gap:5px;">
-                <i class="material-icons" style="font-size:16px">{{ profile.bio ? 'edit' : 'add' }}</i>
-                {{ profile.bio ? 'Edit Bio' : 'Add Bio' }}
-              </a>
-            </div>
-          }
-        }
+    @if (!isEditingBio) {
+      <div id="userBioLabel" style="margin-top:12px; margin-bottom:4px;">
+        {{ profile.bio || 'No bio yet.' }}
+      </div>
+      <div style="margin-top:10px;">
+        <button
+          class="btn btn-sm btn-outline-dark"
+          style="display:inline-flex; align-items:center; gap:5px;"
+          (click)="startEditBio()">
+          <i class="material-icons" style="font-size:16px">{{ profile.bio ? 'edit' : 'add' }}</i>
+          {{ profile.bio ? 'Edit Bio' : 'Add Bio' }}
+        </button>
+      </div>
+    } @else {
+      <textarea
+        class="form-control"
+        rows="4"
+        [(ngModel)]="editBioContent"
+        style="margin-top:12px;">
+      </textarea>
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <button
+          class="btn btn-sm btn-primary"
+          style="display:inline-flex; align-items:center; gap:4px;"
+          (click)="saveEditBio()">
+          <i class="material-icons" style="font-size:14px">save</i>
+          Save
+        </button>
+        <button
+          class="btn btn-sm btn-outline-secondary"
+          style="display:inline-flex; align-items:center; gap:4px;"
+          (click)="cancelEditBio()">
+          <i class="material-icons" style="font-size:14px">close</i>
+          Cancel
+        </button>
+      </div>
+    }
+
+  } @else {
+    <!-- Non-owner just sees the bio text -->
+    <div id="userBioLabel" style="margin-top:12px; margin-bottom:4px;">{{ profile.bio }}</div>
+  }
+}
       </div>
     </div>
 }

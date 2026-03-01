@@ -10,13 +10,13 @@
           <tr>
             <td>
               <div class="postTitle">
-                <a [routerLink]="['/post', post.id]">
+                <a routerLink="['/post', post.id]">
                   {{ post.title }}
                 </a>
               </div>
 
               <div class="forumSubTitle">
-                <a [routerLink]="['/profile', post.authorId]">
+                <a routerLink="['/profile', post.authorId]">
                   {{ post.authorName }}
                 </a>
 
@@ -42,7 +42,7 @@
                 <span style="margin-bottom: 15px; margin-left: 20px">
                   {{ post.totalLikes }}
                 </span>
-                <div class="inline-icon material-icons">
+                <div class="inline-icon material-icons like-icon">
                   favorite
                 </div>
               </div>

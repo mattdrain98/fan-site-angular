@@ -2,22 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService, ProfileCommentService } from '../../core/services/services';
-import { ProfileModel, ProfileCommentModel } from '../../core/models';
-
-// ── Edit Bio ──────────────────────────────────────────────────────────────
-import { Component as C1 } from '@angular/core';
-@C1({ selector: 'app-edit-bio', templateUrl: './edit-bio.component.html' })
-export class EditBioComponent implements OnInit {
-  userId = ''; userName = ''; bio = '';
-  constructor(private route: ActivatedRoute, private svc: ProfileService, private router: Router) {}
-  ngOnInit(): void {
-    this.userId = this.route.snapshot.paramMap.get('id')!;
-    this.svc.getProfile(this.userId).subscribe(p => { this.userName = p.userName; this.bio = p.bio ?? ''; });
-  }
-  submit(form: NgForm): void {
-    this.svc.editBio(this.userId, this.bio, this.userName).subscribe(() => this.router.navigate(['/profile', this.userId]));
-  }
-}
+import { ProfileModel, ProfileCommentDto } from '../../core/models';
 
 // ── Edit Username ──────────────────────────────────────────────────────────
 import { Component as C2 } from '@angular/core';
@@ -65,7 +50,7 @@ export class FollowingComponent implements OnInit {
 import { Component as C5 } from '@angular/core';
 @C5({ selector: 'app-profile-comment-create', templateUrl: './profile-comment-create.component.html' })
 export class ProfileCommentCreateComponent implements OnInit {
-  template: ProfileCommentModel | null = null;
+  template: ProfileCommentDto | null = null;
   commentContent = '';
   errors: string[] = [];
   constructor(private route: ActivatedRoute, private svc: ProfileCommentService, private router: Router) {}
@@ -75,9 +60,9 @@ export class ProfileCommentCreateComponent implements OnInit {
   }
   submit(form: NgForm): void {
     if (!this.template) return;
-    const payload: ProfileCommentModel = { ...this.template, commentContent: this.commentContent };
+    const payload: ProfileCommentDto = { ...this.template, commentContent: this.commentContent };
     this.svc.add(payload).subscribe({
-      next: () => this.router.navigate(['/profile', this.template!.userId]),
+      next: () => this.router.navigate(['/profile', this.template!.commentUserId]),
       error: () => this.errors = ['Failed to submit comment']
     });
   }

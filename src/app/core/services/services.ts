@@ -151,6 +151,12 @@ export class ProfileService {
 // ── Profile Comment ────────────────────────────────────────────────────────
 @Injectable({ providedIn: 'root' })
 export class ProfileCommentService {
+  getCommentTemplate(id: string) {
+    throw new Error('Method not implemented.');
+  }
+  addComment(payload: ProfileCommentDto) {
+    throw new Error('Method not implemented.');
+  }
   private http = inject(HttpClient);
   private base = `${environment.apiBaseUrl}/profilecomment`;
 
