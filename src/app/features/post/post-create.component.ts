@@ -9,6 +9,7 @@ import { PostService, ForumService } from '../../core/services/services';
   imports: [FormsModule],
   templateUrl: './post-create.component.html'
 })
+
 export class PostCreateComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private postService = inject(PostService);

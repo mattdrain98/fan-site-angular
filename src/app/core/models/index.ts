@@ -1,3 +1,4 @@
+//------------------FORUMS------------------\\
 export interface ForumListingModel {
   id: number;
   name: string;
@@ -13,6 +14,7 @@ export interface ForumTopicModel {
   searchQuery?: string;
 }
 
+//------------------POSTS------------------\\
 export interface PostListingModel {
   id: number;
   title: string;
@@ -44,6 +46,24 @@ export interface PostIndexModel {
   userHasLiked: boolean;
 }
 
+export interface NewPostModel {
+  title: string;
+  content: string;
+  forumId: number;
+}
+
+export interface PostTopicModel {
+  forumId: number;
+  forumName: string;
+  posts: PostListingModel[];
+}
+
+export interface PostEditModel {
+  title: string;
+  content: string;
+}
+
+//------------------POST REPLIES------------------\\
 export interface PostReplyModel {
   id: number;
   authorImageUrl?: string;
@@ -73,11 +93,13 @@ export interface PostReplyDto {
   forumName: string;
 }
 
+//------------------LIKES------------------\\
 export interface LikeModel {
   id?: number;
   user?: { id: string; userName: string };
 }
 
+//------------------SCREENSHOTS------------------\\
 export interface ScreenshotDto {
   id: number;
   title: string;
@@ -90,6 +112,7 @@ export interface ScreenshotDto {
   slug: string;
 }
 
+//------------------PROFILES------------------\\
 export interface ProfileModel {
   userId: string;
   userName: string;
@@ -103,14 +126,6 @@ export interface ProfileModel {
   profileComments: ProfileCommentDto [];
   bio?: string;
   isFollowing: boolean; 
-}
-
-export interface FollowDto {
-  id: string;
-  userName: string;
-  imagePath?: string;
-  rating: number;
-  memberSince: string;
 }
 
 export interface ProfileCommentDto  {
@@ -127,15 +142,12 @@ export interface ProfileCommentDto  {
   commentUserId: string;
 }
 
-export interface HomeIndexModel {
-  latestPosts: PostListingModel[];
-  searchQuery: string;
-}
-
-export interface SearchResultModel {
-  posts: PostListingModel[];
-  searchQuery: string;
-  emptySearchResults: boolean;
+export interface FollowDto {
+  id: string;
+  userName: string;
+  imagePath?: string;
+  rating: number;
+  memberSince: string;
 }
 
 export interface ApplicationUser {
@@ -155,19 +167,16 @@ export interface ProfileEditModel {
   bio?: string;
 }
 
-export interface NewPostModel {
-  title: string;
-  content: string;
-  forumId: number;
+//------------------HOME & SEARCH------------------\\
+export interface HomeIndexModel {
+  latestPosts: PostListingModel[];
+  searchQuery: string;
 }
 
-export interface PostTopicModel {
-  forumId: number;
-  forumName: string;
+export interface SearchResultModel {
   posts: PostListingModel[];
+  searchQuery: string;
+  emptySearchResults: boolean;
 }
 
-export interface PostEditModel {
-  title: string;
-  content: string;
-}
+
