@@ -2,19 +2,29 @@
     width: 50%; 
 }
 
-.logo{
-    width: 25%; 
-    height: 25%; 
+.header-bar {
+  background: skyblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;        /* control the bar height here */
+  padding: 0 1rem;
+  gap: 1rem;
+}
+
+.logo {
+  height: 60px;
+  width: auto;
 }
 
 .chocobo {
-    height: 4%;
-    width: 4%;
+  height: 50px;
+  width: auto;
 }
 
 .cactuar {
-    height: 5%;
-    width: 5%;
+  height: 50px;
+  width: auto;
 }
 
 .pfp {

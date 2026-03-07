@@ -7,7 +7,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
   standalone: true,
   imports: [RouterOutlet, RouterLink, NavbarComponent],
   template: `
-    <div class="text-center" style="background:skyblue">
+    <div class="header-bar">
       <img src="assets/images/chocobo.png" class="chocobo" alt="chocobo" />
       <img src="assets/images/logo.png" class="logo" alt="logo" />
       <img src="assets/images/cactuar.png" class="cactuar" alt="cactuar" />
