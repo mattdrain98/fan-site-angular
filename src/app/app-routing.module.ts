@@ -16,9 +16,11 @@ import { ScreenshotCreateComponent } from './features/screenshot/screenshot-crea
 import { ProfileDetailComponent } from './features/profile/profile-detail.component';
 import { EditUsernameComponent, FollowersComponent, FollowingComponent, ProfileCommentCreateComponent } from './features/profile/profile-extra.components';
 import { SearchResultsComponent } from './features/search/search-results.component';
+import { ConfirmEmailComponent } from './features/auth/confirm-email.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'confirm-email', component: ConfirmEmailComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'account/change-password', component: ChangePasswordComponent },

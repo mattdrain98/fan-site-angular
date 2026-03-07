@@ -1,0 +1,30 @@
+import { Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { AuthService } from "src/app/core/services/auth.service";
+
+@Component({
+  selector: 'app-confirm-email',
+  standalone: true,
+  imports: [],
+  templateUrl: './confirm-email.component.html'
+})
+
+export class ConfirmEmailComponent {
+  message = '';
+  success = false;
+
+  constructor(
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit() {
+    const userId = this.route.snapshot.queryParams['userId'];
+    const token  = this.route.snapshot.queryParams['token'];
+
+    this.authService.confirmEmail(userId, token).subscribe({
+      next: ()  => { this.success = true;  this.message = 'Email confirmed! You can now log in.'; },
+      error: () => { this.success = false; this.message = 'Link is invalid or has expired.'; }
+    });
+  }
+}

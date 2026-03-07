@@ -71,6 +71,13 @@ login(payload: { userName: string; password: string; rememberMe: boolean }): Obs
 
   
     getLatestUsers(): Observable<ApplicationUser[]> {
-    return this.http.get<ApplicationUser[]>(`${this.base}/new-users`);
+      return this.http.get<ApplicationUser[]>(`${this.base}/new-users`);
+  }
+
+  confirmEmail(userId: string, token: string): Observable<string> {
+    return this.http.get(`${this.base}/confirm-email`, {
+      params: { userId, token },
+      responseType: 'text'
+    });
   }
 }
