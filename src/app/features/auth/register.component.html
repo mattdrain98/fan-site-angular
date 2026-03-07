@@ -1,32 +1,116 @@
-<div class="container body-content">
-  <div class="row sectionHeader">
-    <div class="sectionHeading"><h1>User Registration</h1></div>
-  </div>
-  <div class="row register">
-    <form #f="ngForm" (ngSubmit)="submit(f)">
+<div class="login-wrapper">
+  <div class="login-card">
+    <h1 class="heading">Create an account</h1>
+    <p class="subheading">Join the community today</p>
 
-      @for (e of errors; track e) {
-        <div class="text-danger">{{ e }}</div>
-      }
+    <!-- Errors -->
+    <div class="errors" *ngIf="errors?.length">
+      <div class="error-item" *ngFor="let e of errors">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <circle cx="7" cy="7" r="6" stroke="#f87171" stroke-width="1.5"/>
+          <path d="M7 4v3M7 9.5v.5" stroke="#f87171" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        {{ e }}
+      </div>
+    </div>
 
-      <div class="form-group">
-        <label>Username</label>
-        <input name="userName" [(ngModel)]="model.userName" required class="form-control" />
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input name="email" [(ngModel)]="model.email" required type="email" class="form-control" />
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input name="password" [(ngModel)]="model.password" required type="password" class="form-control" />
-      </div>
-      <div class="form-group">
-        <label>Confirm Password</label>
-        <input name="confirmPassword" [(ngModel)]="model.confirmPassword" required type="password" class="form-control" />
+    <form #f="ngForm" (ngSubmit)="submit(f)" class="login-form" novalidate>
+
+      <!-- Username -->
+      <div class="field-group">
+        <label class="field-label" for="userName">Username</label>
+        <div class="field-wrap">
+          <svg class="field-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M2.5 13c0-2.485 2.462-4.5 5.5-4.5s5.5 2.015 5.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input
+            id="userName"
+            name="userName"
+            [(ngModel)]="model.userName"
+            required
+            class="field-input"
+            placeholder="Choose a username"
+            autocomplete="username"
+          />
+        </div>
       </div>
 
-      <button type="submit" class="btn btn-primary mt-3">Register</button>
+      <!-- Email -->
+      <div class="field-group">
+        <label class="field-label" for="email">Email</label>
+        <div class="field-wrap">
+          <svg class="field-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="2" y="4" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M2 5l6 4.5L14 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <input
+            id="email"
+            name="email"
+            [(ngModel)]="model.email"
+            required
+            type="email"
+            class="field-input"
+            placeholder="Enter your email"
+            autocomplete="email"
+          />
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="field-group">
+        <label class="field-label" for="password">Password</label>
+        <div class="field-wrap">
+          <svg class="field-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input
+            id="password"
+            name="password"
+            [(ngModel)]="model.password"
+            required
+            type="password"
+            class="field-input"
+            placeholder="Create a password"
+            autocomplete="new-password"
+          />
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="field-group">
+        <label class="field-label" for="confirmPassword">Confirm Password</label>
+        <div class="field-wrap">
+          <svg class="field-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M6 11l1.5 1.5L10 9.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            [(ngModel)]="model.confirmPassword"
+            required
+            type="password"
+            class="field-input"
+            placeholder="Repeat your password"
+            autocomplete="new-password"
+          />
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit">
+        Create Account
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
     </form>
+
+    <p class="signup-prompt">
+      Already have an account? <a class="signup-link" routerLink="/login">Sign in</a>
+    </p>
   </div>
 </div>

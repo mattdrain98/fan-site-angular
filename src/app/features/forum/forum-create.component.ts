@@ -9,6 +9,7 @@ import { ForumService } from '../../core/services/services';
   imports: [FormsModule],
   templateUrl: './forum-create.component.html'
 })
+
 export class ForumCreateComponent {
   private forumService = inject(ForumService);
   private router = inject(Router);
