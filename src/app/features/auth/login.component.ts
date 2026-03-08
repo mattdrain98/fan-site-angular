@@ -15,13 +15,26 @@ export class LoginComponent {
 
   model = { userName: '', password: '', rememberMe: false };
   errors: string[] = [];
+  emailUnconfirmed = false;
+  unconfirmedEmail = '';
 
-  submit(form: NgForm): void {
-    if (form.invalid) return;
-    this.errors = [];
-    this.auth.login(this.model).subscribe({
-      next: () => this.router.navigate(['/']),
-      error: err => this.errors = [err.error?.message ?? 'Invalid login attempt']
+  submit(form: NgForm) {
+    this.auth.login(form.value).subscribe({
+      next: () => this.router.navigateByUrl('/'),
+      error: err => {
+        if (err.error === 'Please confirm your email before logging in.') {
+          this.emailUnconfirmed = true;
+          this.unconfirmedEmail = form.value.userName; // or email if you collect it
+        }
+        this.errors = [err.error];
+      }
+    });
+}
+
+  resendConfirmation() {
+    this.auth.resendConfirmation(this.unconfirmedEmail).subscribe({
+      next: () => this.errors = ['Confirmation email resent. Please check your inbox.'],
+      error: () => this.errors = ['Could not resend confirmation email.']
     });
   }
 }

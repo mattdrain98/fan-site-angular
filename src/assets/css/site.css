@@ -126,7 +126,7 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    background-image: url(../images/Ra9b34e28bcaac3c6c79fa8782fce737c.jfif);
+    background-image: url(../images/wp4702128-718090007.jpg);
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -660,95 +660,95 @@ video {
     }
 }
 
-          .action-btn-follow {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 18px;
-            border-radius: 999px;
-            font-weight: 600;
-            font-size: 0.84rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-          }
-          .action-btn-follow.follow {
-            border: none;
-            background: #87ceeb;
-            color: #fff;
-            box-shadow: 0 2px 8px rgba(135,206,235,0.4);
-          }
-          .action-btn-follow.follow:hover {
-            background: #5bb8e0;
-            box-shadow: 0 4px 14px rgba(135,206,235,0.55);
-            transform: translateY(-1px);
-          }
-          .action-btn-follow.unfollow {
-            border: 2px solid #e05555;
-            background: #fff;
-            color: #e05555;
-          }
-          .action-btn-follow.unfollow:hover {
-            background: #e05555;
-            color: #fff;
-            transform: translateY(-1px);
-          }
-          .action-btn-comment {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 18px;
-            border-radius: 999px;
-            border: 2px solid #ccc;
-            background: #fff;
-            color: #444;
-            font-weight: 600;
-            font-size: 0.84rem;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s;
-          }
-          .action-btn-comment:hover {
-            border-color: #888;
-            color: #222;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-          }
-          .follower-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            border: 1px solid #dee2e6;
-            border-radius: 999px;
-            text-decoration: none;
-            color: #444;
-            background: #f8f9fa;
-            transition: background 0.2s, border-color 0.2s;
-          }
-          .follower-pill:hover {
-            background: #e9ecef;
-            border-color: #adb5bd;
-            color: #222;
-          }
-          .follower-pill-count {
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: #222;
-          }
-          .follower-pill-label {
-            font-size: 0.8rem;
-            color: #666;
-          }
-          .btn-outline-dark:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-          }
-          label.btn-dark:hover {
-            background: #444 !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transform: translateY(-1px);
-          }
+.action-btn-follow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.action-btn-follow.follow {
+  border: none;
+  background: #87ceeb;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(135,206,235,0.4);
+}
+.action-btn-follow.follow:hover {
+  background: #5bb8e0;
+  box-shadow: 0 4px 14px rgba(135,206,235,0.55);
+  transform: translateY(-1px);
+}
+.action-btn-follow.unfollow {
+  border: 2px solid #e05555;
+  background: #fff;
+  color: #e05555;
+}
+.action-btn-follow.unfollow:hover {
+  background: #e05555;
+  color: #fff;
+  transform: translateY(-1px);
+}
+.action-btn-comment {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 2px solid #ccc;
+  background: #fff;
+  color: #444;
+  font-weight: 600;
+  font-size: 0.84rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.action-btn-comment:hover {
+  border-color: #888;
+  color: #222;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.follower-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid #dee2e6;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #444;
+  background: #f8f9fa;
+  transition: background 0.2s, border-color 0.2s;
+}
+.follower-pill:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+  color: #222;
+}
+.follower-pill-count {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #222;
+}
+.follower-pill-label {
+  font-size: 0.8rem;
+  color: #666;
+}
+.btn-outline-dark:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+label.btn-dark:hover {
+   background: #444 !important;
+   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+transform: translateY(-1px);
+}
 
 #replyRow {
   display: flex;

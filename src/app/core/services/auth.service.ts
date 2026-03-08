@@ -80,4 +80,11 @@ login(payload: { userName: string; password: string; rememberMe: boolean }): Obs
       responseType: 'text'
     });
   }
+
+  resendConfirmation(email: string): Observable<string> {
+    return this.http.post(`${this.base}/resend-confirmation`, 
+      JSON.stringify(email), 
+      { headers: { 'Content-Type': 'application/json' }, responseType: 'text' }
+    );
+  }
 }
