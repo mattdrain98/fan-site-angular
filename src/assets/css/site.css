@@ -158,11 +158,11 @@ body {
     border: none;
 }
 
-    .searchBar:focus {
+.searchBar:focus {
         color: black;
         width: 40%;
         background-color: #fff;
-    }
+}
 
 .userProfile {
     padding: 32px 0 64px 24px;
