@@ -2,11 +2,12 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProfileService } from '../../core/services/services';
 import { FollowDto } from '../../core/models';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-followers',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, DatePipe],
   templateUrl: './followers.component.html'
 })
 export class FollowersComponent implements OnInit {

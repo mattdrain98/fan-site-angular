@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { PostService } from 'src/app/core/services/post.service'; 
 import { ReplyService } from 'src/app/core/services/reply.service';
 import { AuthService } from '../../core/services/auth.service';
-import { PostIndexModel, PostReplyDto, PostEditModel } from '../../core/models';
+import { PostIndexModel } from '../../core/models';
 
 @Component({
   selector: 'app-post-index',
@@ -37,6 +37,7 @@ export class PostIndexComponent implements OnInit {
   // Inline reply creation
   isReplying = false;
   newReplyContent = '';
+  isReplyVisible = false;  // controls animation class
 
   ngOnInit(): void {
     const id = +this.route.snapshot.paramMap.get('id')!;
@@ -113,11 +114,15 @@ export class PostIndexComponent implements OnInit {
   // ── Reply create ──────────────────────────────────────
   startReply(): void {
     this.isReplying = true;
+    setTimeout(() => this.isReplyVisible = true, 10);
   }
 
   cancelReply(): void {
-    this.isReplying = false;
-    this.newReplyContent = '';
+    this.isReplyVisible = false;
+    setTimeout(() => {
+      this.isReplying = false;
+      this.newReplyContent = '';
+    }, 10); 
   }
 
   submitReply(): void {

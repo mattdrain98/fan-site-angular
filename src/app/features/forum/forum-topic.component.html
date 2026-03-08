@@ -1,89 +1,108 @@
 @if (topic; as t) {
-<div class="container body-content">
-  <div class="row sectionHeader">
-    <div class="sectionHeading">
-      <span>{{ t.forum.name }} Forum</span>
-    </div>
-    <div class="sectionDescription">
-      @if (!(currentUser$ | async)) {
-        <span>
-          You must be a <a routerLink="/register">registered member</a> to create a new post.
-        </span>
-      }
-      <div class="searchForm">
-        <input type="text" [(ngModel)]="searchQuery" placeholder="Search..." class="searchBar"
-               (focus)="searchQuery = ''" />
-        <button type="button" class="btn buttonSearch" (click)="search()">
+<div class="forum-topic-page">
+
+  <!-- Header Bar -->
+  <div class="forum-topic-wrapper">
+    <div class="forum-topic-header-bar">
+      <div class="forum-topic-header-left">
+        <i class="material-icons">forum</i>
+        <span>{{ t.forum.name }} Forum</span>
+        @if (t.posts.length > 0) {
+          <span class="forum-topic-count">{{ t.posts.length }}</span>
+        }
+      </div>
+
+      <div class="forum-topic-header-right">
+        <!-- Search -->
+        <div class="forum-search-wrap">
           <i class="material-icons">search</i>
-        </button>
-        <div class="createPostButton">
-          @if (currentUser$ | async) {
-            <span id="headingBtn">
-              <a [routerLink]="['/post/create', t.forum.id]" class="btn btn-newPost">Create Post</a>
-            </span>
-          }
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            placeholder="Search posts..."
+            class="forum-search-input"
+            (focus)="searchQuery = ''" />
+          <button class="forum-search-btn" (click)="search()">Go</button>
         </div>
+
+        <!-- Create Post -->
+        @if (currentUser$ | async) {
+          <a [routerLink]="['/post/create', t.forum.id]" class="forum-create-btn">
+            <i class="material-icons">add</i> Create Post
+          </a>
+        }
       </div>
     </div>
-  </div>
-  <div class="row forumIndexContent">
-    @if (t.posts.length > 0) {
-      <table class="table table-hover table-bordered" id="forumIndexTable" style="background-color:white">
-        <tbody>
-          @for (post of t.posts; track post.id) {
-            <tr>
-              <td>
-                <div class="postData">
-                  <div class="postTitle">
-                    <a [routerLink]="['/post', post.id]">{{ post.title }}</a>
-                  </div>
-                  <div class="forumSubTitle">
-                    <span class="postAuthor">
-                      <a [routerLink]="['/profile', post.authorId]">{{ post.authorName }}</a>
-                    </span>
-                    <span class="badge rounded-circle" style="background-color:skyblue"> {{ post.authorRating }} </span>
-                    on <span class="postData">{{ post.datePosted }}</span>
-                    <div style="float:right">
-                      <span style="margin-bottom:10px; margin-left:20px">{{ post.totalLikes }}</span>
-                      <i class="inline-icon material-icons">favorite</i>
-                    </div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="forumPostContent">Replies: {{ post.repliesCount }}</div>
-              </td>
-              <td>
-                @if ((currentUser$ | async)?.userName === post.authorName) {
-                  <ul class="navbar-nav ml-auto" style="float:right">
-                    <li class="nav-item dropdown">
-                      <a class="nav-link" href="#" data-toggle="dropdown">
-                        <i class="material-icons" style="color:gray; float:right">more_horiz</i>
-                      </a>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item" [routerLink]="['/post/edit', post.id]">Edit Post</a>
-                        <a class="dropdown-item" (click)="deletePost(post.id)" style="cursor:pointer">Delete Post</a>
-                      </div>
-                    </li>
-                  </ul>
-                }
-                <div style="float:left" class="postData">{{ post.datePosted }}</div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    } @else {
-      <div class="noPosts">
-        <i class="material-icons md-72">question_answer</i>
-        <h3>
-          It looks like there are no posts to be found.
-          @if (currentUser$ | async) {
-            Why not <a [routerLink]="['/post/create', t.forum.id]">create one</a>
-          }
-        </h3>
+
+    <!-- Guest notice -->
+    @if (!(currentUser$ | async)) {
+      <div class="forum-guest-notice">
+        <i class="material-icons">info_outline</i>
+        You must be a <a routerLink="/register">registered member</a> to create a new post.
       </div>
     }
+
+    <!-- Posts List -->
+    <div class="forum-topic-container">
+      @if (t.posts.length > 0) {
+        @for (post of t.posts; track post.id; let i = $index) {
+          <div class="forum-post-row" [style.animation-delay]="i * 40 + 'ms'">
+
+            <!-- Body -->
+            <div class="forum-post-body">
+              <a class="forum-post-title" [routerLink]="['/post', post.id]">
+                {{ post.title }}
+              </a>
+              <div class="forum-post-meta">
+                <a class="forum-meta-author" [routerLink]="['/profile', post.authorId]">
+                  <i class="material-icons">person</i>
+                  {{ post.authorName }}
+                </a>
+                <span class="forum-meta-rating">{{ post.authorRating }}</span>
+                <span class="forum-meta-sep">·</span>
+                <span class="forum-meta-date">{{ post.datePosted }}</span>
+              </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="forum-post-stats">
+              <div class="forum-stat-pill replies">
+                <i class="material-icons">chat_bubble_outline</i>
+                <span>{{ post.repliesCount }}</span>
+              </div>
+              <div class="forum-stat-pill likes">
+                <i class="material-icons">favorite</i>
+                <span>{{ post.totalLikes }}</span>
+              </div>
+            </div>
+
+            <!-- Owner Actions -->
+            @if ((currentUser$ | async)?.userName === post.authorName) {
+              <div class="forum-post-actions">
+                <a class="forum-action-btn edit" [routerLink]="['/post/edit', post.id]">
+                  <i class="material-icons">edit</i>
+                </a>
+                <button class="forum-action-btn delete" (click)="deletePost(post.id)">
+                  <i class="material-icons">delete</i>
+                </button>
+              </div>
+            }
+
+          </div>
+        }
+      } @else {
+        <div class="forum-no-posts">
+          <i class="material-icons">question_answer</i>
+          <p>
+            No posts yet.
+            @if (currentUser$ | async) {
+              Why not <a [routerLink]="['/post/create', t.forum.id]">create one</a>?
+            }
+          </p>
+        </div>
+      }
+    </div>
   </div>
+
 </div>
 }

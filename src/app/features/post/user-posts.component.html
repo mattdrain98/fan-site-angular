@@ -1,55 +1,62 @@
-<div class="container body-content">
-  <div class="row sectionHeader">
-    <div class="sectionHeading">User Posts</div>
+<div class="user-posts-page">
+
+  <!-- Header Bar -->
+  <div class="user-posts-header-bar">
+    <div class="user-posts-header-left">
+      <i class="material-icons">article</i>
+      <span>Your Posts</span>
+      @if (posts.length > 0) {
+        <span class="user-posts-count">{{ posts.length }}</span>
+      }
+    </div>
   </div>
 
-  <div class="row forumIndexContent">
+  <!-- Posts List -->
+  <div class="user-posts-container">
     @if (posts.length > 0) {
-      <table class="table table-hover table-bordered">
-        <tbody style="background-color: white">
-          @for (post of posts; track post.id) {
-            <tr>
-              <td>
-                <div class="postTitle">
-                  <a [routerLink]="['/post', post.id]">{{ post.title }}</a>
-                </div>
+      @for (post of posts; track post.id; let i = $index) {
+        <div class="user-post-row" [style.animation-delay]="i * 40 + 'ms'">
 
-                <div class="forumSubTitle">
-                  <a [routerLink]="['/profile', post.authorId]">{{ post.authorName }}</a>
-                  <span
-                    class="badge rounded-circle"
-                    style="background-color: skyblue"
-                  >
-                    {{ post.authorRating }}
-                  </span>
-                  on {{ post.datePosted }}
-                </div>
-              </td>
+          <!-- Index -->
+          <div class="user-post-index">{{ i + 1 }}</div>
 
-              <td>Replies: {{ post.repliesCount }}</td>
+          <!-- Body -->
+          <div class="user-post-body">
+            <a class="user-post-title" [routerLink]="['/post', post.id]">
+              {{ post.title }}
+            </a>
+            <div class="user-post-meta">
+              <a class="user-meta-author" [routerLink]="['/profile', post.authorId]">
+                <i class="material-icons">person</i>
+                {{ post.authorName }}
+              </a>
+              <span class="user-meta-rating">{{ post.authorRating }}</span>
+              <span class="user-meta-sep">·</span>
+              <span class="user-meta-date">{{ post.datePosted }}</span>
+            </div>
+          </div>
 
-              <td>
-                {{ post.datePosted }}
-                <a
-                  class="delete"
-                  style="cursor: pointer"
-                  (click)="delete(post.id)"
-                >
-                  Delete
-                </a>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+          <!-- Stats -->
+          <div class="user-post-stats">
+            <div class="user-stat-pill replies">
+              <i class="material-icons">chat_bubble_outline</i>
+              <span>{{ post.repliesCount }}</span>
+            </div>
+          </div>
+
+          <!-- Delete -->
+          <button class="user-post-delete-btn" (click)="delete(post.id)">
+            <i class="material-icons">delete</i>
+          </button>
+
+        </div>
+      }
     } @else {
-      <div class="noPosts text-center">
-        <i class="material-icons md-72">question_answer</i>
-        <h3>
-          It looks like there are no posts to be found. Why not create one in
-          <a routerLink="/forum">forums</a>?
-        </h3>
+      <div class="user-no-posts">
+        <i class="material-icons">question_answer</i>
+        <p>No posts yet. Why not create one in <a routerLink="/forum">forums</a>?</p>
       </div>
     }
   </div>
+
 </div>

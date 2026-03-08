@@ -1,80 +1,85 @@
-<div class="container body-content">
-  <div class="row sectionHeader">
-    <div class="sectionHeading">
-      <span class="postIndexTitle">Your Screenshots</span>
+<div class="screenshots-page">
 
-      @if (currentUser$ | async) {
-        <span id="headingBtn">
-          <a
-            routerLink="/screenshots/create"
-            class="btn btn-newScreenshot">
-            Create Screenshot
-          </a>
-        </span>
+  <!-- Header Bar -->
+  <div class="screenshots-header-bar">
+    <div class="screenshots-header-left">
+      <i class="material-icons">photo_camera</i>
+      <span>Your Screenshots</span>
+      @if (screenshots.length > 0) {
+        <span class="screenshots-count">{{ screenshots.length }}</span>
       }
     </div>
+
+    @if (currentUser$ | async) {
+      <a routerLink="/screenshots/create" class="screenshots-create-btn">
+        <i class="material-icons">add</i> Create Screenshot
+      </a>
+    }
   </div>
 
-  <div class="row forumIndexContent">
+  <!-- Grid -->
+  <div class="screenshots-container">
     @if (screenshots.length > 0) {
-      @for (s of screenshots; track s.id) {
-        <div class="row screenshotContent">
-          <h1><b>{{ s.title }}</b></h1>
+      <div class="screenshots-grid">
+        @for (s of screenshots; track s.id; let i = $index) {
+          <div class="screenshot-card" [style.animation-delay]="i * 50 + 'ms'">
 
-          @if (s.imageUrl) {
-            <img
-              class="myImg screenshots"
-              [src]="s.imageUrl"
-              [alt]="s.content ?? ''"
-              (click)="openModal(s.imageUrl, s.content ?? '')"
-              style="cursor:pointer"
-            />
-          }
+            <!-- Image -->
+            <div class="screenshot-img-wrap" (click)="openModal(s.imageUrl, s.content ?? '')">
+              @if (s.imageUrl) {
+                <img class="screenshot-img" [src]="s.imageUrl" [alt]="s.content ?? ''" />
+                <div class="screenshot-overlay">
+                  <i class="material-icons">zoom_in</i>
+                </div>
+              }
+            </div>
 
-          <br />
+            <!-- Info -->
+            <div class="screenshot-info">
+              <span class="screenshot-title">{{ s.title }}</span>
+              <div class="screenshot-meta">
+                <span class="screenshot-author">
+                  <i class="material-icons">person</i>{{ s.authorName }}
+                </span>
+                <span class="screenshot-date">{{ s.datePosted }}</span>
+              </div>
+              @if (s.content) {
+                <p class="screenshot-content">{{ s.content }}</p>
+              }
+            </div>
 
-          <span>{{ s.datePosted }}</span>
-          <span>{{ s.authorName }}</span>
-          {{ s.content }}
+            <!-- Delete -->
+            @if ((currentUser$ | async)?.userName === s.authorName) {
+              <button class="screenshot-delete-btn" (click)="delete(s.id)">
+                <i class="material-icons">delete</i>
+              </button>
+            }
 
-          @if ((currentUser$ | async)?.userName === s.authorName) {
-            <a
-              class="delete"
-              style="text-align:right; cursor:pointer"
-              (click)="delete(s.id)">
-              Delete
-            </a>
-          }
-
-          <br />
-        </div>
-      }
+          </div>
+        }
+      </div>
     } @else {
-      <div class="noPosts">
-        <i class="material-icons">photo</i>
-        <h3>
-          It looks like there are no screenshots to be found.
-          @if (currentUser$ | async) {
-            Why not
-            <a routerLink="/screenshots/create">create one</a>
-          }
-        </h3>
+      <div class="no-screenshots">
+        <i class="material-icons">photo_library</i>
+        <p>
+          You haven't posted any screenshots yet.
+          <a routerLink="/screenshots/create">Create one</a>?
+        </p>
       </div>
     }
   </div>
 
-  <!-- Lightbox modal -->
-  <div
-    id="myModal"
-    class="modal"
-    [style.display]="showModal ? 'block' : 'none'">
-
-    <span class="close" (click)="closeModal()">&times;</span>
-
-    <img
-      class="modal-content"
-      [src]="lightboxSrc ?? ''" />
-
-    <div id="caption">{{ lightboxCaption }}</div>
-  </div>
 </div>
+
+<!-- Lightbox -->
+@if (showModal) {
+  <div class="lightbox" (click)="closeModal()">
+    <button class="lightbox-close" (click)="closeModal()">
+      <i class="material-icons">close</i>
+    </button>
+    <img class="lightbox-img" [src]="lightboxSrc ?? ''" (click)="$event.stopPropagation()" />
+    @if (lightboxCaption) {
+      <div class="lightbox-caption">{{ lightboxCaption }}</div>
+    }
+  </div>
+}

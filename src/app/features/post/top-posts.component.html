@@ -1,55 +1,61 @@
-<div class="container sectionHeader">
-  <h3 class="sectionHeading">Top Posts</h3>
-</div>
+<div class="top-posts-page">
 
-<div class="container">
-  <div class="row forumIndexContent">
-    <table class="table table-hover table-bordered" style="background-color: white">
-      <tbody>
-        @for (post of posts; track post.id) {
-          <tr>
-            <td>
-              <div class="postTitle">
-                <a routerLink="['/post', post.id]">
-                  {{ post.title }}
-                </a>
-              </div>
-
-              <div class="forumSubTitle">
-                <a routerLink="['/profile', post.authorId]">
-                  {{ post.authorName }}
-                </a>
-
-                <span
-                  class="badge rounded-circle"
-                  style="background-color: skyblue"
-                >
-                  {{ post.authorRating }}
-                </span>
-
-                on {{ post.datePosted }}
-              </div>
-            </td>
-
-            <td>
-              Replies: {{ post.repliesCount }}
-            </td>
-
-            <td>
-              {{ post.datePosted }}
-
-              <div style="float: right">
-                <span style="margin-bottom: 15px; margin-left: 20px">
-                  {{ post.totalLikes }}
-                </span>
-                <div class="inline-icon material-icons like-icon">
-                  favorite
-                </div>
-              </div>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
+  <div class="top-posts-header-bar">
+    <div class="top-posts-header-left">
+      <i class="material-icons">star</i>
+      <span>Top Posts</span>
+      @if (posts?.length) {
+        <span class="top-posts-count">{{ posts.length }}</span>
+      }
+    </div>
   </div>
+
+  <div class="top-posts-container">
+    @for (post of posts; track post.id; let i = $index) {
+      <div class="top-post-row" [style.animation-delay]="i * 40 + 'ms'">
+
+        <div class="top-post-rank">
+          @if (i === 0) { <i class="material-icons gold">emoji_events</i> }
+          @else if (i === 1) { <i class="material-icons silver">emoji_events</i> }
+          @else if (i === 2) { <i class="material-icons bronze">emoji_events</i> }
+          @else { <span class="rank-number">{{ i + 1 }}</span> }
+        </div>
+
+        <div class="top-post-body">
+          <a class="top-post-title" [routerLink]="['/post', post.id]">
+            {{ post.title }}
+          </a>
+          <div class="top-post-meta">
+            <a class="top-meta-author" [routerLink]="['/profile', post.authorId]">
+              <i class="material-icons">person</i>
+              {{ post.authorName }}
+            </a>
+            <span class="top-meta-rating">{{ post.authorRating }}</span>
+            <span class="top-meta-sep">·</span>
+            <span class="top-meta-date">{{ post.datePosted }}</span>
+          </div>
+        </div>
+
+        <div class="top-post-stats">
+          <div class="top-stat-pill replies">
+            <i class="material-icons">chat_bubble_outline</i>
+            <span>{{ post.repliesCount }}</span>
+          </div>
+          <div class="top-stat-pill likes">
+            <i class="material-icons">favorite</i>
+            <span>{{ post.totalLikes }}</span>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    @if (!posts?.length) {
+      <div class="no-top-posts">
+        <i class="material-icons">star_border</i>
+        <p>No posts yet.</p>
+      </div>
+    }
+  </div>
+
 </div>

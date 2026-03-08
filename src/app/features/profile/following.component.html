@@ -1,39 +1,55 @@
-<div class="container body-content">
-  <div class="sectionHeader">
-    <h3>Following</h3>
+<div class="users-page">
+
+  <div class="users-header-bar">
+    <div class="users-header-left">
+      <i class="material-icons">group</i>
+      <span>followings</span>
+      @if (followings?.length) {
+        <span class="users-count">{{ followings.length }}</span>
+      }
+    </div>
   </div>
 
-  @for (follow of followings; track follow.id) {
-    <div class="container body-content border-bottom">
-      <div class="row userProfile">
-        <div class="col-md-4">
+  <div class="users-container">
+    @for (follow of followings; track follow.id; let i = $index) {
+      <div class="user-card" [style.animation-delay]="i * 40 + 'ms'">
+
+        <a [routerLink]="['/profile', follow.id]" class="user-avatar-wrap">
           @if (!follow.imagePath) {
-            <img
-              src="assets/images/blankpicture.png"
-              class="profile-img-box"
-              alt="Default profile image" />
+            <img src="assets/images/blankpicture.png" class="user-avatar" />
           } @else {
-            <div
-              class="profile-img-box"
-              [style.background-image]="'url(' + follow.imagePath + ')'"
-            ></div>
+            <div class="user-avatar"
+              [style.background-image]="'url(' + follow.imagePath + ')'">
+            </div>
           }
-        </div>
-        <div class="col-md-8">
-          <a [routerLink]="['/profile', follow.id]">
+        </a>
+
+        <div class="user-info">
+          <a class="user-name" [routerLink]="['/profile', follow.id]">
             {{ follow.userName }}
           </a>
-          <span id="userRating">Current Rating:</span>
-          <span class="badge rounded-circle" style="background-color:skyblue">
-            {{ follow.rating }}
-          </span>
-          <span id="userCreatedLabel">
-            Member Since: {{ follow.memberSince }}
+          <span class="user-since">
+            <i class="material-icons">calendar_today</i>
+            Member since {{ follow.memberSince | date:'mediumDate' }}
           </span>
         </div>
+
+        <div class="user-rating">
+          <span class="rating-label">Rating</span>
+          <span class="rating-badge">{{ follow.rating }}</span>
+        </div>
+
+        <a class="user-browse-btn" [routerLink]="['/profile', follow.id]">
+          <i class="material-icons">arrow_forward</i>
+        </a>
+
       </div>
-    </div>
-  } @empty {
-    <p class="text-muted">Not following anyone yet.</p>
-  }
+    } @empty {
+      <div class="no-users">
+        <i class="material-icons">group_off</i>
+        <p>No followings yet.</p>
+      </div>
+    }
+  </div>
+
 </div>

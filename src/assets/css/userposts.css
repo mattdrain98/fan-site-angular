@@ -1,0 +1,210 @@
+.user-posts-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Header Bar ──────────────────────────────────────── */
+.user-posts-header-bar {
+  display: flex;
+  align-items: center;
+  background: skyblue;
+  padding: .75rem 1.1rem;
+  border-radius: 12px 12px 0 0;
+}
+
+.user-posts-header-left {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: #fff;
+  font-weight: 700;
+  font-size: .95rem;
+
+  .material-icons { font-size: 18px !important; }
+}
+
+.user-posts-count {
+  background: rgba(255,255,255,0.3);
+  color: #fff;
+  font-size: .7rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+/* ── Container ───────────────────────────────────────── */
+.user-posts-container {
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* ── Post Row ────────────────────────────────────────── */
+.user-post-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .9rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background .15s;
+  animation: userPostFadeIn .3s ease both;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: #f8fafc; }
+}
+
+@keyframes userPostFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Index ───────────────────────────────────────────── */
+.user-post-index {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  border-radius: 8px;
+  font-size: .75rem;
+  font-weight: 700;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* ── Body ────────────────────────────────────────────── */
+.user-post-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+
+.user-post-title {
+  font-size: .95rem;
+  font-weight: 600;
+  color: #0f172a;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -.01em;
+  transition: color .15s;
+
+  &:hover { color: #0284c7; }
+}
+
+.user-post-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .3rem;
+  font-size: .775rem;
+}
+
+.user-meta-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #0284c7;
+  text-decoration: none;
+  font-weight: 600;
+
+  &:hover { text-decoration: underline; }
+  .material-icons { font-size: 13px !important; }
+}
+
+.user-meta-rating {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: skyblue;
+  color: #fff;
+  font-size: .65rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+.user-meta-sep  { color: #cbd5e1; font-size: .7rem; }
+.user-meta-date { color: #94a3b8; }
+
+/* ── Stats ───────────────────────────────────────────── */
+.user-post-stats {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  flex-shrink: 0;
+}
+
+.user-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: .775rem;
+  font-weight: 600;
+
+  .material-icons { font-size: 14px !important; }
+
+  &.replies { background: #f1f5f9; color: #64748b; }
+}
+
+/* ── Delete ──────────────────────────────────────────── */
+.user-post-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #fff1f2;
+  border: none;
+  color: #e11d48;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background .15s;
+
+  &:hover { background: #ffe4e6; }
+  .material-icons { font-size: 18px !important; }
+}
+
+/* ── No Posts ────────────────────────────────────────── */
+.user-no-posts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+  padding: 3rem 1rem;
+  color: #94a3b8;
+  text-align: center;
+
+  .material-icons { font-size: 40px !important; color: #cbd5e1; }
+
+  p {
+    font-size: .875rem;
+    margin: 0;
+
+    a {
+      color: #0284c7;
+      font-weight: 600;
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+  }
+}
+
+/* ── Mobile ──────────────────────────────────────────── */
+@media (max-width: 560px) {
+  .user-post-stats { display: none; }
+  .user-post-row   { padding: .75rem 1rem; }
+}

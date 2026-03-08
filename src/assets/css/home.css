@@ -1,0 +1,323 @@
+.posts-section {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+/* ── Header ──────────────────────────────────────────── */
+.posts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.posts-header-left {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.posts-label {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -.02em;
+}
+
+.posts-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: skyblue;
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 1px 8px;
+  letter-spacing: .02em;
+}
+
+/* ── Search ──────────────────────────────────────────── */
+.search-wrap {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+  transition: border-color .18s, box-shadow .18s;
+
+  &:focus-within {
+    border-color: skyblue;
+    box-shadow: 0 0 0 3px rgba(135, 206, 235, .2);
+    background: #fff;
+  }
+}
+
+.search-icon {
+  font-size: 16px !important;
+  color: #94a3b8;
+  padding: 0 .5rem 0 .85rem;
+  pointer-events: none;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: .875rem;
+  color: #0f172a;
+  padding: .5rem .25rem;
+  width: 200px;
+  font-family: inherit;
+
+  &::placeholder { color: #94a3b8; }
+}
+
+.search-btn {
+  border: none;
+  background: skyblue;
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 700;
+  padding: .5rem 1rem;
+  cursor: pointer;
+  letter-spacing: .04em;
+  transition: background .15s;
+
+  &:hover { background: #5bb8e0; }
+}
+
+/* ── Post Cards ──────────────────────────────────────── */
+.post-card {
+  display: flex;
+  align-items: center;
+  padding: .9rem 1rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  transition: border-color .18s, box-shadow .18s, transform .18s;
+  animation: fadeSlideIn .3s ease both;
+
+  &:hover {
+    border-color: #bae6fd;
+    box-shadow: 0 4px 16px rgba(135, 206, 235, .18);
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Index number ────────────────────────────────────── */
+.post-index {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  border-radius: 8px;
+  font-size: .75rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+/* ── Body ────────────────────────────────────────────── */
+.post-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.post-title {
+  font-size: .975rem;
+  font-weight: 600;
+  color: #0f172a;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -.01em;
+  transition: color .15s;
+
+  &:hover { color: #0284c7; }
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .3rem;
+  font-size: .775rem;
+  color: #64748b;
+}
+
+.meta-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #0284c7;
+  text-decoration: none;
+  font-weight: 600;
+
+  &:hover { text-decoration: underline; }
+}
+
+.meta-rating {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: skyblue;
+  color: #fff;
+  font-size: .65rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+.meta-forum {
+  color: #7c3aed;
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover { text-decoration: underline; }
+}
+
+.meta-sep {
+  color: #cbd5e1;
+  font-size: .7rem;
+}
+
+.meta-date {
+  color: #94a3b8;
+}
+
+/* ── Stats ───────────────────────────────────────────── */
+.post-stats {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  flex-shrink: 0;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: .775rem;
+  font-weight: 600;
+
+  .material-icons { font-size: 14px !important; }
+
+  &.replies {
+    background: #f1f5f9;
+    color: #64748b;
+  }
+
+  &.likes {
+    background: #fff1f2;
+    color: #e11d48;
+  }
+}
+
+/* ── Mobile ──────────────────────────────────────────── */
+@media (max-width: 560px) {
+  .post-card {
+    flex-wrap: wrap;
+    gap: .6rem;
+  }
+
+  .post-stats {
+    margin-left: auto;
+  }
+
+  .search-input { width: 130px; }
+}
+
+.posts-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem;
+  background: skyblue;
+  padding: .75rem 1.1rem;
+  border-radius: 12px 12px 0 0;
+  margin-bottom: 0;
+}
+
+.posts-header-bar-left {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -.01em;
+
+  .material-icons { font-size: 18px !important; }
+}
+
+.posts-count {
+  background: rgba(255,255,255,0.3);
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+.posts-header-bar .search-wrap {
+  background: rgba(255,255,255,0.25);
+  border-color: rgba(255,255,255,0.4);
+
+  &:focus-within {
+    background: #fff;
+    border-color: #fff;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+  }
+}
+
+.posts-header-bar .search-icon { color: #fff; }
+
+.posts-header-bar .search-input {
+  color: #0f172a;
+  &::placeholder { color: rgba(255,255,255,0.75); }
+  &:focus::placeholder { color: #94a3b8; }
+}
+
+.posts-header-bar .search-btn {
+  background: rgba(255,255,255,0.25);
+  color: #fff;
+  &:hover { background: rgba(255,255,255,0.4); }
+}
+
+.posts-list {
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+  gap: 0;
+
+  .post-card {
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid #f1f5f9;
+
+    &:last-child { border-bottom: none; }
+  }
+}

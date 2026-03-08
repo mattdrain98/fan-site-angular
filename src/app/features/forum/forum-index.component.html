@@ -1,41 +1,59 @@
-<div class="container body-content">
-<div class="container sectionHeader">
-  <h1 class="sectionHeading">Forums</h1>
+<div class="forums-page">
 
-  @if (currentUser$ | async) {
-    <a routerLink="/forum/create">Create Forum</a>
-  }
-</div>
+  <!-- Header Bar -->
+  <div class="forums-header-bar">
+    <div class="forums-header-left">
+      <i class="material-icons">forum</i>
+      <span>Forums</span>
+      @if (forums?.length) {
+        <span class="forums-count">{{ forums.length }}</span>
+      }
+    </div>
 
-<table
-  class="table table-hover"
-  id="forumIndexTable"
-  style="background-color: white"
->
-  <tbody>
-    @for (forum of forums; track forum.id) {
-      <tr>
-        <td>
-          <a [routerLink]="['/forum', forum.id]">
+    @if (currentUser$ | async) {
+      <a routerLink="/forum/create" class="create-forum-btn">
+        <i class="material-icons">add</i> Create Forum
+      </a>
+    }
+  </div>
+
+  <!-- Forum List -->
+  <div class="forums-container">
+    @for (forum of forums; track forum.id; let i = $index) {
+      <div class="forum-card" [style.animation-delay]="i * 40 + 'ms'">
+
+        <div class="forum-icon">
+          <i class="material-icons">chat</i>
+        </div>
+
+        <div class="forum-body">
+          <a class="forum-name" [routerLink]="['/forum', forum.id]">
             {{ forum.name }}
           </a>
-        </td>
+          <p class="forum-description">{{ forum.description }}</p>
+        </div>
 
-        <td>
-          {{ forum.description }}
+        <div class="forum-actions">
+          <a class="forum-browse-btn" [routerLink]="['/forum', forum.id]">
+            <i class="material-icons">arrow_forward</i>
+          </a>
 
           @if ((currentUser$ | async)?.userName === forum.authorName) {
-            <a
-              class="delete btn btn-link"
-              style="cursor: pointer"
-              (click)="delete(forum.id)"
-            >
-              Delete
-            </a>
+            <button class="forum-delete-btn" (click)="delete(forum.id)">
+              <i class="material-icons">delete</i>
+            </button>
           }
-        </td>
-      </tr>
+        </div>
+
+      </div>
     }
-  </tbody>
-</table>
+
+    @if (!forums?.length) {
+      <div class="no-forums">
+        <i class="material-icons">forum</i>
+        <p>No forums yet. Be the first to create one!</p>
+      </div>
+    }
+  </div>
+
 </div>

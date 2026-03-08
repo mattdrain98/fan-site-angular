@@ -1,41 +1,63 @@
-<div class="container sectionHeader">
-  <h3 class="sectionHeading">New Users</h3>
-</div>
+<div class="users-page">
 
-@for (user of users; track user.id) {
-  <div class="container body-content border-bottom">
-    <div class="row userProfile">
-      <div class="col-md-4">
-        @if (!user.imagePath) {
-          <img
-            src="assets/images/blankpicture.png"
-            class="profile-img-box"
-          />
-        } @else {
-          <div
-            class="profile-img-box"
-            [style.background-image]="'url(' + user.imagePath + ')'"
-          ></div>
-        }
-      </div>
-
-      <div class="col-md-8">
-        <a
-          id="userName"
-          [routerLink]="['/profile', user.id]"
-        >
-          {{ user.userName }}
-        </a>
-
-        <span id="userRating">Current Rating: </span>
-        <span class="badge rounded-circle" style="background-color: skyblue">
-          {{ user.rating }}
-        </span>
-
-        <span id="userCreatedLabel">
-          Member Since: {{ user.memberSince | date:'mediumDate'}}
-        </span>
-      </div>
+  <!-- Header Bar -->
+  <div class="users-header-bar">
+    <div class="users-header-left">
+      <i class="material-icons">people</i>
+      <span>New Users</span>
+      @if (users?.length) {
+        <span class="users-count">{{ users.length }}</span>
+      }
     </div>
   </div>
-}
+
+  <!-- Users List -->
+  <div class="users-container">
+    @for (user of users; track user.id; let i = $index) {
+      <div class="user-card" [style.animation-delay]="i * 40 + 'ms'">
+
+        <!-- Avatar -->
+        <a [routerLink]="['/profile', user.id]" class="user-avatar-wrap">
+          @if (!user.imagePath) {
+            <img src="assets/images/blankpicture.png" class="user-avatar" />
+          } @else {
+            <div class="user-avatar"
+              [style.background-image]="'url(' + user.imagePath + ')'">
+            </div>
+          }
+        </a>
+
+        <!-- Info -->
+        <div class="user-info">
+          <a class="user-name" [routerLink]="['/profile', user.id]">
+            {{ user.userName }}
+          </a>
+          <span class="user-since">
+            <i class="material-icons">calendar_today</i>
+            Member since {{ user.memberSince | date:'mediumDate' }}
+          </span>
+        </div>
+
+        <!-- Rating -->
+        <div class="user-rating">
+          <span class="rating-label">Rating</span>
+          <span class="rating-badge">{{ user.rating }}</span>
+        </div>
+
+        <!-- Arrow -->
+        <a class="user-browse-btn" [routerLink]="['/profile', user.id]">
+          <i class="material-icons">arrow_forward</i>
+        </a>
+
+      </div>
+    }
+
+    @if (!users?.length) {
+      <div class="no-users">
+        <i class="material-icons">people_outline</i>
+        <p>No new users yet.</p>
+      </div>
+    }
+  </div>
+
+</div>

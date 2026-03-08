@@ -1,0 +1,186 @@
+.users-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Header Bar ──────────────────────────────────────── */
+.users-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: skyblue;
+  padding: .75rem 1.1rem;
+  border-radius: 12px 12px 0 0;
+}
+
+.users-header-left {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: #fff;
+  font-weight: 700;
+  font-size: .95rem;
+
+  .material-icons { font-size: 18px !important; }
+}
+
+.users-count {
+  background: rgba(255,255,255,0.3);
+  color: #fff;
+  font-size: .7rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+/* ── Container ───────────────────────────────────────── */
+.users-container {
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* ── User Card ───────────────────────────────────────── */
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .9rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background .15s;
+  animation: fadeIn .3s ease both;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: #f8fafc; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Avatar ──────────────────────────────────────────── */
+.user-avatar-wrap { flex-shrink: 0; }
+
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid #e2e8f0;
+  display: block;
+  transition: border-color .15s;
+
+  .user-card:hover & { border-color: skyblue; }
+}
+
+/* ── Info ────────────────────────────────────────────── */
+.user-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+}
+
+.user-name {
+  font-size: .95rem;
+  font-weight: 700;
+  color: #0f172a;
+  text-decoration: none;
+  letter-spacing: -.01em;
+  transition: color .15s;
+
+  &:hover { color: #0284c7; }
+}
+
+.user-since {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: .775rem;
+  color: #94a3b8;
+
+  .material-icons { font-size: 12px !important; }
+}
+
+/* ── Rating ──────────────────────────────────────────── */
+.user-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .2rem;
+  flex-shrink: 0;
+}
+
+.rating-label {
+  font-size: .68rem;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.rating-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: skyblue;
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 700;
+  border-radius: 999px;
+  min-width: 32px;
+  padding: 2px 8px;
+}
+
+/* ── Browse Arrow ────────────────────────────────────── */
+.user-browse-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: #eff6ff;
+  color: #0284c7;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: background .15s, transform .15s;
+
+  &:hover {
+    background: #dbeafe;
+    transform: translateX(2px);
+  }
+
+  .material-icons { font-size: 18px !important; }
+}
+
+/* ── No Users ────────────────────────────────────────── */
+.no-users {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  padding: 3rem 1rem;
+  color: #94a3b8;
+  text-align: center;
+
+  .material-icons { font-size: 40px !important; color: #cbd5e1; }
+  p { font-size: .875rem; margin: 0; }
+}
+
+/* ── Mobile ──────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .user-rating { display: none; }
+  .user-card   { padding: .75rem 1rem; }
+}

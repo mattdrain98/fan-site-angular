@@ -1,106 +1,98 @@
-<div class="login-wrapper">
-  <div class="login-card">
-    <h1 class="heading">Welcome back</h1>
-    <p class="subheading">Sign in to continue to your community</p>
+<div class="login-page">
+  <div class="login-wrapper">
 
-    <!-- Errors -->
-    @if (errors?.length) {
-      <div class="errors">
-        @for (e of errors; track e) {
-          <div class="error-item">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <circle cx="7" cy="7" r="6" stroke="#f87171" stroke-width="1.5"/>
-              <path d="M7 4v3M7 9.5v.5" stroke="#f87171" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            {{ e }}
-          </div>
-        }
+    <div class="login-header-bar">
+      <div class="login-header-left">
+        <i class="material-icons">login</i>
+        <span>Sign In</span>
       </div>
-    }
+    </div>
 
-    <form #f="ngForm" (ngSubmit)="submit(f)" class="login-form" novalidate>
+    <div class="login-card">
 
-      <div class="field-group">
-        <label class="field-label" for="userName">Username</label>
-        <div class="field-wrap">
-          <svg class="field-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M2.5 13c0-2.485 2.462-4.5 5.5-4.5s5.5 2.015 5.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
+      <p class="login-subheading">Welcome back! Sign in to continue to your community.</p>
+
+      <!-- Errors -->
+      @if (errors?.length) {
+        <div class="login-errors">
+          @for (e of errors; track e) {
+            <div class="error-item">
+              <i class="material-icons">error_outline</i>
+              {{ e }}
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Email unconfirmed -->
+      @if (emailUnconfirmed) {
+        <div class="login-errors">
+          <div class="error-item">
+            <i class="material-icons">error_outline</i>
+            Please confirm your email before logging in.
+          </div>
+          <button class="submit-btn" style="margin-top:.75rem" (click)="resendConfirmation()">
+            <i class="material-icons">send</i>
+            Resend Confirmation Email
+          </button>
+        </div>
+      }
+
+      <form #f="ngForm" (ngSubmit)="submit(f)" novalidate>
+
+        <div class="form-field">
+          <label class="form-label" for="userName">Username</label>
           <input
             id="userName"
             name="userName"
             [(ngModel)]="model.userName"
             required
-            class="field-input"
+            class="form-input"
             placeholder="Enter your username"
-            autocomplete="username"
-          />
+            autocomplete="username" />
         </div>
-      </div>
 
-      <div class="field-group">
-        <div class="field-label-row">
-          <label class="field-label" for="password">Password</label>
-          <a href="#" class="forgot-link">Forgot password?</a>
-        </div>
-        <div class="field-wrap">
-          <svg class="field-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
+        <div class="form-field">
+          <div class="form-label-row">
+            <label class="form-label" for="password">Password</label>
+            <a href="#" class="forgot-link">Forgot password?</a>
+          </div>
           <input
             id="password"
             name="password"
             [(ngModel)]="model.password"
             required
             type="password"
-            class="field-input"
+            class="form-input"
             placeholder="Enter your password"
-            autocomplete="current-password"
-          />
+            autocomplete="current-password" />
         </div>
-      </div>
 
-      <div class="remember-row">
-        <label class="checkbox-label">
-          <input
-            name="rememberMe"
-            [(ngModel)]="model.rememberMe"
-            type="checkbox"
-            class="checkbox-input"
-          />
-          <span class="checkbox-custom"></span>
-          <span class="checkbox-text">Keep me signed in</span>
-        </label>
-      </div>
+        <div class="remember-row">
+          <label class="checkbox-label">
+            <input
+              name="rememberMe"
+              [(ngModel)]="model.rememberMe"
+              type="checkbox"
+              class="checkbox-input" />
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Keep me signed in</span>
+          </label>
+        </div>
 
-      <button type="submit" class="btn-submit">
-        Sign In
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
+        <div class="form-actions">
+          <button type="submit" class="submit-btn" [disabled]="f.invalid">
+            <i class="material-icons">login</i>
+            Sign In
+          </button>
+        </div>
 
-    </form>
+      </form>
 
-    <p class="signup-prompt">
-      Don't have an account? <a class="signup-link" routerLink="/register">Create one</a>
-    </p>
+      <p class="login-prompt">
+        Don't have an account? <a class="login-link" routerLink="/register">Create one</a>
+      </p>
 
-    @if (emailUnconfirmed) {
-  <div class="errors">
-    <div class="error-item">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <circle cx="7" cy="7" r="6" stroke="#f87171" stroke-width="1.5"/>
-        <path d="M7 4v3M7 9.5v.5" stroke="#f87171" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      Please confirm your email before logging in.
     </div>
-    <button class="btn-submit" style="margin-top:.75rem" (click)="resendConfirmation()">
-      Resend Confirmation Email
-    </button>
-  </div>
-}
   </div>
 </div>
