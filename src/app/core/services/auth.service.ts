@@ -29,14 +29,14 @@ login(payload: { userName: string; password: string; rememberMe: boolean }): Obs
   );
 }
 
-  register(userName: string, email: string, password: string, file?: File): Observable<{ message: string; userId: string }> {
+  register(userName: string, email: string, password: string, file?: File): Observable<string> {
     const fd = new FormData();
     fd.append('UserName', userName);
     fd.append('Email', email);
     fd.append('Password', password);
-    fd.append('ConfirmPassword', password);  // ← required by the DTO
+    fd.append('ConfirmPassword', password);
     if (file) fd.append('file', file);
-    return this.http.post<{ message: string; userId: string }>(`${this.base}/register`, fd);
+    return this.http.post(`${this.base}/register`, fd, { responseType: 'text' });
   }
 
   logout(): Observable<{ message: string }> {

@@ -1,11 +1,12 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "src/app/core/services/auth.service";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-confirm-email',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './confirm-email.component.html'
 })
 

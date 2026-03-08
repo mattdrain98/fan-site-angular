@@ -10,22 +10,28 @@ import { AuthService } from '../../core/services/auth.service';
   imports: [FormsModule, RouterLink, CommonModule],
   templateUrl: './register.component.html'
 })
+
 export class RegisterComponent {
   private auth = inject(AuthService);
-  private router = inject(Router);
+
   model = { userName: '', email: '', password: '', confirmPassword: '' };
+  emailSent = false;
   errors: string[] = [];
 
-  submit(form: NgForm): void {
-    if (form.invalid) return;
-    if (this.model.password !== this.model.confirmPassword) {
-      this.errors = ['Passwords do not match'];
-      return;
-    }
-    this.errors = [];
-    this.auth.register(this.model.userName, this.model.email, this.model.password).subscribe({
-      next: () => this.router.navigate(['/']),
-      error: err => this.errors = Array.isArray(err.error) ? err.error : [err.error?.message ?? 'Registration failed']
+  submit(form: NgForm) {
+    this.auth.register(
+      form.value.userName,
+      form.value.email,
+      form.value.password
+    ).subscribe({
+      next: () => {
+        this.emailSent = true; 
+      },
+      error: err => {
+        this.errors = Array.isArray(err.error) 
+          ? err.error 
+          : [err.error];
+      }
     });
   }
 }
