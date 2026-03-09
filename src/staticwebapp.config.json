@@ -19,11 +19,5 @@
         "Cache-Control": "no-cache, no-store, must-revalidate"
       }
     }
-  ],
-  "forwardingGateway": {
-    "requiredHeaders": {},
-    "allowedForwardedHosts": [
-      "fanwebsiteapi20260228180319-hsfjg3dtchcgebe9.canadacentral-01.azurewebsites.net"
-    ]
-  }
+  ]
 }
