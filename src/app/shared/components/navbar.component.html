@@ -8,6 +8,7 @@
 
     <!-- Desktop Links -->
     <div class="nav-links" [class.open]="menuOpen">
+
       <a class="nav-link" routerLink="/" routerLinkActive="active"
          [routerLinkActiveOptions]="{exact:true}" (click)="menuOpen = false">
         <i class="material-icons">home</i>
@@ -34,36 +35,51 @@
         <span>Top Posts</span>
       </a>
 
-      <!-- Auth inside mobile menu -->
+      <!-- Mobile-only auth -->
       <div class="nav-auth-mobile">
         @if (currentUser$ | async; as currentUser) {
-          <div class="mobile-user-header">
-            <div class="avatar-circle"
-              [style.background-image]="currentUser.imagePath ? 'url(' + currentUser.imagePath + ')' : null"
-              [class.has-image]="currentUser.imagePath">
-              @if (!currentUser.imagePath) {
-                {{ currentUser.userName[0].toUpperCase() }}
-              }
+          <div class="mobile-divider"></div>
+
+          <div class="mobile-user-dropdown" [class.open]="mobileUserOpen">
+            <button class="mobile-user-trigger" (click)="mobileUserOpen = !mobileUserOpen">
+              <div class="avatar-circle"
+                [style.background-image]="currentUser.imagePath ? 'url(' + currentUser.imagePath + ')' : null"
+                [class.has-image]="currentUser.imagePath">
+                @if (!currentUser.imagePath) {
+                  {{ currentUser.userName[0].toUpperCase() }}
+                }
+              </div>
+              <span class="mobile-username">{{ currentUser.userName }}</span>
+              <i class="material-icons mobile-chevron">expand_more</i>
+            </button>
+
+            <div class="mobile-user-menu">
+              <div class="mobile-user-menu-inner">
+                <a class="nav-link" [routerLink]="['/profile', currentUser.userId]"
+                   (click)="menuOpen = false; mobileUserOpen = false">
+                  <i class="material-icons">person</i><span>My Account</span>
+                </a>
+                <a class="nav-link" routerLink="/screenshots/mine"
+                   (click)="menuOpen = false; mobileUserOpen = false">
+                  <i class="material-icons">photo_camera</i><span>Your Screenshots</span>
+                </a>
+                <a class="nav-link" routerLink="/posts/mine"
+                   (click)="menuOpen = false; mobileUserOpen = false">
+                  <i class="material-icons">article</i><span>Your Posts</span>
+                </a>
+                <a class="nav-link" routerLink="/account/change-password"
+                   (click)="menuOpen = false; mobileUserOpen = false">
+                  <i class="material-icons">lock</i><span>Change Password</span>
+                </a>
+                <div class="mobile-divider"></div>
+                <button class="nav-link logout-btn"
+                        (click)="logout(); menuOpen = false; mobileUserOpen = false">
+                  <i class="material-icons">logout</i><span>Logout</span>
+                </button>
+              </div>
             </div>
-            <span class="mobile-username">{{ currentUser.userName }}</span>
           </div>
-          <div class="mobile-divider"></div>
-          <a class="nav-link" [routerLink]="['/profile', currentUser.userId]" (click)="menuOpen = false">
-            <i class="material-icons">person</i><span>My Account</span>
-          </a>
-          <a class="nav-link" routerLink="/screenshots/mine" (click)="menuOpen = false">
-            <i class="material-icons">photo_camera</i><span>Your Screenshots</span>
-          </a>
-          <a class="nav-link" routerLink="/posts/mine" (click)="menuOpen = false">
-            <i class="material-icons">article</i><span>Your Posts</span>
-          </a>
-          <a class="nav-link" routerLink="/account/change-password" (click)="menuOpen = false">
-            <i class="material-icons">lock</i><span>Change Password</span>
-          </a>
-          <div class="mobile-divider"></div>
-          <button class="nav-link logout-btn" (click)="logout(); menuOpen = false">
-            <i class="material-icons">logout</i><span>Logout</span>
-          </button>
+
         } @else {
           <div class="mobile-divider"></div>
           <a class="nav-link" routerLink="/register" (click)="menuOpen = false">

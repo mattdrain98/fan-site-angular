@@ -17,7 +17,8 @@ export class NavbarComponent {
 
   menuOpen     = false;
   dropdownOpen = false;
-
+  mobileUserOpen = false;
+  
   logout(): void {
     this.auth.logout().subscribe(() => {
       this.dropdownOpen = false;

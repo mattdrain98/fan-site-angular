@@ -110,7 +110,7 @@
   }
 }
 
-/* ── Avatar Dropdown ─────────────────────────────────── */
+/* ── Avatar / Dropdown ───────────────────────────────── */
 .nav-dropdown { position: relative; }
 
 .avatar-circle {
@@ -129,16 +129,8 @@
   justify-content: center;
   flex-shrink: 0;
 
-  &.large {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-  }
-
-  &.has-image {
-    color: transparent;
-    font-size: 0;
-  }
+  &.large { width: 40px; height: 40px; font-size: 1rem; }
+  &.has-image { color: transparent; font-size: 0; }
 }
 
 .nav-avatar-btn {
@@ -195,10 +187,7 @@
   padding: .5rem;
   z-index: 200;
 
-  .nav-dropdown.open & {
-    display: block;
-    animation: dropDown .22s cubic-bezier(.16,1,.3,1);
-  }
+  .nav-dropdown.open & { display: block; animation: dropDown .22s cubic-bezier(.16,1,.3,1); }
 }
 
 @keyframes dropDown {
@@ -213,16 +202,8 @@
   padding: .6rem .75rem .75rem;
 }
 
-.dropdown-username {
-  font-size: .9rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.dropdown-label {
-  font-size: .75rem;
-  color: #94a3b8;
-}
+.dropdown-username { font-size: .9rem; font-weight: 700; color: #0f172a; }
+.dropdown-label    { font-size: .75rem; color: #94a3b8; }
 
 .dropdown-item {
   display: flex;
@@ -262,22 +243,7 @@
   margin: .3rem .4rem;
 }
 
-/* ── Mobile Auth Section ─────────────────────────────── */
-.nav-auth-mobile { display: none; }
-
-.mobile-user-header {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  padding: .5rem .9rem;
-}
-
-.mobile-username {
-  font-size: .9rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
+/* ── Shared util ─────────────────────────────────────── */
 .mobile-divider {
   height: 1px;
   background: #f1f5f9;
@@ -294,7 +260,6 @@
   color: #dc2626;
 
   .material-icons { color: #fca5a5 !important; }
-
   &:hover { background: #fff1f2 !important; }
 }
 
@@ -316,8 +281,8 @@
 
 /* ── Mobile ──────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .nav-toggler  { display: flex; }
-  .nav-auth     { display: none; }
+  .nav-toggler     { display: flex; }
+  .nav-auth        { display: none; }
   .nav-auth-mobile { display: block; }
 
   .nav-links {
@@ -341,6 +306,71 @@
     border-radius: 10px;
     &::after { display: none; }
   }
+}
+
+/* ── Mobile auth section ─────────────────────────────── */
+.nav-auth-mobile { display: none; }
+
+/* ── Mobile user dropdown ────────────────────────────── */
+.mobile-user-trigger {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  width: 100%;
+  padding: .6rem .9rem;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #334155;
+  font-family: inherit;
+  font-size: .88rem;
+  font-weight: 600;
+  transition: background .15s, border-color .15s;
+}
+
+.mobile-user-trigger:hover {
+  background: #f0f9ff;
+  border-color: skyblue;
+}
+
+.mobile-username {
+  font-size: .88rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.mobile-chevron {
+  font-size: 18px !important;
+  color: #94a3b8;
+  margin-left: auto;
+  transition: transform .22s cubic-bezier(.34,1.56,.64,1);
+}
+
+.mobile-user-dropdown.open .mobile-chevron {
+  transform: rotate(180deg);
+}
+
+/* Grid collapse animation — requires .mobile-user-menu-inner wrapper inside */
+.mobile-user-menu {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .25s cubic-bezier(.16,1,.3,1);
+  overflow: hidden;
+  margin-top: .35rem;
+  padding-left: .5rem;
+  border-left: 2px solid #e2e8f0;
+  margin-left: .5rem;
+}
+
+.mobile-user-dropdown.open .mobile-user-menu {
+  grid-template-rows: 1fr;
+}
+
+.mobile-user-menu-inner {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes slideDown {
