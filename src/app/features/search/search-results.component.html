@@ -1,70 +1,81 @@
-<div class="container body-content">
-  <div class="row sectionHeader">
-    <div class="sectionHeading">
-      <span>Search Results for: {{ result?.searchQuery }} Forum</span>
+<div class="search-page">
 
-      <div class="searchForm">
+  <div class="search-wrapper">
+
+    <!-- Header Bar -->
+    <div class="search-header-bar">
+      <div class="search-header-left">
+        <i class="material-icons">search</i>
+        <span>Search Results</span>
+        @if (result && !result.emptySearchResults) {
+          <span class="search-count">{{ result.posts.length }}</span>
+        }
+      </div>
+
+      <div class="search-wrap">
+        <i class="material-icons search-icon">search</i>
         <input
           type="text"
           [(ngModel)]="searchQuery"
-          placeholder="Search..."
-          class="searchBar"
-          (focus)="searchQuery=''" />
-
-        <button
-          type="button"
-          class="btn buttonSearch"
-          (click)="submit()">
-          <i class="material-icons">search</i>
-        </button>
+          placeholder="Search posts..."
+          class="search-input"
+          (focus)="searchQuery = ''"
+          (keyup.enter)="submit()" />
+        <button class="search-btn" (click)="submit()">Go</button>
       </div>
+    </div>
+
+    <!-- Results -->
+    <div class="search-container">
+
+      @if (result) {
+
+        @if (!result.emptySearchResults) {
+
+          <div class="search-query-label">
+            Results for <strong>"{{ result.searchQuery }}"</strong>
+          </div>
+
+          @for (post of result.posts; track post.id; let i = $index) {
+            <div class="search-post-row" [style.animation-delay]="i * 40 + 'ms'">
+
+              <div class="search-post-index">{{ i + 1 }}</div>
+
+              <div class="search-post-body">
+                <a class="search-post-title" [routerLink]="['/post', post.id]">
+                  {{ post.title }}
+                </a>
+                <div class="search-post-meta">
+                  <a class="search-meta-author" [routerLink]="['/profile', post.authorId]">
+                    <i class="material-icons">person</i>
+                    {{ post.authorName }}
+                  </a>
+                  <span class="search-meta-rating">{{ post.authorRating }}</span>
+                  <span class="search-meta-sep">·</span>
+                  <span class="search-meta-date">{{ post.datePosted }}</span>
+                </div>
+              </div>
+
+              <div class="search-post-stats">
+                <div class="search-stat-pill replies">
+                  <i class="material-icons">chat_bubble_outline</i>
+                  <span>{{ post.repliesCount }}</span>
+                </div>
+              </div>
+
+            </div>
+          }
+
+        } @else {
+          <div class="search-no-results">
+            <i class="material-icons">question_answer</i>
+            <p>No results found for <strong>"{{ result.searchQuery }}"</strong></p>
+          </div>
+        }
+
+      }
+
     </div>
   </div>
 
-  @if (result) {
-
-    @if (!result.emptySearchResults) {
-      <table
-        class="table table-hover table-bordered"
-        id="searchIndexTable"
-        style="background-color:white">
-
-        <tbody>
-          @for (post of result.posts; track post.id) {
-            <tr>
-              <td>
-                <div class="postData">
-                  <div class="postTitle">
-                    <a [routerLink]="['/post', post.id]">{{ post.title }}</a>
-                  </div>
-                  <div class="forumSubTitle">
-                    <span class="postAuthor">
-                      <a [routerLink]="['/profile', post.authorId]">{{ post.authorName }}</a>
-                    </span>
-                    ({{ post.authorRating }}) on
-                    <span class="postData">{{ post.datePosted }}</span>
-                  </div>
-                </div>
-              </td>
-
-              <td>
-                <div class="forumPostContent">
-                  Replies: {{ post.repliesCount }}
-                </div>
-              </td>
-
-              <td>
-                <div class="postData">{{ post.datePosted }}</div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    } @else {
-      <div class="noPosts">
-        <i class="material-icons md-72">question_answer</i>
-        <h3>No search results found for {{ result.searchQuery }}</h3>
-      </div>
-    }
-  }
 </div>

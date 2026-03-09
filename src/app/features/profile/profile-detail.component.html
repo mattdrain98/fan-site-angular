@@ -49,10 +49,6 @@
                     <i class="material-icons">person_remove</i> Unfollow
                   </button>
                 }
-                <a class="profile-action-btn comment"
-                   [routerLink]="['/profile-comment/create', profile.userId]">
-                  <i class="material-icons">mode_comment</i> Comment
-                </a>
               </div>
             }
           }
@@ -147,9 +143,40 @@
             <span class="profile-comments-count">{{ profile.profileComments.length }}</span>
           }
         </div>
+
+        @if (currentUser$ | async; as cu) {
+          @if (cu.userName !== profile.userName && !isCommenting) {
+            <button class="reply-trigger-btn" (click)="startComment()">
+              <i class="material-icons">mode_comment</i> Write a Comment
+            </button>
+          }
+        }
       </div>
 
       <div class="profile-comments-container">
+
+        <!-- Inline comment input -->
+        @if (isCommenting) {
+          <div class="reply-input-card"
+               [class.reply-slide-in]="isCommentVisible"
+               [class.reply-slide-out]="!isCommentVisible">
+            <textarea
+              class="profile-textarea"
+              rows="4"
+              [(ngModel)]="newCommentContent"
+              placeholder="Write your comment...">
+            </textarea>
+            <div class="comment-actions">
+              <button class="action-btn save" (click)="submitComment()">
+                <i class="material-icons">send</i> Submit
+              </button>
+              <button class="action-btn cancel" (click)="cancelComment()">
+                <i class="material-icons">close</i> Cancel
+              </button>
+            </div>
+          </div>
+        }
+
         @for (comment of profile.profileComments; track comment.id) {
           <div class="profile-comment-card">
 

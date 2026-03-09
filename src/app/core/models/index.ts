@@ -63,6 +63,11 @@ export interface PostEditModel {
   content: string;
 }
 
+export interface EditPostDto {
+  title: string;
+  content?: string;
+}
+
 //------------------POST REPLIES------------------\\
 export interface PostReplyModel {
   id: number;

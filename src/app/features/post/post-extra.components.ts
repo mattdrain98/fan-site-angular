@@ -28,35 +28,6 @@ export class PostCreateComponent implements OnInit {
   }
 }
 
-// ── Edit Post ─────────────────────────────────────────────────────────────
-import { Component as Comp2 } from '@angular/core';
-@Comp2({ selector: 'app-post-edit', templateUrl: './post-edit.component.html' })
-export class PostEditComponent implements OnInit {
-  postId!: number;
-  model = { title: '', content: '' };
-  forumName = '';
-  errors: string[] = [];
-
-  constructor(private route: ActivatedRoute, private postService: PostService, private router: Router) {}
-
-  ngOnInit(): void {
-    this.postId = +this.route.snapshot.paramMap.get('id')!;
-    this.postService.getById(this.postId).subscribe(p => {
-      this.model.title = p.title;
-      this.model.content = p.postContent;
-      this.forumName = p.forumName;
-    });
-  }
-
-  submit(form: NgForm): void {
-    if (form.invalid) return;
-    this.postService.edit(this.postId, this.model.title, this.model.content).subscribe({
-      next: () => this.router.navigate(['/post', this.postId]),
-      error: () => this.errors = ['Failed to edit post']
-    });
-  }
-}
-
 // ── User Posts ────────────────────────────────────────────────────────────
 import { Component as Comp3 } from '@angular/core';
 @Comp3({ selector: 'app-user-posts', templateUrl: './user-posts.component.html' })

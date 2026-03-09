@@ -32,10 +32,31 @@ export class ProfileDetailComponent implements OnInit {
   isEditingBio = false;
   editBioContent = '';
 
+  // Inline comment
+  isCommenting = false;
+  isCommentVisible = false;
+  newCommentContent = '';
+
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id')!;
+    this.route.params.subscribe(params => {
+      const id = params['id'];
+      this.loadProfile(id);
+    });
+  }
+
+  private loadProfile(id: string): void {
+    this.profile = null;
+    this.isFollowing = false;
+    this.isOwnProfile = false;
+    this.editingCommentId = null;
+    this.editContent = '';
+    this.isEditingBio = false;
+    this.editBioContent = '';
+    this.errors = [];
+
     this.profileService.getProfile(id).subscribe(p => {
       this.profile = p;
+      this.profile.profileComments = p.profileComments.reverse();
       const cu = this.auth.currentUser;
       if (cu) {
         this.isOwnProfile = cu.userId === p.userId;
@@ -67,6 +88,41 @@ export class ProfileDetailComponent implements OnInit {
     });
   }
 
+  // ── Inline comment ────────────────────────────────────
+  startComment(): void {
+    this.isCommenting = true;
+    setTimeout(() => this.isCommentVisible = true, 10);
+  }
+
+  cancelComment(): void {
+    this.isCommentVisible = false;
+    setTimeout(() => {
+      this.isCommenting = false;
+      this.newCommentContent = '';
+    }, 150);
+  }
+
+  submitComment(): void {
+    if (!this.profile || !this.newCommentContent.trim()) return;
+    this.commentService.getCommentTemplate(this.profile.userId).subscribe({
+      next: template => {
+        const payload: ProfileCommentDto = {
+          ...template,
+          commentContent: this.newCommentContent
+        };
+        this.commentService.addComment(payload).subscribe({
+          next: () => {
+            this.loadProfile(this.profile!.userId);
+            this.cancelComment();
+          },
+          error: () => this.errors = ['Failed to submit comment']
+        });
+      },
+      error: () => this.errors = ['Failed to submit comment']
+    });
+  }
+
+  // ── Comment edit ──────────────────────────────────────
   startEdit(comment: ProfileCommentDto): void {
     this.editingCommentId = comment.id;
     this.editContent = comment.commentContent;
@@ -89,6 +145,7 @@ export class ProfileDetailComponent implements OnInit {
   }
 
   deleteComment(commentId: number): void {
+    if (!confirm('Delete this comment?')) return;
     this.commentService.delete(commentId).subscribe({
       next: () => {
         if (this.profile) {
@@ -99,6 +156,8 @@ export class ProfileDetailComponent implements OnInit {
     });
   }
 
+
+  // ── Bio edit ──────────────────────────────────────────
   startEditBio(): void {
     this.isEditingBio = true;
     this.editBioContent = this.profile?.bio || '';
@@ -107,14 +166,14 @@ export class ProfileDetailComponent implements OnInit {
   cancelEditBio(): void {
     this.isEditingBio = false;
     this.editBioContent = '';
-  } 
+  }
 
   saveEditBio(): void {
     if (!this.profile) return;
-    this.profileService.editBio({ 
-      userId: this.profile.userId, 
-      userName: this.profile.userName, 
-      bio: this.editBioContent 
+    this.profileService.editBio({
+      userId: this.profile.userId,
+      userName: this.profile.userName,
+      bio: this.editBioContent
     }).subscribe({
       next: () => {
         this.profile!.bio = this.editBioContent;

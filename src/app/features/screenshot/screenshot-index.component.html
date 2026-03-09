@@ -39,7 +39,7 @@
                 <span class="screenshot-author">
                   <i class="material-icons">person</i>{{ s.authorName }}
                 </span>
-                <span class="screenshot-date">{{ s.datePosted }}</span>
+                <span class="screenshot-date">{{ s.datePosted | date: 'medium'}}</span>
               </div>
               @if (s.content) {
                 <p class="screenshot-content">{{ s.content }}</p>

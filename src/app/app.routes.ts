@@ -11,7 +11,6 @@ export const routes: Routes = [
   { path: 'forum/create', loadComponent: () => import('./features/forum/forum-create.component').then(m => m.ForumCreateComponent) },
   { path: 'forum/:id', loadComponent: () => import('./features/forum/forum-topic.component').then(m => m.ForumTopicComponent) },
   { path: 'post/create/:forumId', loadComponent: () => import('./features/post/post-create.component').then(m => m.PostCreateComponent) },
-  { path: 'post/edit/:id', loadComponent: () => import('./features/post/post-edit.component').then(m => m.PostEditComponent) },
   { path: 'post/:id', loadComponent: () => import('./features/post/post-index.component').then(m => m.PostIndexComponent) },
   { path: 'posts/mine', loadComponent: () => import('./features/post/user-posts.component').then(m => m.UserPostsComponent) },
   { path: 'top-posts', loadComponent: () => import('./features/post/top-posts.component').then(m => m.TopPostsComponent) },
@@ -22,7 +21,6 @@ export const routes: Routes = [
   { path: 'profile/followers/:id', loadComponent: () => import('./features/profile/followers.component').then(m => m.FollowersComponent) },
   { path: 'profile/following/:id', loadComponent: () => import('./features/profile/following.component').then(m => m.FollowingComponent) },
   { path: 'profile/:id', loadComponent: () => import('./features/profile/profile-detail.component').then(m => m.ProfileDetailComponent) },
-  { path: 'profile-comment/create/:id', loadComponent: () => import('./features/profile/profile-comment-create.component').then(m => m.ProfileCommentCreateComponent) },
   { path: 'search', loadComponent: () => import('./features/search/search-results.component').then(m => m.SearchResultsComponent) },
   { path: '**', redirectTo: '' }
 ];

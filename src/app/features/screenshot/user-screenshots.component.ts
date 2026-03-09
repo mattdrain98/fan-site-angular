@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { ScreenshotService } from '../../core/services/services';
 import { AuthService } from '../../core/services/auth.service';
 import { ScreenshotDto } from '../../core/models';
@@ -8,7 +8,7 @@ import { ScreenshotDto } from '../../core/models';
 @Component({
   selector: 'app-user-screenshots',
   standalone: true,
-  imports: [RouterLink, AsyncPipe],
+  imports: [RouterLink, AsyncPipe, DatePipe],
   templateUrl: './user-screenshots.component.html'
 })
 export class UserScreenshotsComponent implements OnInit {

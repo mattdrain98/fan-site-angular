@@ -66,7 +66,7 @@
               </div>
             </div>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" routerLink="['/profile', currentUser.userId]"
+            <a class="dropdown-item" [routerLink]="['/profile', currentUser.userId]"
                (click)="dropdownOpen = false">
               <i class="material-icons">person</i> My Account
             </a>

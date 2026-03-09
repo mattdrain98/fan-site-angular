@@ -24,13 +24,13 @@
             {{ post.authorName }}
           </a>
           <span class="author-rating">{{ post.authorRating }}</span>
-          <span class="post-date">{{ post.date | date: 'short' }}</span>
+          <span class="post-date">{{ post.date | date: 'medium' }}</span>
         </div>
 
         <div class="post-content-area">
-          <h2 class="post-title-heading">{{ post.title }}</h2>
 
           @if (!isEditingPost) {
+            <h2 class="post-title-heading">{{ post.title }}</h2>
             <div class="post-body" [innerHTML]="post.postContent"></div>
 
             @if (currentUser$ | async; as cu) {
@@ -46,6 +46,11 @@
               }
             }
           } @else {
+            <input
+              class="reply-textarea"
+              style="margin-bottom: .75rem; padding: .6rem .9rem;"
+              [(ngModel)]="editPostTitle"
+              placeholder="Post title..." />
             <textarea class="reply-textarea" rows="6" [(ngModel)]="editPostContent"></textarea>
             <div class="action-row">
               <button class="action-btn save" (click)="saveEditPost()">

@@ -3,11 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HomeService } from '../../core/services/services';
 import { PostListingModel } from '../../core/models';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, DatePipe],
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {

@@ -10,11 +10,11 @@ import { ForumIndexComponent } from './features/forum/forum-index.component';
 import { ForumTopicComponent } from './features/forum/forum-topic.component';
 import { ForumCreateComponent } from './features/forum/forum-create.component';
 import { PostIndexComponent } from './features/post/post-index.component';
-import { PostCreateComponent, PostEditComponent, UserPostsComponent, TopPostsComponent } from './features/post/post-extra.components';
+import { PostCreateComponent, UserPostsComponent, TopPostsComponent } from './features/post/post-extra.components';
 import { ScreenshotIndexComponent, UserScreenshotsComponent } from './features/screenshot/screenshot.components';
 import { ScreenshotCreateComponent } from './features/screenshot/screenshot-create.component';
 import { ProfileDetailComponent } from './features/profile/profile-detail.component';
-import { EditUsernameComponent, FollowersComponent, FollowingComponent, ProfileCommentCreateComponent } from './features/profile/profile-extra.components';
+import { EditUsernameComponent, FollowersComponent, FollowingComponent } from './features/profile/profile-extra.components';
 import { SearchResultsComponent } from './features/search/search-results.component';
 import { ConfirmEmailComponent } from './features/auth/confirm-email.component';
 
@@ -29,7 +29,6 @@ const routes: Routes = [
   { path: 'forum/create', component: ForumCreateComponent },
   { path: 'forum/:id', component: ForumTopicComponent },
   { path: 'post/create/:forumId', component: PostCreateComponent },
-  { path: 'post/edit/:id', component: PostEditComponent },
   { path: 'post/:id', component: PostIndexComponent },
   { path: 'posts/mine', component: UserPostsComponent },
   { path: 'top-posts', component: TopPostsComponent },
@@ -40,7 +39,6 @@ const routes: Routes = [
   { path: 'profile/followers/:id', component: FollowersComponent },
   { path: 'profile/following/:id', component: FollowingComponent },
   { path: 'profile/:id', component: ProfileDetailComponent },
-  { path: 'profile-comment/create/:id', component: ProfileCommentCreateComponent },
   { path: 'search', component: SearchResultsComponent },
   { path: '**', redirectTo: '' }
 ];

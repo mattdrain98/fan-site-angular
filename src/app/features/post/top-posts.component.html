@@ -32,7 +32,7 @@
             </a>
             <span class="top-meta-rating">{{ post.authorRating }}</span>
             <span class="top-meta-sep">·</span>
-            <span class="top-meta-date">{{ post.datePosted }}</span>
+            <span class="top-meta-date">{{ post.datePosted | date: 'medium' }}</span>
           </div>
         </div>
 

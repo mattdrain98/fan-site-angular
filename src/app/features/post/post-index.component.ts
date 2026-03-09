@@ -33,7 +33,8 @@ export class PostIndexComponent implements OnInit {
   // Post inline editing
   isEditingPost = false;
   editPostContent = '';
-
+  editPostTitle = ''; 
+  
   // Inline reply creation
   isReplying = false;
   newReplyContent = '';
@@ -84,18 +85,24 @@ export class PostIndexComponent implements OnInit {
   startEditPost(): void {
     if (!this.post) return;
     this.isEditingPost = true;
-    this.editPostContent = this.post.postContent;
+    this.editPostTitle = this.post.title ?? '';
+    this.editPostContent = this.post.postContent ?? '';
   }
 
   cancelEditPost(): void {
     this.isEditingPost = false;
-    this.editPostContent = '';
+    this.editPostTitle = this.post?.title ?? '';
+    this.editPostContent = this.post?.postContent ?? '';
   }
 
   saveEditPost(): void {
     if (!this.post) return;
-    this.postService.edit(this.post.id, { title: this.post.title, content: this.editPostContent }).subscribe({
+    this.postService.edit(this.post.id, { 
+      title: this.editPostTitle, 
+      content: this.editPostContent 
+    }).subscribe({
       next: () => {
+        this.post!.title = this.editPostTitle;
         this.post!.postContent = this.editPostContent;
         this.cancelEditPost();
       },
