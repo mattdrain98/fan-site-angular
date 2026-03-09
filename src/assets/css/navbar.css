@@ -279,6 +279,9 @@
   .material-icons { font-size: 22px !important; }
 }
 
+/* ── Mobile auth section (hidden by default, shown in media query) ── */
+.nav-auth-mobile { display: none; }
+
 /* ── Mobile ──────────────────────────────────────────── */
 @media (max-width: 768px) {
   .nav-toggler     { display: flex; }
@@ -307,9 +310,6 @@
     &::after { display: none; }
   }
 }
-
-/* ── Mobile auth section ─────────────────────────────── */
-.nav-auth-mobile { display: none; }
 
 /* ── Mobile user dropdown ────────────────────────────── */
 .mobile-user-trigger {
