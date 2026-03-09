@@ -19,15 +19,18 @@ export class AuthService {
 
   get currentUser(): CurrentUser | null { return this.userSubject.value; }
 
-login(payload: { userName: string; password: string; rememberMe: boolean }): Observable<{ message: string }> {
-  return this.http.post<{ message: string; user: CurrentUser }>(`${this.base}/login`, payload).pipe(
-    tap(response => {
-      if (response.user) {
-        this.setCurrentUser(response.user);
-      }
-    })
-  );
-}
+  login(payload: { userName: string; password: string; rememberMe: boolean }): Observable<{ message: string; token: string }> {
+    return this.http.post<{ message: string; user: CurrentUser; token: string }>(`${this.base}/login`, payload).pipe(
+      tap(response => {
+        if (response.user) {
+          this.setCurrentUser(response.user);
+        }
+        if (response.token) {
+          this.setToken(response.token);  // ✅ Store token
+        }
+      })
+    );
+  }
 
   register(userName: string, email: string, password: string, file?: File): Observable<string> {
     const fd = new FormData();
@@ -44,6 +47,7 @@ login(payload: { userName: string; password: string; rememberMe: boolean }): Obs
       tap(() => {
         this.userSubject.next(null);
         localStorage.removeItem('currentUser');
+        localStorage.removeItem('authToken');  // ✅ Remove token
       })
     );
   }
@@ -64,14 +68,26 @@ login(payload: { userName: string; password: string; rememberMe: boolean }): Obs
     localStorage.setItem('currentUser', JSON.stringify(user));
   }
 
+  // ✅ NEW - Token management
+  setToken(token: string): void {
+    localStorage.setItem('authToken', token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('authToken');
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
   private loadStored(): CurrentUser | null {
     const s = localStorage.getItem('currentUser');
     return s ? JSON.parse(s) : null;
   }
 
-  
-    getLatestUsers(): Observable<ApplicationUser[]> {
-      return this.http.get<ApplicationUser[]>(`${this.base}/new-users`);
+  getLatestUsers(): Observable<ApplicationUser[]> {
+    return this.http.get<ApplicationUser[]>(`${this.base}/new-users`);
   }
 
   confirmEmail(userId: string, token: string): Observable<string> {
