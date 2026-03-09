@@ -74,7 +74,7 @@
   }
 }
 
-/* ── Auth ────────────────────────────────────────────── */
+/* ── Desktop Auth ────────────────────────────────────── */
 .nav-auth {
   display: flex;
   align-items: center;
@@ -262,6 +262,42 @@
   margin: .3rem .4rem;
 }
 
+/* ── Mobile Auth Section ─────────────────────────────── */
+.nav-auth-mobile { display: none; }
+
+.mobile-user-header {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .5rem .9rem;
+}
+
+.mobile-username {
+  font-size: .9rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.mobile-divider {
+  height: 1px;
+  background: #f1f5f9;
+  margin: .3rem .4rem;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
+  color: #dc2626;
+
+  .material-icons { color: #fca5a5 !important; }
+
+  &:hover { background: #fff1f2 !important; }
+}
+
 /* ── Toggler ─────────────────────────────────────────── */
 .nav-toggler {
   display: none;
@@ -280,8 +316,9 @@
 
 /* ── Mobile ──────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .nav-toggler { display: flex; }
-  .nav-auth    { display: none; }
+  .nav-toggler  { display: flex; }
+  .nav-auth     { display: none; }
+  .nav-auth-mobile { display: block; }
 
   .nav-links {
     display: none;
