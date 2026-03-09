@@ -68,7 +68,6 @@ export class AuthService {
     localStorage.setItem('currentUser', JSON.stringify(user));
   }
 
-  // ✅ NEW - Token management
   setToken(token: string): void {
     localStorage.setItem('authToken', token);
   }
