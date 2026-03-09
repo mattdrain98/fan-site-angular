@@ -61,14 +61,6 @@
           <!-- Username -->
           <div class="profile-username-row">
             <span class="profile-username">{{ profile.userName }}</span>
-            @if (currentUser$ | async; as cu) {
-              @if (cu.userName === profile.userName) {
-                <a class="profile-edit-icon"
-                   [routerLink]="['/profile/edit-username', profile.userId]">
-                  <i class="material-icons">edit</i>
-                </a>
-              }
-            }
           </div>
 
           <!-- Rating -->
