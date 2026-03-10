@@ -14,7 +14,7 @@ import { PostCreateComponent, UserPostsComponent, TopPostsComponent } from './fe
 import { ScreenshotIndexComponent, UserScreenshotsComponent } from './features/screenshot/screenshot.components';
 import { ScreenshotCreateComponent } from './features/screenshot/screenshot-create.component';
 import { ProfileDetailComponent } from './features/profile/profile-detail.component';
-import { EditUsernameComponent, FollowersComponent, FollowingComponent } from './features/profile/profile-extra.components';
+import { FollowersComponent, FollowingComponent } from './features/profile/profile-extra.components';
 import { SearchResultsComponent } from './features/search/search-results.component';
 import { ConfirmEmailComponent } from './features/auth/confirm-email.component';
 
@@ -35,7 +35,6 @@ const routes: Routes = [
   { path: 'screenshots', component: ScreenshotIndexComponent },
   { path: 'screenshots/create', component: ScreenshotCreateComponent },
   { path: 'screenshots/mine', component: UserScreenshotsComponent },
-  { path: 'profile/edit-username/:id', component: EditUsernameComponent },
   { path: 'profile/followers/:id', component: FollowersComponent },
   { path: 'profile/following/:id', component: FollowingComponent },
   { path: 'profile/:id', component: ProfileDetailComponent },

@@ -17,7 +17,6 @@ export const routes: Routes = [
   { path: 'screenshots', loadComponent: () => import('./features/screenshot/screenshot-index.component').then(m => m.ScreenshotIndexComponent) },
   { path: 'screenshots/create', loadComponent: () => import('./features/screenshot/screenshot-create.component').then(m => m.ScreenshotCreateComponent) },
   { path: 'screenshots/mine', loadComponent: () => import('./features/screenshot/user-screenshots.component').then(m => m.UserScreenshotsComponent) },
-  { path: 'profile/edit-username/:id', loadComponent: () => import('./features/profile/edit-username.component').then(m => m.EditUsernameComponent) },
   { path: 'profile/followers/:id', loadComponent: () => import('./features/profile/followers.component').then(m => m.FollowersComponent) },
   { path: 'profile/following/:id', loadComponent: () => import('./features/profile/following.component').then(m => m.FollowingComponent) },
   { path: 'profile/:id', loadComponent: () => import('./features/profile/profile-detail.component').then(m => m.ProfileDetailComponent) },
