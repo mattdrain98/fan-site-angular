@@ -7,7 +7,8 @@ import { ForumService } from '../../core/services/services';
   selector: 'app-forum-create',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './forum-create.component.html'
+  templateUrl: './forum-create.component.html',
+  styleUrl: './forum-create.component.css'
 })
 
 export class ForumCreateComponent {

@@ -29,16 +29,35 @@
         <i class="material-icons">people</i>
         <span>New Users</span>
       </a>
-      <a class="nav-link" routerLink="/top-posts" routerLinkActive="active"
-         (click)="menuOpen = false">
-        <i class="material-icons">star</i>
-        <span>Top Posts</span>
-      </a>
-      <a class="nav-link" routerLink="/latest-posts" routerLinkActive="active"
-         (click)="menuOpen = false">
-        <i class="material-icons">article</i>
-        <span>Latest Posts</span>
-      </a>
+
+      <!-- Posts Dropdown -->
+      <div class="nav-posts-dropdown" [class.open]="postsDropdownOpen">
+        <button class="nav-link posts-dropdown-trigger"
+                [class.active]="isPostsRouteActive()"
+                (click)="postsDropdownOpen = !postsDropdownOpen">
+          <i class="material-icons">article</i>
+          <span>Posts</span>
+          <i class="material-icons posts-chevron">expand_more</i>
+        </button>
+        <div class="posts-dropdown-menu">
+          <a class="posts-dropdown-item" routerLink="/top-posts" routerLinkActive="active"
+             (click)="postsDropdownOpen = false; menuOpen = false">
+            <i class="material-icons">star</i>
+            <div>
+              <span class="posts-item-label">Top Posts</span>
+              <span class="posts-item-desc">Most liked &amp; discussed</span>
+            </div>
+          </a>
+          <a class="posts-dropdown-item" routerLink="/latest-posts" routerLinkActive="active"
+             (click)="postsDropdownOpen = false; menuOpen = false">
+            <i class="material-icons">schedule</i>
+            <div>
+              <span class="posts-item-label">Latest Posts</span>
+              <span class="posts-item-desc">Freshest content first</span>
+            </div>
+          </a>
+        </div>
+      </div>
 
       <!-- Mobile-only auth -->
       <div class="nav-auth-mobile">

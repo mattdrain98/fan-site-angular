@@ -4,7 +4,7 @@
     <div class="posts-header-bar-left">
       <i class="material-icons">article</i>
       <span>Latest Posts</span>
-      @if (latestPosts?.length) {
+      @if (latestPosts.length) {
         <span class="posts-count">{{ latestPosts.length }}</span>
       }
     </div>
@@ -62,7 +62,7 @@
       </div>
     }
 
-    @if (!latestPosts?.length) {
+    @if (!latestPosts.length) {
       <div class="latest-no-posts">
         <i class="material-icons">article</i>
         <p>No posts yet.</p>

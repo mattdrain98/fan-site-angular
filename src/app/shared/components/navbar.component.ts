@@ -7,7 +7,8 @@ import { AuthService } from '../../core/services/auth.service';
   selector: 'app-navbar',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, AsyncPipe],
-  templateUrl: './navbar.component.html'
+  templateUrl: './navbar.component.html',
+  styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
   private auth = inject(AuthService);
@@ -18,12 +19,17 @@ export class NavbarComponent {
   menuOpen     = false;
   dropdownOpen = false;
   mobileUserOpen = false;
-  
+  postsDropdownOpen = false;
+
   logout(): void {
     this.auth.logout().subscribe(() => {
       this.dropdownOpen = false;
       this.router.navigate(['/login']);
     });
+  }
+
+  isPostsRouteActive(): boolean {
+    return this.router.url.startsWith('/top-posts') || this.router.url.startsWith('/latest-posts');
   }
 
   @HostListener('document:click', ['$event'])

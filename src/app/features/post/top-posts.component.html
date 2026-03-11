@@ -4,7 +4,7 @@
     <div class="top-posts-header-left">
       <i class="material-icons">star</i>
       <span>Top Posts</span>
-      @if (posts?.length) {
+      @if (posts.length) {
         <span class="top-posts-count">{{ posts.length }}</span>
       }
     </div>
@@ -50,7 +50,7 @@
       </div>
     }
 
-    @if (!posts?.length) {
+    @if (!posts.length) {
       <div class="no-top-posts">
         <i class="material-icons">star_border</i>
         <p>No posts yet.</p>

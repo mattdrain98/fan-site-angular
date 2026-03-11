@@ -9,7 +9,8 @@ import { DatePipe } from '@angular/common';
   selector: 'app-home',
   standalone: true,
   imports: [FormsModule, RouterLink, DatePipe],
-  templateUrl: './latest-posts.component.html'
+  templateUrl: './latest-posts.component.html',
+  styleUrl: './latest-posts.component.css'
 })
 export class LatestPostsComponent implements OnInit {
   private postService = inject(PostService);

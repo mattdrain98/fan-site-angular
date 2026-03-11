@@ -7,7 +7,8 @@ import { PostListingModel } from '../../core/models';
   selector: 'app-user-posts',
   standalone: true,
   imports: [RouterLink],
-  templateUrl: './user-posts.component.html'
+  templateUrl: './user-posts.component.html',
+  styleUrl: './user-posts.component.css'
 })
 export class UserPostsComponent implements OnInit {
   private postService = inject(PostService);

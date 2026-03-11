@@ -25,9 +25,9 @@
           <div class="screenshot-card" [style.animation-delay]="i * 50 + 'ms'">
 
             <!-- Image -->
-            <div class="screenshot-img-wrap" (click)="openModal(s.imageUrl, s.content ?? '')">
+            <div class="screenshot-img-wrap" (click)="openModal(s.imageUrl, s.content)">
               @if (s.imageUrl) {
-                <img class="screenshot-img" [src]="s.imageUrl" [alt]="s.content ?? ''" />
+                <img class="screenshot-img" [src]="s.imageUrl" [alt]="s.content" />
                 <div class="screenshot-overlay">
                   <i class="material-icons">zoom_in</i>
                 </div>
@@ -77,7 +77,7 @@
     <button class="lightbox-close" (click)="closeModal()">
       <i class="material-icons">close</i>
     </button>
-    <img class="lightbox-img" [src]="lightboxSrc ?? ''" (click)="$event.stopPropagation()" />
+    <img class="lightbox-img" [src]="lightboxSrc" (click)="$event.stopPropagation()" />
     @if (lightboxCaption) {
       <div class="lightbox-caption">{{ lightboxCaption }}</div>
     }

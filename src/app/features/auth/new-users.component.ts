@@ -8,7 +8,8 @@ import { DatePipe } from '@angular/common';
   selector: 'app-new-users',
   standalone: true,
   imports: [RouterLink, DatePipe],
-  templateUrl: './new-users.component.html'
+  templateUrl: './new-users.component.html',
+  styleUrl: './new-users.component.css'
 })
 export class NewUsersComponent implements OnInit {
   private auth = inject(AuthService);

@@ -8,7 +8,8 @@ import { DatePipe } from '@angular/common';
   selector: 'app-followers',
   standalone: true,
   imports: [RouterLink, DatePipe],
-  templateUrl: './followers.component.html'
+  templateUrl: './followers.component.html',
+  styleUrl: './followers.component.css'
 })
 export class FollowersComponent implements OnInit {
   private route = inject(ActivatedRoute);

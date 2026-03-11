@@ -54,7 +54,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.homeService.getTopPosts(5).subscribe(p => this.topPosts = p);
     this.homeService.getLatestPosts(5).subscribe(p => this.latestPosts = p);
     this.homeService.getMostActive(8).subscribe(f => this.topForums = f);
-    this.homeService.getLatestScreenshots().subscribe(s => this.latestScreenshots = s); 
+    this.homeService.getLatestScreenshots().subscribe(s => {
+      this.latestScreenshots = s;
+      if (s.length) {
+        this.shotTextVisible = true;
+        this.startShotAutoplay();
+      }
+    });
   }
 
   ngOnDestroy(): void {

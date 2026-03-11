@@ -11,7 +11,8 @@ import { ProfileCommentService } from 'src/app/core/services/profile-comment.ser
   selector: 'app-profile-detail',
   standalone: true,
   imports: [RouterLink, AsyncPipe, DatePipe, FormsModule],
-  templateUrl: './profile-detail.component.html'
+  templateUrl: './profile-detail.component.html',
+  styleUrl: './profile-detail.component.css'
 })
 export class ProfileDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);

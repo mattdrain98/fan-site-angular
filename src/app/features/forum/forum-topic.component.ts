@@ -10,7 +10,8 @@ import { ForumTopicModel } from '../../core/models';
   selector: 'app-forum-topic',
   standalone: true,
   imports: [FormsModule, RouterLink, AsyncPipe],
-  templateUrl: './forum-topic.component.html'
+  templateUrl: './forum-topic.component.html',
+  styleUrl: './forum-topic.component.css'
 })
 export class ForumTopicComponent implements OnInit {
   private route = inject(ActivatedRoute);

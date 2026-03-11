@@ -7,7 +7,8 @@ import { PostService, ForumService } from '../../core/services/services';
   selector: 'app-post-create',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './post-create.component.html'
+  templateUrl: './post-create.component.html',
+  styleUrl: './post-create.component.css'
 })
 
 export class PostCreateComponent implements OnInit {

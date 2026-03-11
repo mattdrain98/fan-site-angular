@@ -7,7 +7,8 @@ import { ScreenshotService } from '../../core/services/services';
   selector: 'app-screenshot-create',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './screenshot-create.component.html'
+  templateUrl: './screenshot-create.component.html',
+  styleUrl: './screenshot-create.component.css'
 })
 export class ScreenshotCreateComponent {
   private svc = inject(ScreenshotService);

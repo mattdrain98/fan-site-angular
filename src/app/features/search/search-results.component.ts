@@ -8,7 +8,8 @@ import { SearchResultModel } from '../../core/models';
   selector: 'app-search-results',
   standalone: true,
   imports: [FormsModule, RouterLink],
-  templateUrl: './search-results.component.html'
+  templateUrl: './search-results.component.html',
+  styleUrl: './search-results.component.css'
 })
 export class SearchResultsComponent implements OnInit {
   private route = inject(ActivatedRoute);

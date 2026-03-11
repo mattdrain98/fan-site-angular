@@ -5,7 +5,7 @@
     <div class="users-header-left">
       <i class="material-icons">people</i>
       <span>New Users</span>
-      @if (users?.length) {
+      @if (users.length) {
         <span class="users-count">{{ users.length }}</span>
       }
     </div>
@@ -52,7 +52,7 @@
       </div>
     }
 
-    @if (!users?.length) {
+    @if (!users.length) {
       <div class="no-users">
         <i class="material-icons">people_outline</i>
         <p>No new users yet.</p>

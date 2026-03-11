@@ -6,7 +6,8 @@ import { AuthService } from '../../core/services/auth.service';
   selector: 'app-change-password',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './change-password.component.html'
+  templateUrl: './change-password.component.html',
+  styleUrl: './change-password.component.css'
 })
 export class ChangePasswordComponent {
   private auth = inject(AuthService);

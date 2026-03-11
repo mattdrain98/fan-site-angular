@@ -15,7 +15,7 @@
         <p class="register-subheading">Join the community today</p>
 
         <!-- Errors -->
-        @if (errors?.length) {
+        @if (errors.length) {
           <div class="register-errors">
             @for (e of errors; track e) {
               <div class="error-item">

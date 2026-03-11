@@ -5,7 +5,7 @@
     <div class="forums-header-left">
       <i class="material-icons">forum</i>
       <span>Forums</span>
-      @if (forums?.length) {
+      @if (forums.length) {
         <span class="forums-count">{{ forums.length }}</span>
       }
     </div>
@@ -48,7 +48,7 @@
       </div>
     }
 
-    @if (!forums?.length) {
+    @if (!forums.length) {
       <div class="no-forums">
         <i class="material-icons">forum</i>
         <p>No forums yet. Be the first to create one!</p>

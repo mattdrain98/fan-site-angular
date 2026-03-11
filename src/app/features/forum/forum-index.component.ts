@@ -9,7 +9,8 @@ import { ForumListingModel } from '../../core/models';
   selector: 'app-forum-index',
   standalone: true,
   imports: [RouterLink, AsyncPipe],
-  templateUrl: './forum-index.component.html'
+  templateUrl: './forum-index.component.html',
+  styleUrl: './forum-index.component.css'
 })
 export class ForumIndexComponent implements OnInit {
   private forumService = inject(ForumService);

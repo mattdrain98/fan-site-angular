@@ -11,7 +11,8 @@ import { PostIndexModel } from '../../core/models';
   selector: 'app-post-index',
   standalone: true,
   imports: [RouterLink, AsyncPipe, DatePipe, FormsModule],
-  templateUrl: './post-index.component.html'
+  templateUrl: './post-index.component.html',
+  styleUrl: './post-index.component.css'
 })
 export class PostIndexComponent implements OnInit {
   constructor(private location: Location) {}

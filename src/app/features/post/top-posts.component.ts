@@ -8,7 +8,8 @@ import { DatePipe } from '@angular/common';
   selector: 'app-top-posts',
   standalone: true,
   imports: [RouterLink, DatePipe],
-  templateUrl: './top-posts.component.html'
+  templateUrl: './top-posts.component.html',
+  styleUrl: './top-posts.component.css'
 })
 export class TopPostsComponent implements OnInit {
   private postService = inject(PostService);

@@ -9,7 +9,8 @@ import { ScreenshotDto } from '../../core/models';
   selector: 'app-screenshot-index',
   standalone: true,
   imports: [RouterLink, AsyncPipe, DatePipe],
-  templateUrl: './screenshot-index.component.html'
+  templateUrl: './screenshot-index.component.html',
+  styleUrl: './screenshot-index.component.css'
 })
 export class ScreenshotIndexComponent implements OnInit {
   private svc = inject(ScreenshotService);
