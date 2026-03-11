@@ -8,7 +8,6 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  font-family: 'DM Sans', sans-serif;
 }
 
 /* ── Stats bar ──────────────────────────────────────── */
@@ -42,7 +41,6 @@
   strong {
     font-size: 1.15rem;
     font-weight: 800;
-    font-family: 'Syne', sans-serif;
   }
 
   span {
@@ -79,7 +77,6 @@
 }
 
 .section-header__title {
-  font-family: 'Syne', sans-serif;
   font-size: 1.25rem;
   font-weight: 800;
   color: #0f172a;
@@ -312,7 +309,6 @@
 }
 
 .post-block__title {
-  font-family: 'Syne', sans-serif;
   font-size: .95rem;
   font-weight: 700;
   color: #0f172a;
@@ -473,7 +469,6 @@
 .forum-card__rank {
   font-size: .72rem;
   font-weight: 800;
-  font-family: 'Syne', sans-serif;
   color: #94a3b8;
   flex-shrink: 0;
 }
