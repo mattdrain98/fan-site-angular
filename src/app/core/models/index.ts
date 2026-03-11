@@ -1,3 +1,11 @@
+//------------------GLOBAL STATS------------------\\
+export interface HomeStatsDto {
+  totalMembers: number;
+  totalPosts:   number;
+  totalForums:  number;
+  totalReplies: number;
+}
+
 //------------------FORUMS------------------\\
 export interface ForumListingModel {
   id: number;
@@ -12,6 +20,16 @@ export interface ForumTopicModel {
   posts: PostListingModel[];
   forum: ForumListingModel;
   searchQuery?: string;
+}
+
+export interface ForumDto {
+  forumId: number;
+  forumTitle: string;
+  description?: string;
+  userId: string;
+  userName: string;
+  userRating: number;
+  postsCount: number;
 }
 
 //------------------POSTS------------------\\
@@ -184,4 +202,15 @@ export interface SearchResultModel {
   emptySearchResults: boolean;
 }
 
-
+export interface MediaDto {
+  id: number;
+  title: string;
+  content: string;
+  authorId: number;
+  authorName: string;
+  authorRating: number;
+  datePosted: string;   // ISO 8601 string from the API — pipe through date pipe in templates
+  imageUrl: string;
+  mediaType: 'screenshot' | 'clip' | 'artwork' | string;  // extend as your backend grows
+  slug: string;
+}

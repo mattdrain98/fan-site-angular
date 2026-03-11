@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ScreenshotDto } from '../models';
+import { MediaDto } from '../models';
 
 @Injectable({ providedIn: 'root' })
-export class ScreenshotService {
+export class MediaService {
   private base = `${environment.apiBaseUrl}/media`;
 
   constructor(private http: HttpClient) {}
@@ -17,8 +17,18 @@ export class ScreenshotService {
    * Fields: id, title, content, authorId, authorName, authorRating,
    *         datePosted, imageUrl, mediaType, slug
    */
-  getAll(): Observable<ScreenshotDto[]> {
-    return this.http.get<ScreenshotDto[]>(this.base);
+  getAll(): Observable<MediaDto[]> {
+    return this.http.get<MediaDto[]>(this.base);
+  }
+
+  /**
+   * GET /api/media/latest?count=8
+   * Returns the N most recent media posts, for use on the home page
+   * Returns: MediaDto[]
+   */
+  getLatest(count: number = 8): Observable<MediaDto[]> {
+    const params = new HttpParams().set('count', count);
+    return this.http.get<MediaDto[]>(`${this.base}/latest`, { params });
   }
 
   /**
@@ -26,8 +36,8 @@ export class ScreenshotService {
    * Returns a single media item by id
    * Returns: MediaDto
    */
-  getById(id: number): Observable<ScreenshotDto> {
-    return this.http.get<ScreenshotDto>(`${this.base}/${id}`);
+  getById(id: number): Observable<MediaDto> {
+    return this.http.get<MediaDto>(`${this.base}/${id}`);
   }
 
   /**
@@ -35,8 +45,8 @@ export class ScreenshotService {
    * Returns a single media item by slug
    * Returns: MediaDto
    */
-  getBySlug(slug: string): Observable<ScreenshotDto> {
-    return this.http.get<ScreenshotDto>(`${this.base}/slug/${slug}`);
+  getBySlug(slug: string): Observable<MediaDto> {
+    return this.http.get<MediaDto>(`${this.base}/slug/${slug}`);
   }
 
   /**
@@ -45,8 +55,8 @@ export class ScreenshotService {
    * Returns: MediaDto[]
    * Requires auth
    */
-  getUserMedia(): Observable<ScreenshotDto[]> {
-    return this.http.get<ScreenshotDto[]>(`${this.base}/user`);
+  getUserMedia(): Observable<MediaDto[]> {
+    return this.http.get<MediaDto[]>(`${this.base}/user`);
   }
 
   /**

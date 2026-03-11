@@ -1,73 +1,197 @@
-<div class="posts-section">
+<!-- ══════════════════════════════════════════
+     HOME PAGE
+     ══════════════════════════════════════════ -->
 
-  <div class="posts-header-bar">
-    <div class="posts-header-bar-left">
-      <i class="material-icons">article</i>
-      <span>Latest Posts</span>
-      @if (latestPosts?.length) {
-        <span class="posts-count">{{ latestPosts.length }}</span>
-      }
-    </div>
-    <div class="search-wrap">
-      <i class="material-icons search-icon">search</i>
-      <input
-        type="text"
-        [(ngModel)]="searchQuery"
-        placeholder="Search posts..."
-        class="search-input"
-        (focus)="searchQuery = ''"
-        (keyup.enter)="search()" />
-      <button class="search-btn" (click)="search()">Go</button>
-    </div>
-  </div>
+<div class="home-wrap">
 
-  <div class="posts-list">
-    @for (post of latestPosts; track post.id; let i = $index) {
-      <div class="post-card" [style.animation-delay]="i * 40 + 'ms'">
+  <!-- ── Stats bar ──────────────────────────── -->
+  <section class="stats-bar">
+    @for (stat of quickStats; track stat.label) {
+      <div class="stats-bar__item">
+        <i class="material-icons">{{ stat.icon }}</i>
+        <div class="stats-bar__text">
+          <strong>{{ stat.value }}</strong>
+          <span>{{ stat.label }}</span>
+        </div>
+      </div>
+    }
+  </section>
 
-        <div class="post-index">{{ i + 1 }}</div>
 
-        <div class="post-body">
-          <a class="post-title" [routerLink]="['/post', post.id]">
-            {{ post.title }}
-          </a>
-          <div class="post-meta">
-            <a class="meta-author" [routerLink]="['/profile', post.authorId]">
-              <i class="material-icons">person</i>
-              {{ post.authorName }}
+  <!-- ── Latest Gaming Moments ──────────────── -->
+  <section class="moments-section">
+    <div class="moments-card">
+      <div class="moments-card__header">
+        <div class="section-header__left">
+          <span class="section-header__eyebrow">
+            <i class="material-icons">photo_library</i> Media
+          </span>
+          <h2 class="section-header__title">Latest Gaming Moments</h2>
+        </div>
+        <a [routerLink]="['/screenshots']" class="section-header__link">
+          View all <i class="material-icons">arrow_forward</i>
+        </a>
+      </div>
+
+      @if (!latestScreenshots.length) {
+        <div class="moments-empty">
+          <i class="material-icons">photo_library</i>
+          <p>No screenshots yet. <a [routerLink]="['/screenshots/create']">Share yours!</a></p>
+        </div>
+      } @else {
+        <div class="slideshow">
+
+          <!-- Slides -->
+          @for (shot of latestScreenshots; track shot.id; let i = $index) {
+            <div class="slideshow__slide" [class.active]="i === activeShot" [class.prev]="i === prevShotIndex">
+              <img [src]="shot.imageUrl" [alt]="shot.title" class="slideshow__img" />
+            </div>
+          }
+
+          <!-- Caption bar -->
+          <div class="slideshow__caption" [class.visible]="shotTextVisible">
+            <a [routerLink]="['/screenshot', latestScreenshots[activeShot]?.id]" class="slideshow__title">
+              {{ latestScreenshots[activeShot]?.title }}
             </a>
-            <span class="meta-rating">{{ post.authorRating }}</span>
-            @if (post.forum) {
-              <span class="meta-sep">in</span>
-              <a class="meta-forum" [routerLink]="['/forum', post.forum.id]">
-                {{ post.forum.name }}
-              </a>
+            <span class="slideshow__author">
+              <i class="material-icons">person</i>{{ latestScreenshots[activeShot]?.authorName }}
+            </span>
+          </div>
+
+          <!-- Arrows -->
+          <button class="slideshow__arrow slideshow__arrow--prev" (click)="prevShot()" aria-label="Previous">
+            <i class="material-icons">chevron_left</i>
+          </button>
+          <button class="slideshow__arrow slideshow__arrow--next" (click)="nextShot()" aria-label="Next">
+            <i class="material-icons">chevron_right</i>
+          </button>
+
+          <!-- Dots -->
+          <div class="slideshow__dots">
+            @for (shot of latestScreenshots; track shot.id; let i = $index) {
+              <button class="slideshow__dot" [class.active]="i === activeShot" (click)="goToShot(i)"></button>
             }
-            <span class="meta-sep">·</span>
-            <span class="meta-date">{{ post.datePosted | date: 'medium'}}</span>
           </div>
+
+          <!-- Progress bar -->
+          <div class="slideshow__progress">
+            @if (showShotProgress) {
+              <div class="slideshow__progress-fill"></div>
+            }
+          </div>
+
         </div>
+      }
+    </div><!-- /moments-card -->
+  </section>
 
-        <div class="post-stats">
-          <div class="stat-pill replies">
-            <i class="material-icons">chat_bubble_outline</i>
-            <span>{{ post.repliesCount }}</span>
-          </div>
-          <div class="stat-pill likes">
-            <i class="material-icons">favorite</i>
-            <span>{{ post.totalLikes }}</span>
-          </div>
+
+  <!-- ── Two-column post blocks ─────────────── -->
+  <section class="posts-grid">
+
+    <!-- Top Posts -->
+    <div class="post-block">
+      <div class="post-block__header">
+        <span class="post-block__badge post-block__badge--sky">
+          <i class="material-icons">trending_up</i> Trending
+        </span>
+        <h2 class="post-block__title">Top Posts This Week</h2>
+      </div>
+
+      <ul class="mini-list">
+        @for (post of topPosts; track post.id; let i = $index) {
+          <li class="mini-item" [style.animation-delay]="i * 55 + 'ms'">
+            <span class="mini-item__rank">{{ i + 1 }}</span>
+            <a class="mini-item__title" [routerLink]="['/post', post.id]">{{ post.title }}</a>
+            <span class="mini-item__stat mini-item__stat--likes">
+              <i class="material-icons">favorite</i>{{ post.totalLikes }}
+            </span>
+          </li>
+        }
+        @if (!topPosts?.length) {
+          <li class="mini-item mini-item--empty">Nothing trending yet.</li>
+        }
+      </ul>
+
+      <a [routerLink]="['/top-posts']" class="post-block__link">
+        See all top posts <i class="material-icons">east</i>
+      </a>
+    </div>
+
+    <!-- Latest Posts -->
+    <div class="post-block">
+      <div class="post-block__header">
+        <span class="post-block__badge post-block__badge--violet">
+          <i class="material-icons">schedule</i> Fresh
+        </span>
+        <h2 class="post-block__title">Latest Discussions</h2>
+      </div>
+
+      <ul class="mini-list">
+        @for (post of latestPosts?.slice(0, 5); track post.id; let i = $index) {
+          <li class="mini-item" [style.animation-delay]="i * 55 + 'ms'">
+            <span class="mini-item__rank mini-item__rank--new">
+              <i class="material-icons">fiber_new</i>
+            </span>
+            <a class="mini-item__title" [routerLink]="['/post', post.id]">{{ post.title }}</a>
+            <span class="mini-item__stat">{{ post.datePosted | date:'MMM d' }}</span>
+          </li>
+        }
+        @if (!latestPosts?.length) {
+          <li class="mini-item mini-item--empty">No posts yet.</li>
+        }
+      </ul>
+
+      <a [routerLink]="['/latest-posts']" class="post-block__link post-block__link--violet">
+        View all latest <i class="material-icons">east</i>
+      </a>
+    </div>
+
+  </section>
+
+
+  <!-- ── Popular Forums ─────────────────────── -->
+  <section class="forums-section">
+    <div class="forums-card">
+      <div class="forums-card__header">
+        <div class="section-header__left">
+          <span class="section-header__eyebrow section-header__eyebrow--fire">
+            <i class="material-icons">local_fire_department</i> Most Active
+          </span>
+          <h2 class="section-header__title">Popular Forums</h2>
         </div>
-
+        <a [routerLink]="['/forum']" class="section-header__link">
+          Browse all <i class="material-icons">arrow_forward</i>
+        </a>
       </div>
-    }
 
-    @if (!latestPosts?.length) {
-      <div class="latest-no-posts">
-        <i class="material-icons">article</i>
-        <p>No posts yet.</p>
+      <div class="forum-grid">
+        @for (forum of topForums; track forum.forumId; let i = $index) {
+          <a class="forum-card" [routerLink]="['/forum', forum.forumId]"
+             [style.animation-delay]="i * 40 + 'ms'">
+            <span class="forum-card__rank"
+              [class.rank--gold]="i === 0"
+              [class.rank--silver]="i === 1"
+              [class.rank--bronze]="i === 2">#{{ i + 1 }}</span>
+            <div class="forum-card__body">
+              <strong class="forum-card__name">{{ forum.forumTitle }}</strong>
+              <div class="forum-card__stats">
+                <span><i class="material-icons">article</i>{{ forum.postsCount | number }}</span>
+              </div>
+              <div class="forum-card__bar">
+                <div class="forum-card__bar-fill"
+                  [style.width]="(forum.postsCount / topForums[0].postsCount * 100) + '%'">
+                </div>
+              </div>
+            </div>
+            <i class="material-icons forum-card__arrow">chevron_right</i>
+          </a>
+        }
+        @if (!topForums?.length) {
+          <p class="forums-empty">No forums yet. <a [routerLink]="['/forum/new']">Create one!</a></p>
+        }
       </div>
-    }
-  </div>
+    </div><!-- /forums-card -->
+  </section>
 
 </div>

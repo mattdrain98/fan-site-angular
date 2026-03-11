@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { HomeIndexModel } from '../models';
+import { ForumDto, HomeStatsDto, PostListingModel, ScreenshotDto } from '../models';  // reuse your existing model
 
 @Injectable({ providedIn: 'root' })
 export class HomeService {
@@ -11,13 +11,50 @@ export class HomeService {
   constructor(private http: HttpClient) {}
 
   /**
-   * GET /api/home
-   * Returns: HomeIndexModel
-   * Fields: latestPosts (PostListingModel[] — latest 10), searchQuery (empty string)
-   * Each PostListingModel includes: id, title, authorName, authorId, authorRating,
-   *   totalLikes, datePosted, repliesCount, forum (ForumListingModel), forumName
+   * GET /api/home/latest?count=10
+   * Latest posts for the home page panel
    */
-  getHomeIndex(): Observable<HomeIndexModel> {
-    return this.http.get<HomeIndexModel>(this.base);
+  getLatestPosts(count: number = 10): Observable<PostListingModel[]> {
+    const params = new HttpParams().set('count', count);
+    return this.http.get<PostListingModel[]>(`${this.base}/latest-posts`, { params });
   }
+
+  /**
+   * GET /api/home/top?count=5&days=7
+   * Top posts by likes within the last N days
+   */
+  getTopPosts(count: number = 5, days: number = 7): Observable<PostListingModel[]> {
+    const params = new HttpParams()
+      .set('count', count)
+      .set('days', days);
+    return this.http.get<PostListingModel[]>(`${this.base}/top`, { params });
+  }
+
+    /**
+     * GET /api/media/latest?count=8
+     * Returns the N most recent media posts, for use on the home page
+     * Returns: MediaDto[]
+     */
+    getLatestScreenshots(count: number = 8): Observable<ScreenshotDto[]> {
+      const params = new HttpParams().set('count', count);
+      return this.http.get<ScreenshotDto[]>(`${this.base}/screenshots`, { params });
+    }
+
+     /**
+     * GET /api/media/top-forums?count=5
+     * Returns the N top forums, for use on the home page
+     * Returns: ForumDto[]
+     */
+    getMostActive(count: number = 5): Observable<ForumDto[]> {
+      const params = new HttpParams().set('count', count);
+      return this.http.get<ForumDto[]>(`${this.base}/top-forums`, { params });
+    }
+
+    /**
+   * GET /api/home/stats
+   * Real counts for members, posts, forums, replies
+   */
+    getStats(): Observable<HomeStatsDto> {
+      return this.http.get<HomeStatsDto>(`${this.base}/stats`);
+    }
 }
