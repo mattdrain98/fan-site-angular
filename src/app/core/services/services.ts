@@ -6,7 +6,7 @@ import {
   ForumListingModel, ForumTopicModel,
   PostIndexModel, PostListingModel, PostReplyDto,
   ScreenshotDto, ProfileModel, ProfileCommentDto,
-  HomeIndexModel, SearchResultModel, ApplicationUser
+  SearchResultModel
 } from '../models';
 
 // ── Forum ──────────────────────────────────────────────────────────────────
@@ -50,6 +50,10 @@ export class PostService {
 
   getTopPosts(): Observable<PostListingModel[]> {
     return this.http.get<PostListingModel[]>(`${this.base}/top`);
+  }
+
+  getLatestPosts(): Observable<PostListingModel[]>{
+    return this.http.get<PostListingModel[]>(`${this.base}/latest`);
   }
 
   add(title: string, content: string, forumId: number): Observable<PostIndexModel> {
@@ -166,16 +170,6 @@ export class ProfileCommentService {
 
   add(payload: ProfileCommentDto): Observable<ProfileCommentDto> {
     return this.http.post<ProfileCommentDto>(this.base, payload);
-  }
-}
-
-// ── Home ───────────────────────────────────────────────────────────────────
-@Injectable({ providedIn: 'root' })
-export class HomeService {
-  private http = inject(HttpClient);
-
-  getHomeIndex(): Observable<HomeIndexModel> {
-    return this.http.get<HomeIndexModel>(`${environment.apiBaseUrl}/home`);
   }
 }
 

@@ -31,10 +31,20 @@ export class ReplyService {
     return this.http.post<{ message: string; postId: number }>(`${this.base}/add`, { postId, replyContent });
   }
 
+  /**
+   * PUT /api/reply/{id}
+   * Body: EditReplyDto { content: string }
+   * Requires auth
+   */
   edit(id: number, content: string): Observable<void> {
     return this.http.put<void>(`${this.base}/${id}`, { content });
   }
   
+  /**
+   * DELETE /api/reply/{id}
+   * Body: replyId in URL, no body needed
+   * Requires auth
+   */
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.base}/${id}`);
   }

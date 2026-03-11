@@ -190,12 +190,7 @@ export interface ProfileEditModel {
   bio?: string;
 }
 
-//------------------HOME & SEARCH------------------\\
-export interface HomeIndexModel {
-  latestPosts: PostListingModel[];
-  searchQuery: string;
-}
-
+//------------------SEARCH------------------\\
 export interface SearchResultModel {
   posts: PostListingModel[];
   searchQuery: string;

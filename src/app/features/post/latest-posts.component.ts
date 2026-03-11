@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { HomeService } from '../../core/services/services';
+import { PostService } from '../../core/services/services';
 import { PostListingModel } from '../../core/models';
 import { DatePipe } from '@angular/common';
 
@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './latest-posts.component.html'
 })
 export class LatestPostsComponent implements OnInit {
-  private homeService = inject(HomeService);
+  private postService = inject(PostService);
   private router = inject(Router);
 
   latestPosts: PostListingModel[] = [];
@@ -20,8 +20,8 @@ export class LatestPostsComponent implements OnInit {
   loading = true;
 
   ngOnInit(): void {
-    this.homeService.getHomeIndex().subscribe({
-      next: data => { this.latestPosts = data.latestPosts; this.loading = false; },
+    this.postService.getLatestPosts().subscribe({
+      next: data => { this.latestPosts = data; this.loading = false; },
       error: () => { this.loading = false; }
     });
   }
