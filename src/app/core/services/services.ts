@@ -55,6 +55,10 @@ export class PostService {
   getLatestPosts(): Observable<PostListingModel[]>{
     return this.http.get<PostListingModel[]>(`${this.base}/latest`);
   }
+  
+  getLikedPosts(): Observable<PostListingModel[]> {
+    return this.http.get<PostListingModel[]>(`${this.base}/liked`);
+  }
 
   add(title: string, content: string, forumId: number): Observable<PostIndexModel> {
     return this.http.post<PostIndexModel>(this.base, { title, content, forumId });

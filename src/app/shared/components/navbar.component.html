@@ -56,6 +56,17 @@
               <span class="posts-item-desc">Freshest content first</span>
             </div>
           </a>
+          @if (currentUser$ | async; as currentUser) {
+          <a class="posts-dropdown-item" routerLink="/liked" routerLinkActive="active"
+             (click)="postsDropdownOpen = false; menuOpen = false">
+            <i class="material-icons">favorite</i>
+            <div>
+              <span class="posts-item-label">Liked Posts</span>
+              <span class="posts-item-desc">Posts you've liked</span>
+            </div>
+          </a>  
+          }
+        
         </div>
       </div>
 

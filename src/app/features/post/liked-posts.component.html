@@ -1,0 +1,73 @@
+<div class="posts-section">
+
+  <div class="posts-header-bar">
+    <div class="posts-header-bar-left">
+      <i class="material-icons">article</i>
+      <span>Liked Posts</span>
+      @if (likedPosts.length) {
+        <span class="posts-count">{{ likedPosts.length }}</span>
+      }
+    </div>
+    <div class="search-wrap">
+      <i class="material-icons search-icon">search</i>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Search posts..."
+        class="search-input"
+        (focus)="searchQuery = ''"
+        (keyup.enter)="search()" />
+      <button class="search-btn" (click)="search()">Go</button>
+    </div>
+  </div>
+
+  <div class="posts-list">
+    @for (post of likedPosts; track post.id; let i = $index) {
+      <div class="post-card" [style.animation-delay]="i * 40 + 'ms'">
+
+        <div class="post-index">{{ i + 1 }}</div>
+
+        <div class="post-body">
+          <a class="post-title" [routerLink]="['/post', post.id]">
+            {{ post.title }}
+          </a>
+          <div class="post-meta">
+            <a class="meta-author" [routerLink]="['/profile', post.authorId]">
+              <i class="material-icons">person</i>
+              {{ post.authorName }}
+            </a>
+            <span class="meta-rating">{{ post.authorRating }}</span>
+            @if (post.forum) {
+              <span class="meta-sep">in</span>
+              <a class="meta-forum" [routerLink]="['/forum', post.forum.id]">
+                {{ post.forum.name }}
+              </a>
+            }
+            <span class="meta-sep">·</span>
+            <span class="meta-date">{{ post.datePosted | date: 'medium'}}</span>
+          </div>
+        </div>
+
+        <div class="post-stats">
+          <div class="stat-pill replies">
+            <i class="material-icons">chat_bubble_outline</i>
+            <span>{{ post.repliesCount }}</span>
+          </div>
+          <div class="stat-pill likes">
+            <i class="material-icons">favorite</i>
+            <span>{{ post.totalLikes }}</span>
+          </div>
+        </div>
+
+      </div>
+    }
+
+    @if (!likedPosts.length) {
+      <div class="latest-no-posts">
+        <i class="material-icons">article</i>
+        <p>No posts yet.</p>
+      </div>
+    }
+  </div>
+
+</div>

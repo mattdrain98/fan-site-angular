@@ -18,6 +18,7 @@ import { FollowersComponent, FollowingComponent } from './features/profile/profi
 import { SearchResultsComponent } from './features/search/search-results.component';
 import { ConfirmEmailComponent } from './features/auth/confirm-email.component';
 import { LatestPostsComponent } from './features/post/latest-posts.component';
+import { LikedPostsComponent } from './features/post/liked-posts.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'posts/mine', component: UserPostsComponent },
   { path: 'top-posts', component: TopPostsComponent },
   { path: 'latest-posts', component: LatestPostsComponent },
+  { path: 'liked', component: LikedPostsComponent },
   { path: 'screenshots', component: ScreenshotIndexComponent },
   { path: 'screenshots/create', component: ScreenshotCreateComponent },
   { path: 'screenshots/mine', component: UserScreenshotsComponent },
