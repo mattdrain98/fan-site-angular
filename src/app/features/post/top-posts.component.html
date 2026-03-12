@@ -38,11 +38,18 @@
 
           <div class="top-card-info">
             <h3 class="top-card-title">{{ post.title }}</h3>
-            <div class="top-card-meta">
-              <span class="top-card-author">{{ post.authorName }}</span>
-              <span class="top-card-rating">{{ post.authorRating }}</span>
-            </div>
-            <div class="top-card-stats">
+                <div class="top-card-meta">
+                  <div class="top-card-author-wrap">
+                    <div class="top-card-avatar"
+                      [style.background-image]="post.authorUrl
+                        ? 'url(' + post.authorUrl + ')'
+                        : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'">
+                    </div>
+                    <span class="top-card-author">{{ post.authorName }}</span>
+                  </div>
+                  <span class="top-card-rating">{{ post.authorRating }}</span>
+                </div>
+              <div class="top-card-stats">
               <span class="top-card-stat replies">
                 <i class="material-icons">chat_bubble_outline</i>
                 {{ post.repliesCount }}

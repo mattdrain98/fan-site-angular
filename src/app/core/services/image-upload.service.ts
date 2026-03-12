@@ -17,7 +17,7 @@ export class ImageUploadService {
   async uploadImage(file: File): Promise<string> {
     const formData = new FormData();
     formData.append('file', file);
-
+  
     try {
       const response = await firstValueFrom(
         this.http.post<{ url: string }>(
@@ -26,7 +26,7 @@ export class ImageUploadService {
         )
       );
       if (!response) throw new Error('No response from server');
-      return `https://localhost:5001${response.url}`;
+      return response.url;
     } catch (error) {
       console.error('Image upload error:', error);
       throw error;

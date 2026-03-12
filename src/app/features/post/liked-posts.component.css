@@ -205,6 +205,24 @@
   font-size: 0.78rem;
 }
 
+.liked-card-author-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.liked-card-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
 .liked-card-author {
   font-weight: 600;
   color: #0284c7;

@@ -39,6 +39,7 @@ export interface PostListingModel {
   authorId: string;
   authorName: string;
   authorRating: number;
+  authorUrl?: string;
   totalLikes: number;
   datePosted: string;
   repliesCount: number;

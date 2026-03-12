@@ -43,7 +43,14 @@
               <div class="liked-card-info">
                 <h3 class="liked-card-title">{{ post.title }}</h3>
                 <div class="liked-card-meta">
-                  <span class="liked-card-author">{{ post.authorName }}</span>
+                  <div class="liked-card-author-wrap">
+                    <div class="liked-card-avatar"
+                      [style.background-image]="post.authorUrl
+                        ? 'url(' + post.authorUrl + ')'
+                        : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'">
+                    </div>
+                    <span class="liked-card-author">{{ post.authorName }}</span>
+                  </div>
                   <span class="liked-card-rating">{{ post.authorRating }}</span>
                 </div>
                 <div class="liked-card-stats">

@@ -175,7 +175,7 @@
                   <div class="post-body" [innerHTML]="reply.replyContent"></div>
 
                   @if (currentUser$ | async; as cu) {
-                    @if (cu.userName === post.authorName) {
+                    @if (cu.userName == reply.authorName) {
                       <div class="owner-actions">
                         <button class="owner-btn edit" (click)="startEditReply(reply)">
                           <i class="material-icons">edit</i>

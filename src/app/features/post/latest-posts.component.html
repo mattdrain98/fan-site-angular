@@ -40,7 +40,14 @@
           <div class="post-grid-info">
             <h3 class="grid-title">{{ post.title }}</h3>
             <div class="grid-meta">
-              <span class="author">{{ post.authorName }}</span>
+              <div class="grid-author">
+                <div class="grid-author-avatar"
+                  [style.background-image]="post.authorUrl
+                    ? 'url(' + post.authorUrl + ')'
+                    : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'">
+                </div>
+                <span class="author">{{ post.authorName }}</span>
+              </div>
               <span class="likes">
                 <i class="material-icons">favorite</i>
                 {{ post.totalLikes }}
