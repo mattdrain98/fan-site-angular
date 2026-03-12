@@ -45,10 +45,11 @@ export interface PostListingModel {
   forum?: ForumListingModel;
   forumId?: number;
   forumName?: string;
+  postImages?: PostImageDto[];
 }
 
 export interface PostIndexModel {
-  id: number;
+  postId: number;
   title: string;
   authorName: string;
   authorId: string;
@@ -62,12 +63,19 @@ export interface PostIndexModel {
   forumId: number;
   forumName: string;
   userHasLiked: boolean;
+  postImages?: PostImageDto[];
+}
+
+export interface PostImageDto {
+  id: number;
+  url: string;
 }
 
 export interface NewPostModel {
   title: string;
   content: string;
   forumId: number;
+  imageUrls: string[];
 }
 
 export interface PostTopicModel {
@@ -79,6 +87,7 @@ export interface PostTopicModel {
 export interface PostEditModel {
   title: string;
   content: string;
+  newImageUrls?: string[];
 }
 
 export interface EditPostDto {

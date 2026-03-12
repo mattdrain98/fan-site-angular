@@ -1,210 +1,320 @@
 .user-posts-page {
-  max-width: 860px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 1.5rem 1rem 3rem;
+}
+
+.user-posts-wrapper {
   display: flex;
   flex-direction: column;
   gap: 0;
 }
 
-/* ── Header Bar ──────────────────────────────────────── */
+/* ── Header Bar ── */
 .user-posts-header-bar {
   display: flex;
   align-items: center;
   background: skyblue;
-  padding: .75rem 1.1rem;
+  padding: 0.75rem 1.1rem;
   border-radius: 12px 12px 0 0;
+  box-shadow: 0 4px 12px rgba(135, 206, 235, 0.25);
 }
 
 .user-posts-header-left {
   display: flex;
   align-items: center;
-  gap: .5rem;
+  gap: 0.5rem;
   color: #fff;
   font-weight: 700;
-  font-size: .95rem;
+  font-size: 0.95rem;
+}
 
-  .material-icons { font-size: 18px !important; }
+.user-posts-header-left .material-icons {
+  font-size: 18px !important;
 }
 
 .user-posts-count {
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
   color: #fff;
-  font-size: .7rem;
+  font-size: 0.7rem;
   font-weight: 700;
   border-radius: 999px;
   padding: 1px 8px;
 }
 
-/* ── Container ───────────────────────────────────────── */
-.user-posts-container {
+/* ── Grid ── */
+.user-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+  background: #fff;
   border: 1px solid #e2e8f0;
   border-top: none;
   border-radius: 0 0 14px 14px;
+}
+
+/* ── Card ── */
+.user-grid-card {
+  position: relative;
+  border-radius: 10px;
   overflow: hidden;
   background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: userFadeIn 0.3s ease both;
 }
 
-/* ── Post Row ────────────────────────────────────────── */
-.user-post-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: .9rem 1.25rem;
-  border-bottom: 1px solid #f1f5f9;
-  transition: background .15s;
-  animation: userPostFadeIn .3s ease both;
-
-  &:last-child { border-bottom: none; }
-  &:hover { background: #f8fafc; }
+.user-grid-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
 
-@keyframes userPostFadeIn {
+.user-grid-card:hover .grid-delete-btn {
+  opacity: 1;
+}
+
+@keyframes userFadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Index ───────────────────────────────────────────── */
-.user-post-index {
-  width: 28px;
-  height: 28px;
+.user-card-link {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f1f5f9;
-  border-radius: 8px;
-  font-size: .75rem;
-  font-weight: 700;
-  color: #94a3b8;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* ── Card Image ── */
+.user-card-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
   flex-shrink: 0;
 }
 
-/* ── Body ────────────────────────────────────────────── */
-.user-post-body {
-  flex: 1;
-  min-width: 0;
+.user-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.user-grid-card:hover .user-card-image img {
+  transform: scale(1.08);
+}
+
+.user-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(135, 206, 235, 0.1) 0%, rgba(135, 206, 235, 0.05) 100%);
+  border: 2px dashed rgba(135, 206, 235, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-image-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
+}
+
+/* ── Card Info ── */
+.user-card-info {
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: .25rem;
+  gap: 0.35rem;
+  border-top: 2px solid rgba(135, 206, 235, 0.4);
 }
 
-.user-post-title {
-  font-size: .95rem;
-  font-weight: 600;
+.user-card-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
   color: #0f172a;
-  text-decoration: none;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  letter-spacing: -.01em;
-  transition: color .15s;
-
-  &:hover { color: #0284c7; }
 }
 
-.user-post-meta {
+.user-card-meta {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: .3rem;
-  font-size: .775rem;
+  gap: 0.4rem;
+  font-size: 0.78rem;
 }
 
-.user-meta-author {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  color: #0284c7;
-  text-decoration: none;
+.user-card-author {
   font-weight: 600;
-
-  &:hover { text-decoration: underline; }
-  .material-icons { font-size: 13px !important; }
+  color: #0284c7;
 }
 
-.user-meta-rating {
+.user-card-rating {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   background: skyblue;
   color: #fff;
-  font-size: .65rem;
+  font-size: 0.65rem;
   font-weight: 700;
   border-radius: 999px;
   padding: 1px 7px;
 }
 
-.user-meta-sep  { color: #cbd5e1; font-size: .7rem; }
-.user-meta-date { color: #94a3b8; }
-
-/* ── Stats ───────────────────────────────────────────── */
-.user-post-stats {
+.user-card-stats {
   display: flex;
   align-items: center;
-  gap: .4rem;
-  flex-shrink: 0;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.15rem;
 }
 
-.user-stat-pill {
+.user-card-stat {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: .775rem;
+  gap: 3px;
   font-weight: 600;
-
-  .material-icons { font-size: 14px !important; }
-
-  &.replies { background: #f1f5f9; color: #64748b; }
 }
 
-/* ── Delete ──────────────────────────────────────────── */
-.user-post-delete-btn {
+.user-card-stat .material-icons {
+  font-size: 14px !important;
+}
+
+.user-card-stat.likes .material-icons {
+  color: crimson;
+}
+
+.user-card-date {
+  margin-left: auto;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+/* ── Delete Button ── */
+.grid-delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: #fff1f2;
+  padding: 0;
   border: none;
-  color: #e11d48;
   cursor: pointer;
-  flex-shrink: 0;
-  transition: background .15s;
-
-  &:hover { background: #ffe4e6; }
-  .material-icons { font-size: 18px !important; }
+  background: none;
+  color: rgba(255, 255, 255, 0.7);
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+  transition: color 0.15s, transform 0.15s;
+  opacity: 0;
 }
 
-/* ── No Posts ────────────────────────────────────────── */
+.grid-delete-btn .material-icons {
+  font-size: 20px !important;
+}
+
+.grid-delete-btn:hover {
+  color: #ff6b81;
+  transform: scale(1.15);
+}
+
+/* ── No Posts ── */
 .user-no-posts {
+  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .75rem;
+  gap: 0.5rem;
   padding: 3rem 1rem;
   color: #94a3b8;
   text-align: center;
+}
 
-  .material-icons { font-size: 40px !important; color: #cbd5e1; }
+.user-no-posts .material-icons {
+  font-size: 40px !important;
+  color: #cbd5e1;
+}
 
-  p {
-    font-size: .875rem;
-    margin: 0;
+.user-no-posts p {
+  font-size: 0.875rem;
+  margin: 0;
+}
 
-    a {
-      color: #0284c7;
-      font-weight: 600;
-      text-decoration: none;
-      &:hover { text-decoration: underline; }
-    }
+.user-no-posts p a {
+  color: #0284c7;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.user-no-posts p a:hover {
+  text-decoration: underline;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .user-posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    padding: 0.75rem;
   }
 }
 
-/* ── Mobile ──────────────────────────────────────────── */
-@media (max-width: 560px) {
-  .user-post-stats { display: none; }
-  .user-post-row   { padding: .75rem 1rem; }
+@media (max-width: 768px) {
+  .user-posts-page {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .user-posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .user-card-title {
+    font-size: 0.85rem;
+  }
+
+  .grid-delete-btn {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-posts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-card-image {
+    aspect-ratio: 1 / 1;
+  }
+
+  .user-card-title {
+    font-size: 0.9rem;
+    -webkit-line-clamp: 1;
+  }
+
+  .user-posts-header-bar {
+    padding: 0.75rem 1rem;
+  }
+
+  .user-posts-header-left {
+    font-size: 0.85rem;
+  }
 }

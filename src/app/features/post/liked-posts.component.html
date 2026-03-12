@@ -1,73 +1,116 @@
-<div class="posts-section">
+<div class="liked-posts-page">
 
-  <div class="posts-header-bar">
-    <div class="posts-header-bar-left">
-      <i class="material-icons">article</i>
-      <span>Liked Posts</span>
+  <div class="liked-posts-wrapper">
+    <div class="liked-posts-header-bar">
+      <div class="liked-posts-header-left">
+        <i class="material-icons">favorite</i>
+        <span>Liked Posts</span>
+        @if (totalPosts) {
+          <span class="liked-posts-count">{{ totalPosts }}</span>
+        }
+      </div>
+      <div class="search-wrap">
+        <i class="material-icons search-icon">search</i>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          placeholder="Search posts..."
+          class="search-input"
+          (keyup.enter)="search()" />
+        <button class="search-btn" (click)="search()">Go</button>
+      </div>
+    </div>
+
+    <div class="liked-posts-grid" [class.no-pagination]="totalPages <= 1">
       @if (likedPosts.length) {
-        <span class="posts-count">{{ likedPosts.length }}</span>
+        @for (post of likedPosts; track post.id; let i = $index) {
+          <div class="liked-grid-card" [style.animation-delay]="i * 40 + 'ms'">
+            <a class="liked-card-link" [routerLink]="['/post', post.id]">
+
+              <div class="liked-card-image">
+                @if (post.postImages && post.postImages.length > 0) {
+                  <img [src]="post.postImages[0].url" alt="Post image" />
+                  @if (post.postImages.length > 1) {
+                    <span class="liked-image-badge">+{{ post.postImages.length - 1 }}</span>
+                  }
+                } @else {
+                  <div class="liked-image-placeholder">
+                    <i class="material-icons" style="font-size:40px;color:rgba(135,206,235,0.3)">image</i>
+                  </div>
+                }
+              </div>
+
+              <div class="liked-card-info">
+                <h3 class="liked-card-title">{{ post.title }}</h3>
+                <div class="liked-card-meta">
+                  <span class="liked-card-author">{{ post.authorName }}</span>
+                  <span class="liked-card-rating">{{ post.authorRating }}</span>
+                </div>
+                <div class="liked-card-stats">
+                  <span class="liked-card-stat replies">
+                    <i class="material-icons">chat_bubble_outline</i>
+                    {{ post.repliesCount }}
+                  </span>
+                  <span class="liked-card-stat likes">
+                    <i class="material-icons">favorite</i>
+                    {{ post.totalLikes }}
+                  </span>
+                  @if (post.datePosted) {
+                    <span class="liked-card-date">{{ post.datePosted | date: 'mediumDate' }}</span>
+                  }
+                </div>
+              </div>
+
+            </a>
+          </div>
+        }
+      } @else if (!loading) {
+        <div class="liked-no-posts">
+          <i class="material-icons">favorite_border</i>
+          <p>No liked posts yet.</p>
+        </div>
       }
     </div>
-    <div class="search-wrap">
-      <i class="material-icons search-icon">search</i>
-      <input
-        type="text"
-        [(ngModel)]="searchQuery"
-        placeholder="Search posts..."
-        class="search-input"
-        (focus)="searchQuery = ''"
-        (keyup.enter)="search()" />
-      <button class="search-btn" (click)="search()">Go</button>
-    </div>
-  </div>
 
-  <div class="posts-list">
-    @for (post of likedPosts; track post.id; let i = $index) {
-      <div class="post-card" [style.animation-delay]="i * 40 + 'ms'">
+    @if (totalPages > 1) {
+      <div class="pagination-bar">
+        <button
+          class="page-btn"
+          [disabled]="currentPage === 1"
+          (click)="loadPage(1)">
+          <i class="material-icons">first_page</i>
+        </button>
+        <button
+          class="page-btn"
+          [disabled]="currentPage === 1"
+          (click)="loadPage(currentPage - 1)">
+          <i class="material-icons">chevron_left</i>
+        </button>
 
-        <div class="post-index">{{ i + 1 }}</div>
+        @for (p of visiblePages; track p) {
+          <button
+            class="page-btn"
+            [class.active]="p === currentPage"
+            (click)="loadPage(p)">
+            {{ p }}
+          </button>
+        }
 
-        <div class="post-body">
-          <a class="post-title" [routerLink]="['/post', post.id]">
-            {{ post.title }}
-          </a>
-          <div class="post-meta">
-            <a class="meta-author" [routerLink]="['/profile', post.authorId]">
-              <i class="material-icons">person</i>
-              {{ post.authorName }}
-            </a>
-            <span class="meta-rating">{{ post.authorRating }}</span>
-            @if (post.forum) {
-              <span class="meta-sep">in</span>
-              <a class="meta-forum" [routerLink]="['/forum', post.forum.id]">
-                {{ post.forum.name }}
-              </a>
-            }
-            <span class="meta-sep">·</span>
-            <span class="meta-date">{{ post.datePosted | date: 'medium'}}</span>
-          </div>
-        </div>
-
-        <div class="post-stats">
-          <div class="stat-pill replies">
-            <i class="material-icons">chat_bubble_outline</i>
-            <span>{{ post.repliesCount }}</span>
-          </div>
-          <div class="stat-pill likes">
-            <i class="material-icons">favorite</i>
-            <span>{{ post.totalLikes }}</span>
-          </div>
-        </div>
-
+        <button
+          class="page-btn"
+          [disabled]="currentPage === totalPages"
+          (click)="loadPage(currentPage + 1)">
+          <i class="material-icons">chevron_right</i>
+        </button>
+        <button
+          class="page-btn"
+          [disabled]="currentPage === totalPages"
+          (click)="loadPage(totalPages)">
+          <i class="material-icons">last_page</i>
+        </button>
       </div>
     }
 
-    @if (!likedPosts.length) {
-      <div class="latest-no-posts">
-        <i class="material-icons">article</i>
-        <p>No posts yet.</p>
-      </div>
-    }
   </div>
 
 </div>

@@ -30,38 +30,65 @@
         <div class="post-content-area">
 
           @if (!isEditingPost) {
-            <h2 class="post-title-heading">{{ post.title }}</h2>
-            <div class="post-body" [innerHTML]="post.postContent"></div>
-
-            @if (currentUser$ | async; as cu) {
-              @if (cu.userName === post.authorName) {
-                <div class="action-row">
-                  <button class="action-btn edit" (click)="startEditPost()">
-                    <i class="material-icons">edit</i> Edit
-                  </button>
-                  <button class="action-btn delete" (click)="deletePost()">
-                    <i class="material-icons">delete</i> Delete
-                  </button>
-                </div>
+            <div class="post-title-row">
+              <h2 class="post-title-heading">{{ post.title }}</h2>
+              @if (currentUser$ | async; as cu) {
+                @if (cu.userName === post.authorName) {
+                  <div class="owner-actions">
+                    <button class="owner-btn edit" (click)="startEditPost()">
+                      <i class="material-icons">edit</i>
+                    </button>
+                    <button class="owner-btn delete" (click)="deletePost()">
+                      <i class="material-icons">delete_outline</i>
+                    </button>
+                  </div>
+                }
               }
-            }
+            </div>
+            <div class="post-body" [innerHTML]="getFormattedContent()"></div>
+
           } @else {
             <input
               class="reply-textarea"
               style="margin-bottom: .75rem; padding: .6rem .9rem;"
               [(ngModel)]="editPostTitle"
               placeholder="Post title..." />
-            <textarea class="reply-textarea" rows="6" [(ngModel)]="editPostContent"></textarea>
-            <div class="action-row">
-              <button class="action-btn save" (click)="saveEditPost()">
-                <i class="material-icons">save</i> Save
-              </button>
-              <button class="action-btn cancel" (click)="cancelEditPost()">
-                <i class="material-icons">close</i> Cancel
-              </button>
+            <textarea
+              class="reply-textarea"
+              rows="6"
+              [(ngModel)]="editPostContent"
+              [class.dragover]="isDragOver"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onDrop($event)"
+              (paste)="onPaste($event)"
+              #editTextarea></textarea>
+          
+            <div class="edit-toolbar">
+              <div class="edit-toolbar-left">
+                <input
+                  type="file"
+                  #imageInput
+                  (change)="onEditImageSelected($event)"
+                  accept="image/jpeg,image/png,image/gif,image/webp"
+                  hidden />
+                <button class="toolbar-icon-btn" (click)="imageInput.click()" [disabled]="isUploadingImage">
+                  <i class="material-icons">{{ isUploadingImage ? 'hourglass_top' : 'add_photo_alternate' }}</i>
+                </button>
+                @if (uploadError) {
+                  <span class="upload-error">{{ uploadError }}</span>
+                }
+              </div>
+              <div class="edit-toolbar-right">
+                <button class="toolbar-icon-btn save" (click)="saveEditPost()" [disabled]="isUploadingImage">
+                  <i class="material-icons">save</i>
+                </button>
+                <button class="toolbar-icon-btn cancel" (click)="cancelEditPost()">
+                  <i class="material-icons">cancel</i>
+                </button>
+              </div>
             </div>
           }
-
           <div class="post-like-row">
             @if (currentUser$ | async) {
               <div class="like-wrap">
@@ -148,13 +175,13 @@
                   <div class="post-body" [innerHTML]="reply.replyContent"></div>
 
                   @if (currentUser$ | async; as cu) {
-                    @if (cu.userId === reply.authorId) {
-                      <div class="action-row">
-                        <button class="action-btn edit" (click)="startEditReply(reply)">
-                          <i class="material-icons">edit</i> Edit
+                    @if (cu.userName === post.authorName) {
+                      <div class="owner-actions">
+                        <button class="owner-btn edit" (click)="startEditReply(reply)">
+                          <i class="material-icons">edit</i>
                         </button>
-                        <button class="action-btn delete" (click)="deleteReply(reply.id)">
-                          <i class="material-icons">delete</i> Delete
+                        <button class="owner-btn delete" (click)="deleteReply(reply.id)">
+                          <i class="material-icons">delete_outline</i>
                         </button>
                       </div>
                     }

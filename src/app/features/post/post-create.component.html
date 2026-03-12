@@ -1,60 +1,108 @@
 <div class="create-post-page">
-  <div class="create-post-wrapper">
 
+  <div class="create-post-wrapper">
     <div class="create-post-header-bar">
+      <button class="back-btn" (click)="goBack()">
+        <i class="material-icons">arrow_back</i>
+      </button>
       <div class="create-post-header-left">
-        <i class="material-icons">edit</i>
-        <span>New Post</span>
-        @if (forumName) {
-          <span class="create-post-forum">in {{ forumName }}</span>
-        }
+        <i class="material-icons">edit_note</i>
+        <span>Create Post</span>
       </div>
     </div>
 
-    <div class="create-post-card">
+    <div class="create-post-container">
 
-      @if (errors.length) {
-        <div class="create-post-errors">
-          @for (e of errors; track e) {
-            <div class="error-item">
-              <i class="material-icons">error_outline</i>
-              {{ e }}
-            </div>
-          }
+      <!-- Title Input -->
+      <div class="form-group">
+        <label for="title-input">Post Title</label>
+        <input
+          id="title-input"
+          [(ngModel)]="title"
+          placeholder="What's your post about?"
+          class="form-input"
+          type="text" />
+      </div>
+
+      <!-- Content Input -->
+      <div class="form-group">
+        <label for="content-input">
+          <span>Post Content</span>
+          <span class="hint">Paste, drag & drop, or click to add images</span>
+        </label>
+        <textarea
+          #contentInput
+          id="content-input"
+          [(ngModel)]="content"
+          placeholder="Write your post... (Paste images with Ctrl+V or drag & drop)"
+          class="form-textarea"
+          [class.drag-over]="isDragOver"
+          (paste)="onContentPaste($event)"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)">
+        </textarea>
+      </div>
+
+      <!-- Upload Button -->
+      <input
+        #hiddenFileInput
+        type="file"
+        multiple
+        accept="image/*"
+        (change)="onFileSelected($event)"
+        hidden />
+
+      <button class="upload-btn" (click)="openFileDialog()" type="button">
+        <i class="material-icons">add_photo_alternate</i>
+        <span>Add Images</span>
+      </button>
+
+      <!-- Uploaded Images -->
+      @if (uploadedImages.length > 0) {
+        <div class="uploaded-section">
+          <div class="uploaded-header">
+            <i class="material-icons">photo_library</i>
+            <span>Attached Images ({{ uploadedImages.length }})</span>
+          </div>
+          <div class="uploaded-grid">
+            @for (image of uploadedImages; track image.id) {
+              <div class="uploaded-item">
+                <img [src]="image.url" alt="Uploaded image" />
+                <button class="remove-btn" (click)="removeImage(image.id)" type="button">
+                  <i class="material-icons">close</i>
+                </button>
+              </div>
+            }
+          </div>
         </div>
       }
 
-      <form #f="ngForm" (ngSubmit)="submit(f)">
-
-        <div class="form-field">
-          <label class="form-label">Title</label>
-          <input
-            name="title"
-            [(ngModel)]="model.title"
-            required
-            class="form-input"
-            placeholder="Give your post a title..." />
+      <!-- Uploading Indicator -->
+      @if (isPasting) {
+        <div class="uploading-bar">
+          <i class="material-icons spinning">autorenew</i>
+          <span>Uploading images...</span>
         </div>
+      }
 
-        <div class="form-field">
-          <label class="form-label">Content</label>
-          <textarea
-            name="content"
-            [(ngModel)]="model.content"
-            rows="8"
-            class="form-textarea"
-            placeholder="Write your post content...">
-          </textarea>
-        </div>
+      <!-- Submit -->
+      <div class="form-actions">
+        <button
+          class="submit-btn"
+          (click)="submitPost()"
+          [disabled]="isPasting || !title.trim()"
+          type="button">
+          <i class="material-icons">send</i>
+          <span>Post</span>
+        </button>
+        <button class="cancel-btn" (click)="goBack()" type="button">
+          <i class="material-icons">close</i>
+          <span>Cancel</span>
+        </button>
+      </div>
 
-        <div class="form-actions">
-          <button type="submit" class="submit-btn" [disabled]="f.invalid">
-            <i class="material-icons">send</i>
-            Submit Post
-          </button>
-        </div>
-
-      </form>
     </div>
   </div>
+
 </div>

@@ -1,62 +1,70 @@
 <div class="user-posts-page">
 
-  <!-- Header Bar -->
-  <div class="user-posts-header-bar">
-    <div class="user-posts-header-left">
-      <i class="material-icons">article</i>
-      <span>Your Posts</span>
-      @if (posts.length > 0) {
-        <span class="user-posts-count">{{ posts.length }}</span>
-      }
+  <div class="user-posts-wrapper">
+    <div class="user-posts-header-bar">
+      <div class="user-posts-header-left">
+        <i class="material-icons">article</i>
+        <span>Your Posts</span>
+        @if (posts.length > 0) {
+          <span class="user-posts-count">{{ posts.length }}</span>
+        }
+      </div>
     </div>
-  </div>
 
-  <!-- Posts List -->
-  <div class="user-posts-container">
-    @if (posts.length > 0) {
-      @for (post of posts; track post.id; let i = $index) {
-        <div class="user-post-row" [style.animation-delay]="i * 40 + 'ms'">
+    <div class="user-posts-grid">
+      @if (posts.length > 0) {
+        @for (post of posts; track post.id; let i = $index) {
+          <div class="user-grid-card" [style.animation-delay]="i * 40 + 'ms'">
+            <a class="user-card-link" [routerLink]="['/post', post.id]">
 
-          <!-- Index -->
-          <div class="user-post-index">{{ i + 1 }}</div>
+              <div class="user-card-image">
+                @if (post.postImages && post.postImages.length > 0) {
+                  <img [src]="post.postImages[0].url" alt="Post image" />
+                  @if (post.postImages.length > 1) {
+                    <span class="user-image-badge">+{{ post.postImages.length - 1 }}</span>
+                  }
+                } @else {
+                  <div class="user-image-placeholder">
+                    <i class="material-icons" style="font-size:40px;color:rgba(135,206,235,0.3)">image</i>
+                  </div>
+                }
+              </div>
 
-          <!-- Body -->
-          <div class="user-post-body">
-            <a class="user-post-title" [routerLink]="['/post', post.id]">
-              {{ post.title }}
+              <div class="user-card-info">
+                <h3 class="user-card-title">{{ post.title }}</h3>
+                <div class="user-card-meta">
+                  <span class="user-card-author">{{ post.authorName }}</span>
+                  <span class="user-card-rating">{{ post.authorRating }}</span>
+                </div>
+                <div class="user-card-stats">
+                  <span class="user-card-stat replies">
+                    <i class="material-icons">chat_bubble_outline</i>
+                    {{ post.repliesCount }}
+                  </span>
+                  <span class="user-card-stat likes">
+                    <i class="material-icons">favorite</i>
+                    {{ post.totalLikes }}
+                  </span>
+                  @if (post.datePosted) {
+                    <span class="user-card-date">{{ post.datePosted | date: 'mediumDate' }}</span>
+                  }
+                </div>
+              </div>
+
             </a>
-            <div class="user-post-meta">
-              <a class="user-meta-author" [routerLink]="['/profile', post.authorId]">
-                <i class="material-icons">person</i>
-                {{ post.authorName }}
-              </a>
-              <span class="user-meta-rating">{{ post.authorRating }}</span>
-              <span class="user-meta-sep">·</span>
-              <span class="user-meta-date">{{ post.datePosted }}</span>
-            </div>
+
+            <button class="grid-delete-btn" (click)="delete(post.id)">
+              <i class="material-icons">delete_outline</i>
+            </button>
           </div>
-
-          <!-- Stats -->
-          <div class="user-post-stats">
-            <div class="user-stat-pill replies">
-              <i class="material-icons">chat_bubble_outline</i>
-              <span>{{ post.repliesCount }}</span>
-            </div>
-          </div>
-
-          <!-- Delete -->
-          <button class="user-post-delete-btn" (click)="delete(post.id)">
-            <i class="material-icons">delete</i>
-          </button>
-
+        }
+      } @else {
+        <div class="user-no-posts">
+          <i class="material-icons">question_answer</i>
+          <p>No posts yet. Why not create one in <a routerLink="/forum">forums</a>?</p>
         </div>
       }
-    } @else {
-      <div class="user-no-posts">
-        <i class="material-icons">question_answer</i>
-        <p>No posts yet. Why not create one in <a routerLink="/forum">forums</a>?</p>
-      </div>
-    }
+    </div>
   </div>
 
 </div>

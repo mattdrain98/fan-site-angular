@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   ForumListingModel, ForumTopicModel,
@@ -38,26 +38,33 @@ export class ForumService {
 @Injectable({ providedIn: 'root' })
 export class PostService {
   private http = inject(HttpClient);
-  private base = `${environment.apiBaseUrl}/post`;
+  private base = `${environment.apiBaseUrl}/posts`;
 
   getById(id: number): Observable<PostIndexModel> {
     return this.http.get<PostIndexModel>(`${this.base}/${id}`);
   }
 
-  getUserPosts(): Observable<PostListingModel[]> {
-    return this.http.get<PostListingModel[]>(`${this.base}/user`);
+  getUserPosts(page: number = 1): Observable<{ posts: PostListingModel[]; page: number; totalPages: number; totalUserPosts: number }> {
+    return this.http.get<{ posts: PostListingModel[]; page: number; totalPages: number; totalUserPosts: number }>(
+      `${this.base}/user?page=${page}&pageSize=6`
+    );
   }
 
-  getTopPosts(): Observable<PostListingModel[]> {
-    return this.http.get<PostListingModel[]>(`${this.base}/top`);
+  getTopPosts(page: number = 1): Observable<PostListingModel[]> {
+    return this.http.get<{ posts: PostListingModel[] }>(`${this.base}/top?page=${page}`)
+      .pipe(map(response => response.posts));
   }
 
-  getLatestPosts(): Observable<PostListingModel[]>{
-    return this.http.get<PostListingModel[]>(`${this.base}/latest`);
+  getLatestPosts(page: number = 1): Observable<{ posts: PostListingModel[]; page: number; totalPages: number; totalPosts: number }> {
+    return this.http.get<{ posts: PostListingModel[]; page: number; totalPages: number; totalPosts: number }>(
+      `${this.base}/latest?page=${page}`
+    );
   }
-  
-  getLikedPosts(): Observable<PostListingModel[]> {
-    return this.http.get<PostListingModel[]>(`${this.base}/liked`);
+
+  getLikedPosts(page: number = 1): Observable<{ posts: PostListingModel[]; page: number; totalPages: number; totalPosts: number }> {
+    return this.http.get<{ posts: PostListingModel[]; page: number; totalPages: number; totalPosts: number }>(
+      `${this.base}/liked?page=${page}&pageSize=6`
+    );
   }
 
   add(title: string, content: string, forumId: number): Observable<PostIndexModel> {

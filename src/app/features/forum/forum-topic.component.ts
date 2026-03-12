@@ -5,11 +5,12 @@ import { AsyncPipe } from '@angular/common';
 import { ForumService, PostService } from '../../core/services/services';
 import { AuthService } from '../../core/services/auth.service';
 import { ForumTopicModel } from '../../core/models';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-forum-topic',
   standalone: true,
-  imports: [FormsModule, RouterLink, AsyncPipe],
+  imports: [FormsModule, RouterLink, AsyncPipe, DatePipe],
   templateUrl: './forum-topic.component.html',
   styleUrl: './forum-topic.component.css'
 })

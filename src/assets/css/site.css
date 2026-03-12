@@ -140,3 +140,55 @@ body {
     white-space: nowrap;
     line-height: 60px; /* Vertically center the text there */
 }
+
+@keyframes burstOut {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes ringExpand {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.9;
+    border-width: 3px;
+    box-shadow: 0 0 12px #ff4d6d, inset 0 0 8px rgba(255,77,109,0.3);
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+    border-width: 1px;
+    box-shadow: 0 0 0px transparent;
+  }
+}
+
+@keyframes ringExpandOuter {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.7;
+    border-width: 2px;
+    box-shadow: 0 0 16px #ff8fa3, inset 0 0 6px rgba(255,143,163,0.2);
+  }
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+    border-width: 0.5px;
+    box-shadow: 0 0 0px transparent;
+  }
+}
+
+@keyframes popWiggle {
+  0%   { transform: scale(1); }
+  25%  { transform: scale(1.35); }
+  50%  { transform: scale(0.9); }
+  75%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}

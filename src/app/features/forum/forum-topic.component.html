@@ -1,8 +1,9 @@
 @if (topic; as t) {
 <div class="forum-topic-page">
 
-  <!-- Header Bar -->
   <div class="forum-topic-wrapper">
+
+    <!-- Header Bar -->
     <div class="forum-topic-header-bar">
       <div class="forum-topic-header-left">
         <i class="material-icons">forum</i>
@@ -21,7 +22,8 @@
             [(ngModel)]="searchQuery"
             placeholder="Search posts..."
             class="forum-search-input"
-            (focus)="searchQuery = ''" />
+            (focus)="searchQuery = ''"
+            (keyup.enter)="search()" />
           <button class="forum-search-btn" (click)="search()">Go</button>
         </div>
 
@@ -42,48 +44,54 @@
       </div>
     }
 
-    <!-- Posts List -->
-    <div class="forum-topic-container">
+    <!-- Posts Grid -->
+    <div class="forum-posts-grid">
       @if (t.posts.length > 0) {
         @for (post of t.posts; track post.id; let i = $index) {
-          <div class="forum-post-row" [style.animation-delay]="i * 40 + 'ms'">
+          <div class="forum-grid-card" [style.animation-delay]="i * 40 + 'ms'">
 
-            <!-- Body -->
-            <div class="forum-post-body">
-              <a class="forum-post-title" [routerLink]="['/post', post.id]">
-                {{ post.title }}
-              </a>
-              <div class="forum-post-meta">
-                <a class="forum-meta-author" [routerLink]="['/profile', post.authorId]">
-                  <i class="material-icons">person</i>
-                  {{ post.authorName }}
-                </a>
-                <span class="forum-meta-rating">{{ post.authorRating }}</span>
-                <span class="forum-meta-sep">·</span>
-                <span class="forum-meta-date">{{ post.datePosted }}</span>
+            <!-- Clickable card area -->
+            <a class="forum-card-link" [routerLink]="['/post', post.id]">
+              <div class="forum-card-image">
+                @if (post.postImages && post.postImages.length > 0) {
+                  <img [src]="post.postImages[0].url" alt="Post image" />
+                  @if (post.postImages.length > 1) {
+                    <span class="forum-image-badge">+{{ post.postImages.length - 1 }}</span>
+                  }
+                } @else {
+                  <div class="forum-image-placeholder">
+                    <i class="material-icons" style="font-size:40px;color:rgba(135,206,235,0.3)">image</i>
+                  </div>
+                }
               </div>
-            </div>
 
-            <!-- Stats -->
-            <div class="forum-post-stats">
-              <div class="forum-stat-pill replies">
-                <i class="material-icons">chat_bubble_outline</i>
-                <span>{{ post.repliesCount }}</span>
+              <div class="forum-card-info">
+                <h3 class="forum-card-title">{{ post.title }}</h3>
+                <div class="forum-card-meta">
+                  <span class="forum-card-author">{{ post.authorName }}</span>
+                  <span class="forum-card-rating">{{ post.authorRating }}</span>
+                </div>
+                <div class="forum-card-stats">
+                  <span class="forum-card-stat replies">
+                    <i class="material-icons">chat_bubble_outline</i>
+                    {{ post.repliesCount }}
+                  </span>
+                  <span class="forum-card-stat likes">
+                    <i class="material-icons">favorite</i>
+                    {{ post.totalLikes }}
+                  </span>
+                  @if (post.datePosted) {
+                    <span class="forum-card-date">{{ post.datePosted | date: 'mediumDate' }}</span>
+                  }
+                </div>
               </div>
-              <div class="forum-stat-pill likes">
-                <i class="material-icons">favorite</i>
-                <span>{{ post.totalLikes }}</span>
-              </div>
-            </div>
+            </a>
 
             <!-- Owner Actions -->
             @if ((currentUser$ | async)?.userName === post.authorName) {
-              <div class="forum-post-actions">
-                <a class="forum-action-btn edit" [routerLink]="['/post/edit', post.id]">
-                  <i class="material-icons">edit</i>
-                </a>
+              <div class="forum-card-actions">
                 <button class="forum-action-btn delete" (click)="deletePost(post.id)">
-                  <i class="material-icons">delete</i>
+                  <i class="material-icons">delete_outline</i>
                 </button>
               </div>
             }
@@ -102,7 +110,7 @@
         </div>
       }
     </div>
-  </div>
 
+  </div>
 </div>
 }

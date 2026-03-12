@@ -5,7 +5,7 @@
       <i class="material-icons">article</i>
       <span>Latest Posts</span>
       @if (latestPosts.length) {
-        <span class="posts-count">{{ latestPosts.length }}</span>
+        <span class="posts-count">{{ totalPosts }}</span>
       }
     </div>
     <div class="search-wrap">
@@ -15,59 +15,93 @@
         [(ngModel)]="searchQuery"
         placeholder="Search posts..."
         class="search-input"
-        (focus)="searchQuery = ''"
         (keyup.enter)="search()" />
       <button class="search-btn" (click)="search()">Go</button>
     </div>
   </div>
 
-  <div class="posts-list">
-    @for (post of latestPosts; track post.id; let i = $index) {
-      <div class="post-card" [style.animation-delay]="i * 40 + 'ms'">
-
-        <div class="post-index">{{ i + 1 }}</div>
-
-        <div class="post-body">
-          <a class="post-title" [routerLink]="['/post', post.id]">
-            {{ post.title }}
-          </a>
-          <div class="post-meta">
-            <a class="meta-author" [routerLink]="['/profile', post.authorId]">
-              <i class="material-icons">person</i>
-              {{ post.authorName }}
-            </a>
-            <span class="meta-rating">{{ post.authorRating }}</span>
-            @if (post.forum) {
-              <span class="meta-sep">in</span>
-              <a class="meta-forum" [routerLink]="['/forum', post.forum.id]">
-                {{ post.forum.name }}
-              </a>
+  <div class="posts-grid" [class.no-pagination]="totalPages <= 1">
+    @for (post of latestPosts; track post.id) {
+      <div class="post-grid-card">
+        <a class="post-grid-link" [routerLink]="['/post', post.id]">
+          <div class="post-grid-image">
+            @if (post.postImages && post.postImages.length > 0) {
+              <img [src]="post.postImages[0].url" alt="Post image" />
+              @if (post.postImages.length > 1) {
+                <span class="image-badge">+{{ post.postImages.length - 1 }}</span>
+              }
+            } @else {
+              <div class="image-placeholder">
+                <i class="material-icons" style="font-size:40px;color:rgba(135,206,235,0.3)">image</i>
+              </div>
             }
-            <span class="meta-sep">·</span>
-            <span class="meta-date">{{ post.datePosted | date: 'medium'}}</span>
           </div>
-        </div>
 
-        <div class="post-stats">
-          <div class="stat-pill replies">
-            <i class="material-icons">chat_bubble_outline</i>
-            <span>{{ post.repliesCount }}</span>
+          <div class="post-grid-info">
+            <h3 class="grid-title">{{ post.title }}</h3>
+            <div class="grid-meta">
+              <span class="author">{{ post.authorName }}</span>
+              <span class="likes">
+                <i class="material-icons">favorite</i>
+                {{ post.totalLikes }}
+              </span>
+            </div>
           </div>
-          <div class="stat-pill likes">
-            <i class="material-icons">favorite</i>
-            <span>{{ post.totalLikes }}</span>
-          </div>
-        </div>
+        </a>
 
+        @if ((currentUser$ | async)?.userName === post.authorName) {
+          <button class="grid-delete-btn" (click)="deletePost(post.id)">
+            <i class="material-icons">delete_outline</i>
+          </button>
+        }
       </div>
     }
 
-    @if (!latestPosts.length) {
-      <div class="latest-no-posts">
+    @if (!latestPosts.length && !loading) {
+      <div class="no-posts">
         <i class="material-icons">article</i>
-        <p>No posts yet.</p>
+        <p>No posts yet</p>
       </div>
     }
   </div>
+
+  @if (totalPages > 1) {
+    <div class="pagination-bar">
+      <button
+        class="page-btn"
+        [disabled]="currentPage === 1"
+        (click)="loadPage(1)">
+        <i class="material-icons">first_page</i>
+      </button>
+      <button
+        class="page-btn"
+        [disabled]="currentPage === 1"
+        (click)="loadPage(currentPage - 1)">
+        <i class="material-icons">chevron_left</i>
+      </button>
+
+      @for (p of visiblePages; track p) {
+        <button
+          class="page-btn"
+          [class.active]="p === currentPage"
+          (click)="loadPage(p)">
+          {{ p }}
+        </button>
+      }
+
+      <button
+        class="page-btn"
+        [disabled]="currentPage === totalPages"
+        (click)="loadPage(currentPage + 1)">
+        <i class="material-icons">chevron_right</i>
+      </button>
+      <button
+        class="page-btn"
+        [disabled]="currentPage === totalPages"
+        (click)="loadPage(totalPages)">
+        <i class="material-icons">last_page</i>
+      </button>
+    </div>
+  }
 
 </div>

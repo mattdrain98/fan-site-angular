@@ -12,7 +12,7 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
-  private base = `${environment.apiBaseUrl}/post`;
+  private base = `${environment.apiBaseUrl}/posts`;
 
   constructor(private http: HttpClient) {}
 
@@ -39,13 +39,13 @@ export class PostService {
   }
 
   /**
-   * POST /api/post
-   * Body: { title, content, forumId }
+   * POST /api/post/create
+   * Body: { title, content, forumId, imageUrls }
    * Returns: PostIndexModel (201 Created)
    * Requires auth
    */
   add(payload: NewPostModel): Observable<PostIndexModel> {
-    return this.http.post<PostIndexModel>(this.base, payload);
+    return this.http.post<PostIndexModel>(`${this.base}/create`, payload);
   }
 
   /**
