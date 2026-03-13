@@ -6,6 +6,7 @@ import { PostService } from 'src/app/core/services/post.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ForumService } from 'src/app/core/services/services';
 import { firstValueFrom } from 'rxjs';
+import { ToastService } from 'src/app/core/services/toast.service';
 
 @Component({
   selector: 'app-create-post',
@@ -30,6 +31,7 @@ export class PostCreateComponent implements OnInit{
   private route = inject(ActivatedRoute);
   private postService = inject(PostService);
   private forumService = inject(ForumService);  
+  private toastService = inject(ToastService);  
   private router = inject(Router);
   private location = inject(Location);
 
@@ -39,7 +41,9 @@ export class PostCreateComponent implements OnInit{
     this.forumId = +this.route.snapshot.paramMap.get('forumId')!;
     this.forumService.getById(this.forumId).subscribe({
       next: (forum) => this.forumName = forum.forum.name,
-      error: () => this.errors = ['Failed to load forum']
+      error: () => {
+        this.toastService.error('Failed to load forum');
+      }
     });
   }
 
@@ -81,7 +85,7 @@ export class PostCreateComponent implements OnInit{
       });
     } catch (error) {
       console.error('Upload failed:', error);
-      alert('Failed to upload images. Please try again.');
+      this.toastService.error('Failed to upload images. Please try again.');
     } finally {
       this.isPasting = false;
     }
@@ -185,12 +189,12 @@ export class PostCreateComponent implements OnInit{
    */
 submitPost(): void {
   if (!this.title.trim()) {
-    alert('Please enter a title');
+    this.toastService.warning('Please enter a title');
     return;
   }
 
   if (!this.content.trim() && this.uploadedImages.length === 0) {
-    alert('Please add some content or images');
+    this.toastService.warning('Please add some content or images');
     return;
   }
 
@@ -205,15 +209,15 @@ submitPost(): void {
 
   this.postService.add(postData).subscribe({
     next: () => {
-      alert('Post created successfully!');
       this.title = '';
       this.content = '';
       this.uploadedImages = [];
+      this.toastService.success('Post created successfully!');
       this.router.navigate(['/forum', this.forumId]);
     },
     error: (error) => {
       console.error('Failed to create post:', error);
-      alert('Failed to create post. Please try again.');
+      this.toastService.error('Failed to create post. Please try again.');
     }
   });
 }

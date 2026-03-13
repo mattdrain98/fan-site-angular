@@ -34,37 +34,41 @@
                     <span class="liked-image-badge">+{{ post.postImages.length - 1 }}</span>
                   }
                 } @else {
-                  <div class="liked-image-placeholder">
-                    <i class="material-icons" style="font-size:40px;color:rgba(135,206,235,0.3)">image</i>
+                  <div class="post-grid-preview">
+                    <p class="preview-text">{{ post.content || 'No content' }}</p>
                   </div>
-                }
+                  }
               </div>
 
               <div class="liked-card-info">
                 <h3 class="liked-card-title">{{ post.title }}</h3>
-                <div class="liked-card-meta">
-                  <div class="liked-card-author-wrap">
-                    <div class="liked-card-avatar"
-                      [style.background-image]="post.authorUrl
-                        ? 'url(' + post.authorUrl + ')'
-                        : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'">
-                    </div>
-                    <span class="liked-card-author">{{ post.authorName }}</span>
+                <div class="liked-card-author-section">
+                  <div class="liked-card-avatar"
+                    [style.background-image]="post.authorUrl
+                      ? 'url(' + post.authorUrl + ')'
+                      : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'"
+                    (click)="navigateToProfile($event, post.authorId)"
+                    style="cursor: pointer">
                   </div>
-                  <span class="liked-card-rating">{{ post.authorRating }}</span>
-                </div>
-                <div class="liked-card-stats">
-                  <span class="liked-card-stat replies">
-                    <i class="material-icons">chat_bubble_outline</i>
-                    {{ post.repliesCount }}
-                  </span>
-                  <span class="liked-card-stat likes">
-                    <i class="material-icons">favorite</i>
-                    {{ post.totalLikes }}
-                  </span>
-                  @if (post.datePosted) {
-                    <span class="liked-card-date">{{ post.datePosted | date: 'mediumDate' }}</span>
-                  }
+                  <div class="liked-card-author-info">
+                    <div class="liked-card-author-row">
+                      <span class="liked-card-author">{{ post.authorName }}</span>
+                      <span class="liked-card-rating">{{ post.authorRating }}</span>
+                    </div>
+                    @if (post.datePosted) {
+                      <span class="liked-card-date">{{ post.datePosted | date: 'mediumDate' }}</span>
+                    }
+                  </div>
+                  <div class="liked-card-stats">
+                    <span class="liked-card-stat replies">
+                      <i class="material-icons">chat_bubble_outline</i>
+                      {{ post.repliesCount }}
+                    </span>
+                    <span class="liked-card-stat likes">
+                      <i class="material-icons">favorite</i>
+                      {{ post.totalLikes }}
+                    </span>
+                  </div>
                 </div>
               </div>
 

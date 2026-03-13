@@ -24,29 +24,35 @@
     @for (post of latestPosts; track post.id) {
       <div class="post-grid-card">
         <a class="post-grid-link" [routerLink]="['/post', post.id]">
-          <div class="post-grid-image">
-            @if (post.postImages && post.postImages.length > 0) {
+
+          @if (post.postImages && post.postImages.length > 0) {
+            <div class="post-grid-image">
               <img [src]="post.postImages[0].url" alt="Post image" />
               @if (post.postImages.length > 1) {
                 <span class="image-badge">+{{ post.postImages.length - 1 }}</span>
               }
-            } @else {
-              <div class="image-placeholder">
-                <i class="material-icons" style="font-size:40px;color:rgba(135,206,235,0.3)">image</i>
-              </div>
-            }
-          </div>
+            </div>
+          } @else {
+            <div class="post-grid-preview">
+              <p class="preview-text">{{ post.content || 'No content' }}</p>
+            </div>
+          }
 
           <div class="post-grid-info">
             <h3 class="grid-title">{{ post.title }}</h3>
-            <div class="grid-meta">
-              <div class="grid-author">
+            <div class="grid-author-section">
                 <div class="grid-author-avatar"
                   [style.background-image]="post.authorUrl
                     ? 'url(' + post.authorUrl + ')'
-                    : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'">
+                    : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'"
+                  (click)="navigateToProfile($event, post.authorId)"
+                  style="cursor: pointer">
                 </div>
-                <span class="author">{{ post.authorName }}</span>
+              <div class="grid-author-info">
+                <span class="author-name">{{ post.authorName }}       <span class="author-rating">  {{ post.authorRating }}</span></span>
+                @if (post.datePosted) {
+                  <span class="grid-date">{{ post.datePosted | date: 'mediumDate' }}</span>
+                }
               </div>
               <span class="likes">
                 <i class="material-icons">favorite</i>
@@ -57,7 +63,7 @@
         </a>
 
         @if ((currentUser$ | async)?.userName === post.authorName) {
-          <button class="grid-delete-btn" (click)="deletePost(post.id)">
+          <button class="grid-delete-btn" (click)="deletePost(post.id, $event)">
             <i class="material-icons">delete_outline</i>
           </button>
         }

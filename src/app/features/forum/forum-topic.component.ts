@@ -6,6 +6,8 @@ import { ForumService, PostService } from '../../core/services/services';
 import { AuthService } from '../../core/services/auth.service';
 import { ForumTopicModel } from '../../core/models';
 import { DatePipe } from '@angular/common';
+import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
+import { ToastService } from 'src/app/core/services/toast.service';
 
 @Component({
   selector: 'app-forum-topic',
@@ -16,9 +18,11 @@ import { DatePipe } from '@angular/common';
 })
 export class ForumTopicComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private forumService = inject(ForumService);
   private postService = inject(PostService);
+  private router = inject(Router);
+  private confirmService = inject(ConfirmService);
+  private toastService = inject(ToastService);  
   auth = inject(AuthService);
 
   forumId!: number;
@@ -37,11 +41,21 @@ export class ForumTopicComponent implements OnInit {
 
   search(): void { this.load(this.searchQuery); }
 
-  deletePost(postId: number): void {
-    if (confirm('Delete this post?')) {
+  async deletePost(postId: number): Promise<void> {
+    const confirmed = await this.confirmService.confirm('Delete this post?');
+    if (confirmed) {
+      this.toastService.success('Post deleted successfully');
       this.postService.delete(postId).subscribe(() => {
-        if (this.topic) this.topic.posts = this.topic.posts.filter(p => p.id !== postId);
+        if (this.topic) {
+          this.topic.posts = this.topic.posts.filter(p => p.id !== postId);
+        }
       });
     }
+  }
+
+  navigateToProfile(event: MouseEvent, authorId: string) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.router.navigate(['/profile', authorId]);
   }
 }

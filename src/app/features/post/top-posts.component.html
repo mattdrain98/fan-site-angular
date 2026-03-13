@@ -30,44 +30,48 @@
                 <span class="top-image-badge">+{{ post.postImages.length - 1 }}</span>
               }
             } @else {
-              <div class="top-image-placeholder">
-                <i class="material-icons" style="font-size:40px;color:rgba(135,206,235,0.3)">image</i>
-              </div>
-            }
+                  <div class="post-grid-preview">
+                    <p class="preview-text">{{ post.content || 'No content' }}</p>
+                  </div>
+              }
           </div>
 
           <div class="top-card-info">
             <h3 class="top-card-title">{{ post.title }}</h3>
-                <div class="top-card-meta">
-                  <div class="top-card-author-wrap">
-                    <div class="top-card-avatar"
-                      [style.background-image]="post.authorUrl
-                        ? 'url(' + post.authorUrl + ')'
-                        : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'">
+            <div class="top-card-author-section">
+              <div class="top-card-avatar"
+                [style.background-image]="post.authorUrl
+                  ? 'url(' + post.authorUrl + ')'
+                  : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'"
+                (click)="navigateToProfile($event, post.authorId)"
+                style="cursor: pointer">
+              </div>
+                  <div class="top-card-author-info">
+                    <div class="top-card-author-row">
+                      <span class="top-card-author">{{ post.authorName }}</span>
+                      <span class="top-card-rating">{{ post.authorRating }}</span>
                     </div>
-                    <span class="top-card-author">{{ post.authorName }}</span>
+                    @if (post.datePosted) {
+                      <span class="top-card-date">{{ post.datePosted | date: 'mediumDate' }}</span>
+                    }
                   </div>
-                  <span class="top-card-rating">{{ post.authorRating }}</span>
+                <div class="top-card-stats">
+                  <span class="top-card-stat replies">
+                    <i class="material-icons">chat_bubble_outline</i>
+                    {{ post.repliesCount }}
+                  </span>
+                  <span class="top-card-stat likes">
+                    <i class="material-icons">favorite</i>
+                    {{ post.totalLikes }}
+                  </span>
                 </div>
-              <div class="top-card-stats">
-              <span class="top-card-stat replies">
-                <i class="material-icons">chat_bubble_outline</i>
-                {{ post.repliesCount }}
-              </span>
-              <span class="top-card-stat likes">
-                <i class="material-icons">favorite</i>
-                {{ post.totalLikes }}
-              </span>
-              @if (post.datePosted) {
-                <span class="top-card-date">{{ post.datePosted | date: 'mediumDate' }}</span>
-              }
             </div>
           </div>
 
         </a>
 
         @if ((currentUser$ | async)?.userName === post.authorName) {
-          <button class="grid-delete-btn" (click)="deletePost(post.id)">
+          <button class="grid-delete-btn" (click)="deletePost(post.id, $event)">
             <i class="material-icons">delete_outline</i>
           </button>
         }

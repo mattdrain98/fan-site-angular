@@ -5,6 +5,8 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { PostService } from '../../core/services/services';
 import { AuthService } from '../../core/services/auth.service';
 import { PostListingModel } from '../../core/models';
+import { ToastService } from 'src/app/core/services/toast.service';
+import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
 
 @Component({
   selector: 'app-latest-posts',
@@ -16,6 +18,8 @@ import { PostListingModel } from '../../core/models';
 export class LatestPostsComponent implements OnInit {
   private postService = inject(PostService);
   private router = inject(Router);
+  private toastService = inject(ToastService);
+  private confirmService = inject(ConfirmService);
   auth = inject(AuthService);
 
   latestPosts: PostListingModel[] = [];
@@ -45,16 +49,24 @@ export class LatestPostsComponent implements OnInit {
       },
       error: () => {
         this.loading = false;
+        this.toastService.error('Failed to load posts');
       }
     });
   }
 
-  deletePost(postId: number): void {
-    if (!confirm('Delete this post?')) return;
-    this.postService.delete(postId).subscribe({
-      next: () => this.loadPage(this.currentPage),
-      error: () => alert('Failed to delete post')
-    });
+  async deletePost(postId: number, event: MouseEvent): Promise<void> {
+    event.stopPropagation();
+    event.preventDefault();
+    const confirmed = await this.confirmService.confirm('Delete this post?');
+    if (confirmed) {
+      this.postService.delete(postId).subscribe({
+        next: () => {
+          this.toastService.success('Post deleted successfully');
+          this.loadPage(this.currentPage);
+        },
+        error: () => this.toastService.error('Failed to delete post')
+      });
+    }
   }
 
   get visiblePages(): number[] {
@@ -71,5 +83,11 @@ export class LatestPostsComponent implements OnInit {
     if (this.searchQuery.trim()) {
       this.router.navigate(['/search'], { queryParams: { query: this.searchQuery } });
     }
+  }
+
+  navigateToProfile(event: MouseEvent, authorId: string) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.router.navigate(['/profile', authorId]);
   }
 }

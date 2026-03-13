@@ -50,7 +50,6 @@
         @for (post of t.posts; track post.id; let i = $index) {
           <div class="forum-grid-card" [style.animation-delay]="i * 40 + 'ms'">
 
-            <!-- Clickable card area -->
             <a class="forum-card-link" [routerLink]="['/post', post.id]">
               <div class="forum-card-image">
                 @if (post.postImages && post.postImages.length > 0) {
@@ -59,30 +58,41 @@
                     <span class="forum-image-badge">+{{ post.postImages.length - 1 }}</span>
                   }
                 } @else {
-                  <div class="forum-image-placeholder">
-                    <i class="material-icons" style="font-size:40px;color:rgba(135,206,235,0.3)">image</i>
+                  <div class="post-grid-preview">
+                    <p class="preview-text">{{ post.content || 'No content' }}</p>
                   </div>
                 }
               </div>
 
               <div class="forum-card-info">
                 <h3 class="forum-card-title">{{ post.title }}</h3>
-                <div class="forum-card-meta">
-                  <span class="forum-card-author">{{ post.authorName }}</span>
-                  <span class="forum-card-rating">{{ post.authorRating }}</span>
-                </div>
-                <div class="forum-card-stats">
-                  <span class="forum-card-stat replies">
-                    <i class="material-icons">chat_bubble_outline</i>
-                    {{ post.repliesCount }}
-                  </span>
-                  <span class="forum-card-stat likes">
-                    <i class="material-icons">favorite</i>
-                    {{ post.totalLikes }}
-                  </span>
-                  @if (post.datePosted) {
-                    <span class="forum-card-date">{{ post.datePosted | date: 'mediumDate' }}</span>
-                  }
+                <div class="forum-card-author-section">
+                  <div class="forum-card-avatar"
+                    [style.background-image]="post.authorUrl
+                      ? 'url(' + post.authorUrl + ')'
+                      : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'"
+                    (click)="navigateToProfile($event, post.authorId)"
+                    style="cursor: pointer">
+                  </div>
+                  <div class="forum-card-author-info">
+                    <div class="forum-card-author-row">
+                      <span class="forum-card-author">{{ post.authorName }}</span>
+                      <span class="forum-card-rating">{{ post.authorRating }}</span>
+                    </div>
+                    @if (post.datePosted) {
+                      <span class="forum-card-date">{{ post.datePosted | date: 'mediumDate' }}</span>
+                    }
+                  </div>
+                  <div class="forum-card-stats">
+                    <span class="forum-card-stat replies">
+                      <i class="material-icons">chat_bubble_outline</i>
+                      {{ post.repliesCount }}
+                    </span>
+                    <span class="forum-card-stat likes">
+                      <i class="material-icons">favorite</i>
+                      {{ post.totalLikes }}
+                    </span>
+                  </div>
                 </div>
               </div>
             </a>

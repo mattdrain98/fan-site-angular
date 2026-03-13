@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "src/app/core/services/auth.service";
 import { RouterLink } from '@angular/router';
+import { ToastService } from "src/app/core/services/toast.service";
 
 @Component({
   selector: 'app-confirm-email',
@@ -13,6 +14,7 @@ import { RouterLink } from '@angular/router';
 export class ConfirmEmailComponent {
   message = '';
   success = false;
+  private toastService = inject(ToastService);
 
   constructor(
     private route: ActivatedRoute,
@@ -24,8 +26,8 @@ export class ConfirmEmailComponent {
     const token  = this.route.snapshot.queryParams['token'];
 
     this.authService.confirmEmail(userId, token).subscribe({
-      next: ()  => { this.success = true;  this.message = 'Email confirmed! You can now log in.'; },
-      error: () => { this.success = false; this.message = 'Link is invalid or has expired.'; }
+      next: ()  => { this.success = true;  this.toastService.success('Email confirmed! You can now log in.'); },
+      error: () => { this.success = false; this.toastService.error('Link is invalid or has expired.'); }
     });
   }
 }

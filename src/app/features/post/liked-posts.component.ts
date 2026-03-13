@@ -1,20 +1,22 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { PostService } from '../../core/services/services';
 import { PostListingModel } from '../../core/models';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from 'src/app/core/services/toast.service';
 
 @Component({
   selector: 'app-liked-posts',
   standalone: true,
-  imports: [RouterLink, DatePipe, FormsModule, AsyncPipe],
+  imports: [RouterLink, DatePipe, FormsModule],
   templateUrl: './liked-posts.component.html',
   styleUrl: './liked-posts.component.css'
 })
 export class LikedPostsComponent implements OnInit {
   private postService = inject(PostService);
   private router = inject(Router);
+  private toastService = inject(ToastService);
 
   likedPosts: PostListingModel[] = [];
   searchQuery = '';
@@ -42,6 +44,7 @@ export class LikedPostsComponent implements OnInit {
       },
       error: () => {
         this.loading = false;
+        this.toastService.error('Failed to load liked posts');
       }
     });
   }
@@ -60,5 +63,11 @@ export class LikedPostsComponent implements OnInit {
     if (this.searchQuery.trim()) {
       this.router.navigate(['/search'], { queryParams: { query: this.searchQuery } });
     }
+  }
+
+  navigateToProfile(event: MouseEvent, authorId: string) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.router.navigate(['/profile', authorId]);
   }
 }

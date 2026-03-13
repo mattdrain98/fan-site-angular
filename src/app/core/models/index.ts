@@ -36,6 +36,7 @@ export interface ForumDto {
 export interface PostListingModel {
   id: number;
   title: string;
+  content: string; 
   authorId: string;
   authorName: string;
   authorRating: number;

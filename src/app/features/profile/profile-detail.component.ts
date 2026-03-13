@@ -6,6 +6,8 @@ import { ProfileService } from 'src/app/core/services/profile.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ProfileModel, ProfileCommentDto } from '../../core/models';
 import { ProfileCommentService } from 'src/app/core/services/profile-comment.service';
+import { ToastService } from 'src/app/core/services/toast.service';
+import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
 
 @Component({
   selector: 'app-profile-detail',
@@ -19,6 +21,8 @@ export class ProfileDetailComponent implements OnInit {
   private router = inject(Router);
   private profileService = inject(ProfileService);
   private commentService = inject(ProfileCommentService);
+  private toastService = inject(ToastService);
+  private confirmService = inject(ConfirmService);
   auth = inject(AuthService);
 
   profile: ProfileModel | null = null;
@@ -26,14 +30,12 @@ export class ProfileDetailComponent implements OnInit {
   isFollowing = false;
   isOwnProfile = false;
   currentUser: any;
-  errors: string[] = [];
 
   editingCommentId: number | null | undefined = null;
   editContent = '';
   isEditingBio = false;
   editBioContent = '';
 
-  // Inline comment
   isCommenting = false;
   isCommentVisible = false;
   newCommentContent = '';
@@ -53,16 +55,18 @@ export class ProfileDetailComponent implements OnInit {
     this.editContent = '';
     this.isEditingBio = false;
     this.editBioContent = '';
-    this.errors = [];
 
-    this.profileService.getProfile(id).subscribe(p => {
-      this.profile = p;
-      this.profile.profileComments = p.profileComments.reverse();
-      const cu = this.auth.currentUser;
-      if (cu) {
-        this.isOwnProfile = cu.userId === p.userId;
-        this.isFollowing = p.isFollowing;
-      }
+    this.profileService.getProfile(id).subscribe({
+      next: p => {
+        this.profile = p;
+        this.profile.profileComments = p.profileComments.reverse();
+        const cu = this.auth.currentUser;
+        if (cu) {
+          this.isOwnProfile = cu.userId === p.userId;
+          this.isFollowing = p.isFollowing;
+        }
+      },
+      error: () => this.toastService.error('Failed to load profile')
     });
   }
 
@@ -77,6 +81,7 @@ export class ProfileDetailComponent implements OnInit {
       error: () => {
         this.isFollowing = !this.isFollowing;
         if (this.profile) this.profile.followers += this.isFollowing ? 1 : -1;
+        this.toastService.error('Failed to update follow status');
       }
     });
   }
@@ -84,12 +89,15 @@ export class ProfileDetailComponent implements OnInit {
   onImageSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (!file) return;
-    this.profileService.uploadProfileImage(file).subscribe(res => {
-      if (this.profile) this.profile.profileImageUrl = res.imageUrl;
+    this.profileService.uploadProfileImage(file).subscribe({
+      next: res => {
+        if (this.profile) this.profile.profileImageUrl = res.imageUrl;
+        this.toastService.success('Profile image updated');
+      },
+      error: () => this.toastService.error('Failed to upload image')
     });
   }
 
-  // ── Inline comment ────────────────────────────────────
   startComment(): void {
     this.isCommenting = true;
     setTimeout(() => this.isCommentVisible = true, 10);
@@ -113,17 +121,17 @@ export class ProfileDetailComponent implements OnInit {
         };
         this.commentService.addComment(payload).subscribe({
           next: () => {
+            this.toastService.success('Comment posted');
             this.loadProfile(this.profile!.userId);
             this.cancelComment();
           },
-          error: () => this.errors = ['Failed to submit comment']
+          error: () => this.toastService.error('Failed to submit comment')
         });
       },
-      error: () => this.errors = ['Failed to submit comment']
+      error: () => this.toastService.error('Failed to submit comment')
     });
   }
 
-  // ── Comment edit ──────────────────────────────────────
   startEdit(comment: ProfileCommentDto): void {
     this.editingCommentId = comment.id;
     this.editContent = comment.commentContent;
@@ -139,26 +147,28 @@ export class ProfileDetailComponent implements OnInit {
       next: () => {
         const comment = this.profile?.profileComments?.find(c => c.id === commentId);
         if (comment) comment.commentContent = this.editContent;
+        this.toastService.success('Comment updated');
         this.cancelEdit();
       },
-      error: () => this.errors = ['Failed to update comment']
+      error: () => this.toastService.error('Failed to update comment')
     });
   }
 
-  deleteComment(commentId: number): void {
-    if (!confirm('Delete this comment?')) return;
-    this.commentService.delete(commentId).subscribe({
-      next: () => {
-        if (this.profile) {
-          this.profile.profileComments = this.profile.profileComments.filter(c => c.id !== commentId);
-        }
-      },
-      error: () => this.errors = ['Failed to delete comment']
-    });
+  async deleteComment(commentId: number): Promise<void> {
+    const confirmed = await this.confirmService.confirm('Delete this comment?');
+    if (confirmed) {
+      this.commentService.delete(commentId).subscribe({
+        next: () => {
+          if (this.profile) {
+            this.profile.profileComments = this.profile.profileComments.filter(c => c.id !== commentId);
+          }
+          this.toastService.success('Comment deleted');
+        },
+        error: () => this.toastService.error('Failed to delete comment')
+      });
+    }
   }
 
-
-  // ── Bio edit ──────────────────────────────────────────
   startEditBio(): void {
     this.isEditingBio = true;
     this.editBioContent = this.profile?.bio || '';
@@ -178,9 +188,10 @@ export class ProfileDetailComponent implements OnInit {
     }).subscribe({
       next: () => {
         this.profile!.bio = this.editBioContent;
+        this.toastService.success('Bio updated');
         this.cancelEditBio();
       },
-      error: () => this.errors = ['Failed to update bio']
+      error: () => this.toastService.error('Failed to update bio')
     });
   }
 }

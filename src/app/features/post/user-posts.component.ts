@@ -3,6 +3,8 @@ import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { PostService } from '../../core/services/services';
 import { PostListingModel } from '../../core/models';
+import { ToastService } from 'src/app/core/services/toast.service';
+import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
 
 @Component({
   selector: 'app-user-posts',
@@ -13,6 +15,8 @@ import { PostListingModel } from '../../core/models';
 })
 export class UserPostsComponent implements OnInit {
   private postService = inject(PostService);
+  private toastService = inject(ToastService);
+  private confirmService = inject(ConfirmService);
 
   posts: PostListingModel[] = [];
   loading = true;
@@ -38,6 +42,7 @@ export class UserPostsComponent implements OnInit {
       },
       error: () => {
         this.loading = false;
+        this.toastService.error('Failed to load posts');
       }
     });
   }
@@ -52,9 +57,18 @@ export class UserPostsComponent implements OnInit {
     return pages;
   }
 
-  delete(id: number): void {
-    if (confirm('Delete this post?')) {
-      this.postService.delete(id).subscribe(() => this.loadPage(this.currentPage));
+  async delete(id: number, event: MouseEvent): Promise<void> {
+    event.stopPropagation();
+    event.preventDefault();
+    const confirmed = await this.confirmService.confirm('Delete this post?');
+    if (confirmed) {
+      this.postService.delete(id).subscribe({
+        next: () => {
+          this.toastService.success('Post deleted successfully');
+          this.loadPage(this.currentPage);
+        },
+        error: () => this.toastService.error('Failed to delete post')
+      });
     }
   }
 }
