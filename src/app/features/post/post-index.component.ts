@@ -8,6 +8,8 @@ import { ReplyService } from 'src/app/core/services/reply.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ImageUploadService } from 'src/app/core/services/image-upload.service';
 import { PostIndexModel } from '../../core/models';
+import { ToastService } from 'src/app/core/services/toast.service';
+import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
 
 @Component({
   selector: 'app-post-index',
@@ -27,37 +29,37 @@ export class PostIndexComponent implements OnInit {
   private postService = inject(PostService);
   private replyService = inject(ReplyService);
   private imageUploadService = inject(ImageUploadService);
+  private toastService = inject(ToastService);
+  private confirmService = inject(ConfirmService);
   auth = inject(AuthService);
 
   @ViewChild('editTextarea') editTextarea!: ElementRef<HTMLTextAreaElement>;
 
   post: PostIndexModel | null = null;
   currentUser$ = this.auth.currentUser$;
-  errors: string[] = [];
 
-  // Reply inline editing
   editingReplyId: number | null = null;
   editReplyContent = '';
 
-  // Post inline editing
   isEditingPost = false;
   editPostContent = '';
   editPostTitle = '';
-  isDragOver = false; 
+  isDragOver = false;
 
-  // Image upload during edit
   isUploadingImage = false;
   uploadError = '';
   newImageUrls: string[] = [];
 
-  // Inline reply creation
   isReplying = false;
   newReplyContent = '';
   isReplyVisible = false;
 
   ngOnInit(): void {
     const id = +this.route.snapshot.paramMap.get('id')!;
-    this.postService.getById(id).subscribe(p => this.post = p);
+    this.postService.getById(id).subscribe({
+      next: p => this.post = p,
+      error: () => this.toastService.error('Failed to load post')
+    });
   }
 
   getFormattedContent(): SafeHtml {
@@ -76,7 +78,6 @@ export class PostIndexComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustHtml(content);
   }
 
-  // ── Image upload during edit ──
   onDragOver(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
@@ -92,7 +93,7 @@ export class PostIndexComponent implements OnInit {
   onPaste(event: ClipboardEvent): void {
     const items = event.clipboardData?.items;
     if (!items) return;
-  
+
     const imageFiles: File[] = [];
     for (let i = 0; i < items.length; i++) {
       if (items[i].type.startsWith('image/')) {
@@ -100,7 +101,7 @@ export class PostIndexComponent implements OnInit {
         if (file) imageFiles.push(file);
       }
     }
-  
+
     if (imageFiles.length > 0) {
       event.preventDefault();
       this.processImageFiles(imageFiles);
@@ -111,13 +112,11 @@ export class PostIndexComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.isDragOver = false;
-  
+
     const files = event.dataTransfer?.files;
     if (!files || files.length === 0) return;
 
     const imageFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
-
-    console.log('Raw files:', imageFiles.map(f => ({ name: f.name, size: f.size, type: f.type })));
 
     const seen = new Set<string>();
     const uniqueFiles = imageFiles.filter(f => {
@@ -127,10 +126,8 @@ export class PostIndexComponent implements OnInit {
       return true;
     });
 
-    console.log('Unique files:', uniqueFiles.length);
-
     if (uniqueFiles.length === 0) {
-      this.uploadError = 'Please drop image files only.';
+      this.toastService.warning('Please drop image files only.');
       return;
     }
 
@@ -145,14 +142,13 @@ export class PostIndexComponent implements OnInit {
   }
 
   private async processImageFiles(files: File[]): Promise<void> {
-    console.log('processImageFiles called', files.length)
     this.uploadError = '';
     this.isUploadingImage = true;
 
     for (const file of files) {
       const validation = this.imageUploadService.validateImage(file);
       if (!validation.valid) {
-        this.uploadError = validation.error!;
+        this.toastService.error(validation.error!);
         this.isUploadingImage = false;
         return;
       }
@@ -187,13 +183,11 @@ export class PostIndexComponent implements OnInit {
         }
       }
     } catch (err) {
-      this.uploadError = 'Failed to upload image. Please try again.';
+      this.toastService.error('Failed to upload image. Please try again.');
     } finally {
       this.isUploadingImage = false;
     }
   }
-
-  // ── Post editing ──
 
   startEditPost(): void {
     if (!this.post) return;
@@ -220,20 +214,18 @@ export class PostIndexComponent implements OnInit {
       newImageUrls: this.newImageUrls
     }).subscribe({
       next: () => {
-        // Reload the post to get updated images with real IDs
         const id = +this.route.snapshot.paramMap.get('id')!;
         this.postService.getById(id).subscribe(p => {
           this.post = p;
           this.isEditingPost = false;
           this.newImageUrls = [];
           this.uploadError = '';
+          this.toastService.success('Post updated successfully');
         });
       },
-      error: () => this.errors = ['Failed to update post']
+      error: () => this.toastService.error('Failed to update post')
     });
   }
-
-  // ── Everything below stays the same ──
 
   toggleLike() {
     if (!this.post) return;
@@ -245,7 +237,7 @@ export class PostIndexComponent implements OnInit {
       error: () => {
         this.post!.userHasLiked = !this.post!.userHasLiked;
         this.post!.totalLikes += this.post!.userHasLiked ? 1 : -1;
-        alert('Error saving your like. Please try again.');
+        this.toastService.error('Error saving your like. Please try again.');
       }
     });
   }
@@ -257,7 +249,6 @@ export class PostIndexComponent implements OnInit {
     if (!burst) return;
     burst.innerHTML = '';
 
-    // Inner ring particles
     const colors = ['#ff4d6d', '#ff8fa3', '#ffccd5'];
     for (let i = 0; i < 12; i++) {
       const span = document.createElement('span');
@@ -279,7 +270,6 @@ export class PostIndexComponent implements OnInit {
       burst.appendChild(span);
     }
 
-    // Outer ring particles
     for (let i = 0; i < 10; i++) {
       const span = document.createElement('span');
       const angle = (360 / 10) * i + 18;
@@ -307,12 +297,15 @@ export class PostIndexComponent implements OnInit {
     setTimeout(() => btn.classList.remove('pop'), 600);
   }
 
-  deletePost(): void {
-    if (!this.post || !confirm('Delete this post?')) return;
-    this.postService.delete(this.post.postId).subscribe({
-      next: () => this.location.back(),
-      error: () => this.errors = ['Failed to delete post']
-    });
+  async deletePost(): Promise<void> {
+    if (!this.post) return;
+    const confirmed = await this.confirmService.confirm('Delete this post?');
+    if (confirmed) {
+      this.postService.delete(this.post.postId).subscribe({
+        next: () => this.location.back(),
+        error: () => this.toastService.error('Failed to delete post')
+      });
+    }
   }
 
   startReply(): void {
@@ -336,9 +329,10 @@ export class PostIndexComponent implements OnInit {
         this.postService.getById(id).subscribe(p => {
           this.post = p;
           this.cancelReply();
+          this.toastService.success('Reply posted');
         });
       },
-      error: () => this.errors = ['Failed to submit reply']
+      error: () => this.toastService.error('Failed to submit reply')
     });
   }
 
@@ -357,20 +351,27 @@ export class PostIndexComponent implements OnInit {
       next: () => {
         const reply = this.post?.replies.find(r => r.id === replyId);
         if (reply) reply.replyContent = this.editReplyContent;
+        this.toastService.success('Reply updated');
         this.cancelEditReply();
       },
-      error: () => this.errors = ['Failed to update reply']
+      error: () => this.toastService.error('Failed to update reply')
     });
   }
 
-  deleteReply(replyId: number): void {
-    if (!confirm('Delete this reply?') || !this.post) return;
-    this.replyService.delete(replyId).subscribe({
-      next: () => { this.post!.replies = this.post!.replies.filter(r => r.id !== replyId); },
-      error: () => this.errors = ['Failed to delete reply']
-    });
+  async deleteReply(replyId: number): Promise<void> {
+    if (!this.post) return;
+    const confirmed = await this.confirmService.confirm('Delete this reply?');
+    if (confirmed) {
+      this.replyService.delete(replyId).subscribe({
+        next: () => {
+          this.post!.replies = this.post!.replies.filter(r => r.id !== replyId);
+          this.toastService.success('Reply deleted');
+        },
+        error: () => this.toastService.error('Failed to delete reply')
+      });
+    }
   }
 
-  notSignedIn(): void { alert('Please sign in'); }
+  notSignedIn(): void { this.toastService.warning('Please sign in'); }
   goBack(): void { this.location.back(); }
 }
