@@ -8,8 +8,8 @@ export interface HomeStatsDto {
 
 //------------------FORUMS------------------\\
 export interface ForumListingModel {
-  id: number;
-  name: string;
+  forumId: number;
+  forumTitle: string;
   description?: string;
   authorId: string;
   authorName: string;
@@ -30,6 +30,11 @@ export interface ForumDto {
   userName: string;
   userRating: number;
   postsCount: number;
+}
+
+export interface AddForumModel {
+  title: string;
+  description?: string;
 }
 
 //------------------POSTS------------------\\

@@ -19,7 +19,7 @@
 
   <!-- Forum List -->
   <div class="forums-container">
-    @for (forum of forums; track forum.id; let i = $index) {
+    @for (forum of forums; track forum.forumId; let i = $index) {
       <div class="forum-card" [style.animation-delay]="i * 40 + 'ms'">
 
         <div class="forum-icon">
@@ -27,19 +27,19 @@
         </div>
 
         <div class="forum-body">
-          <a class="forum-name" [routerLink]="['/forum', forum.id]">
-            {{ forum.name }}
+          <a class="forum-name" [routerLink]="['/forum', forum.forumId]">
+            {{ forum.forumTitle }}
           </a>
           <p class="forum-description">{{ forum.description }}</p>
         </div>
 
         <div class="forum-actions">
-          <a class="forum-browse-btn" [routerLink]="['/forum', forum.id]">
+          <a class="forum-browse-btn" [routerLink]="['/forum', forum.forumId]">
             <i class="material-icons">arrow_forward</i>
           </a>
 
           @if ((currentUser$ | async)?.userName === forum.authorName) {
-            <button class="forum-delete-btn" (click)="delete(forum.id)">
+            <button class="forum-delete-btn" (click)="delete(forum.forumId)">
               <i class="material-icons">delete</i>
             </button>
           }

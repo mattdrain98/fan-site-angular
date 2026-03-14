@@ -40,7 +40,7 @@ export class PostCreateComponent implements OnInit{
   ngOnInit(): void {
     this.forumId = +this.route.snapshot.paramMap.get('forumId')!;
     this.forumService.getById(this.forumId).subscribe({
-      next: (forum) => this.forumName = forum.forum.name,
+      next: (forum) => this.forumName = forum.forum.forumTitle,
       error: () => {
         this.toastService.error('Failed to load forum');
       }

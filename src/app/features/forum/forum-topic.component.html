@@ -7,7 +7,7 @@
     <div class="forum-topic-header-bar">
       <div class="forum-topic-header-left">
         <i class="material-icons">forum</i>
-        <span>{{ t.forum.name }} Forum</span>
+        <span>{{ t.forum.forumTitle }} Forum</span>
         @if (t.posts.length > 0) {
           <span class="forum-topic-count">{{ t.posts.length }}</span>
         }
@@ -29,7 +29,7 @@
 
         <!-- Create Post -->
         @if (currentUser$ | async) {
-          <a [routerLink]="['/post/create', t.forum.id]" class="forum-create-btn">
+          <a [routerLink]="['/post/create', t.forum.forumId]" class="forum-create-btn">
             <i class="material-icons">add</i> Create Post
           </a>
         }
@@ -114,7 +114,7 @@
           <p>
             No posts yet.
             @if (currentUser$ | async) {
-              Why not <a [routerLink]="['/post/create', t.forum.id]">create one</a>?
+              Why not <a [routerLink]="['/post/create', t.forum.forumId]">create one</a>?
             }
           </p>
         </div>

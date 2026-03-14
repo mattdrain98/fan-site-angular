@@ -26,7 +26,7 @@ export class ForumIndexComponent implements OnInit {
   async delete(id: number): Promise<void> {
     const confirmed = await this.confirmService.confirm('Delete this forum?');
     if (confirmed) {
-      this.forumService.delete(id).subscribe(() => this.forums = this.forums.filter(f => f.id !== id));
+      this.forumService.delete(id).subscribe(() => this.forums = this.forums.filter(f => f.forumId !== id));
     }
   }
 }
