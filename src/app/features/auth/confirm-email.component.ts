@@ -1,25 +1,22 @@
 import { Component, inject } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { AuthService } from "src/app/core/services/auth.service";
-import { RouterLink } from '@angular/router';
 import { ToastService } from "src/app/core/services/toast.service";
 
 @Component({
   selector: 'app-confirm-email',
   standalone: true,
   imports: [RouterLink],
-  templateUrl: './confirm-email.component.html'
+  templateUrl: './confirm-email.component.html',
+  styleUrl: './confirm-email.component.css'
 })
-
 export class ConfirmEmailComponent {
   message = '';
   success = false;
-  private toastService = inject(ToastService);
 
-  constructor(
-    private route: ActivatedRoute,
-    private authService: AuthService
-  ) {}
+  private route = inject(ActivatedRoute);
+  private authService = inject(AuthService);
+  private toastService = inject(ToastService);
 
   ngOnInit() {
     const userId = this.route.snapshot.queryParams['userId'];

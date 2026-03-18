@@ -1,25 +1,38 @@
-<div class="login-wrapper">
-  <div class="login-card" style="text-align:center">
-    @if (success) {
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <circle cx="24" cy="24" r="24" fill="#e0f2fe"/>
-        <path d="M14 24l7 7 13-13" stroke="#0284c7" stroke-width="2.5"
-              stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <h1 class="heading" style="margin-top:1rem">You're confirmed!</h1>
-      <p class="subheading">Your email has been verified. You can now log in.</p>
-      <a routerLink="/login" class="btn-submit"
-         style="margin-top:1.5rem; text-decoration:none; display:flex">
-        Go to Login
-      </a>
-    } @else {
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <circle cx="24" cy="24" r="24" fill="#fef2f2"/>
-        <path d="M16 16l16 16M32 16L16 32" stroke="#f87171" stroke-width="2.5"
-              stroke-linecap="round"/>
-      </svg>
-      <h1 class="heading" style="margin-top:1rem">Something went wrong</h1>
-      <p class="subheading">{{ message }}</p>
-    }
+<div class="login-page">
+  <div class="login-wrapper">
+
+    <div class="login-header-bar">
+      <div class="login-header-left">
+        <span class="material-icons">mark_email_read</span>
+        Email Confirmation
+      </div>
+    </div>
+
+    <div class="login-card" style="text-align: center">
+      @if (success) {
+        <div class="confirm-icon-wrap confirm-icon-wrap--success">
+          <svg width="28" height="28" viewBox="0 0 48 48" fill="none">
+            <path d="M14 24l7 7 13-13" stroke="#0284c7" stroke-width="3"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h1 class="heading" style="margin-top: 1.25rem">You're confirmed!</h1>
+        <p class="subheading">Your email has been verified. You can now log in.</p>
+        <a routerLink="/login" class="btn-submit"
+           style="margin-top: 1.5rem; text-decoration: none;">
+          Go to Login
+        </a>
+      } @else {
+        <div class="confirm-icon-wrap confirm-icon-wrap--error">
+          <svg width="28" height="28" viewBox="0 0 48 48" fill="none">
+            <path d="M16 16l16 16M32 16L16 32" stroke="#ef4444" stroke-width="3"
+                  stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h1 class="heading" style="margin-top: 1.25rem">Something went wrong</h1>
+        <p class="subheading">{{ message }}</p>
+      }
+    </div>
+
   </div>
 </div>
