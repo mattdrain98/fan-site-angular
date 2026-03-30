@@ -13,12 +13,12 @@ export class ProfileCommentService {
     return this.http.get<ProfileCommentDto>(`${this.base}/${profileUserId}`);
   }
 
-  addComment(payload: ProfileCommentDto): Observable<ProfileCommentDto> {
-    return this.http.post<ProfileCommentDto>(this.base, payload);
+  addComment(payload: { profileUserId: string; commentContent: string }): Observable<void> {
+    return this.http.post<void>(`${this.base}/add`, payload);
   }
 
-  edit(id: number, content: string): Observable<void> {
-    return this.http.put<void>(`${this.base}/${id}`, { content });
+  edit(id: number, commentContent: string): Observable<void> {
+    return this.http.put<void>(`${this.base}/${id}`, { commentContent });
   }
 
   delete(id: number): Observable<void> {

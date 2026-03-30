@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { ForumService } from '../../core/services/services';
 import { AuthService } from '../../core/services/auth.service';
-import { ForumListingModel } from '../../core/models';
+import { ForumDto } from '../../core/models';
 import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class ForumIndexComponent implements OnInit {
   private auth = inject(AuthService);
   private confirmService = inject(ConfirmService);
 
-  forums: ForumListingModel[] = [];
+  forums: ForumDto[] = [];
   currentUser$ = this.auth.currentUser$;
 
   ngOnInit(): void { this.forumService.getAll().subscribe(f => this.forums = f); }

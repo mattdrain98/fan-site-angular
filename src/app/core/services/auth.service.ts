@@ -26,7 +26,7 @@ export class AuthService {
           this.setCurrentUser(response.user);
         }
         if (response.token) {
-          this.setToken(response.token);  // ✅ Store token
+          this.setToken(response.token);  
         }
       })
     );
@@ -47,7 +47,7 @@ export class AuthService {
       tap(() => {
         this.userSubject.next(null);
         localStorage.removeItem('currentUser');
-        localStorage.removeItem('authToken');  // ✅ Remove token
+        localStorage.removeItem('authToken'); 
       })
     );
   }

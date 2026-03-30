@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { PostService } from '../../core/services/services';
-import { PostListingModel } from '../../core/models';
+import { PostDto } from '../../core/models';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from 'src/app/core/services/toast.service';
 
@@ -18,7 +18,7 @@ export class LikedPostsComponent implements OnInit {
   private router = inject(Router);
   private toastService = inject(ToastService);
 
-  likedPosts: PostListingModel[] = [];
+  likedPosts: PostDto[] = [];
   searchQuery = '';
   loading = true;
 

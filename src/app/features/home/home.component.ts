@@ -1,7 +1,7 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ForumDto, PostListingModel, ScreenshotDto } from 'src/app/core/models';
+import { ForumDto, PostDto, ScreenshotDto } from 'src/app/core/models';
 import { HomeService } from 'src/app/core/services/home.service';
 
 interface QuickStat {
@@ -30,8 +30,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   quickStats: QuickStat[] = [];
 
   latestScreenshots: ScreenshotDto[] = [];
-  topPosts:          PostListingModel[] = [];
-  latestPosts:       PostListingModel[] = [];
+  topPosts:          PostDto[] = [];
+  latestPosts:       PostDto[] = [];
   topForums:         ForumDto[] = [];
 
   // ── Screenshot slideshow state ─────────────────────────────────────────

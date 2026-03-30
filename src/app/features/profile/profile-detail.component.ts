@@ -4,10 +4,11 @@ import { AsyncPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfileService } from 'src/app/core/services/profile.service';
 import { AuthService } from '../../core/services/auth.service';
-import { ProfileModel, ProfileCommentDto } from '../../core/models';
 import { ProfileCommentService } from 'src/app/core/services/profile-comment.service';
+import { ProfileDto, ProfileCommentDto } from '../../core/models';
 import { ToastService } from 'src/app/core/services/toast.service';
 import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-profile-detail',
@@ -18,14 +19,13 @@ import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
 })
 export class ProfileDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private profileService = inject(ProfileService);
   private commentService = inject(ProfileCommentService);
   private toastService = inject(ToastService);
   private confirmService = inject(ConfirmService);
   auth = inject(AuthService);
 
-  profile: ProfileModel | null = null;
+  profile: ProfileDto | null = null;
   currentUser$ = this.auth.currentUser$;
   isFollowing = false;
   isOwnProfile = false;
@@ -111,27 +111,25 @@ export class ProfileDetailComponent implements OnInit {
     }, 150);
   }
 
-  submitComment(): void {
+  submitComment(profileUserId: string): void {
     if (!this.profile || !this.newCommentContent.trim()) return;
-    this.commentService.getCommentTemplate(this.profile.userId).subscribe({
-      next: template => {
-        const payload: ProfileCommentDto = {
-          ...template,
-          commentContent: this.newCommentContent
-        };
-        this.commentService.addComment(payload).subscribe({
-          next: () => {
-            this.toastService.success('Comment posted');
-            this.loadProfile(this.profile!.userId);
-            this.cancelComment();
-          },
-          error: () => this.toastService.error('Failed to submit comment')
-        });
+  
+    this.commentService.addComment({
+      profileUserId,
+      commentContent: this.newCommentContent
+    }).pipe(
+      switchMap(() => this.profileService.getProfile(profileUserId))
+    ).subscribe({
+      next: p => {
+        this.profile = p;
+        this.profile.profileComments = [...p.profileComments].reverse();
+        this.cancelComment();
+        this.toastService.success('Comment posted');
       },
       error: () => this.toastService.error('Failed to submit comment')
     });
   }
-
+  
   startEdit(comment: ProfileCommentDto): void {
     this.editingCommentId = comment.id;
     this.editContent = comment.commentContent;

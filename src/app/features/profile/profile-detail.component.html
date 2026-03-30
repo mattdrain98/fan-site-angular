@@ -159,7 +159,7 @@
               placeholder="Write your comment...">
             </textarea>
             <div class="comment-actions">
-              <button class="action-btn save" (click)="submitComment()">
+              <button class="action-btn save" (click)="submitComment(profile.userId)">
                 <i class="material-icons">send</i> Submit
               </button>
               <button class="action-btn cancel" (click)="cancelComment()">
@@ -175,15 +175,15 @@
             <!-- Author -->
             <div class="comment-author">
               <div class="comment-avatar"
-                [style.background-image]="comment.commentUserImagePath
-                  ? 'url(' + comment.commentUserImagePath + ')'
+                [style.background-image]="comment.authorImagePath
+                  ? 'url(' + comment.authorImagePath + ')'
                   : 'url(assets/images/blankpicture.png)'">
               </div>
-              <a class="comment-author-name" [routerLink]="['/profile', comment.commentUserId]">
-                {{ comment.commentUserName }}
+              <a class="comment-author-name" [routerLink]="['/profile', comment.authorId]">
+                {{ comment.authorName }}
               </a>
-              <span class="comment-author-rating">{{ comment.commentUserRating }}</span>
-              <span class="comment-date">{{ comment.date | date: 'mediumDate' }}</span>
+              <span class="comment-author-rating">{{ comment.authorRating }}</span>
+              <span class="comment-date">{{ comment.datePosted | date: 'mediumDate' }}</span>
             </div>
 
             <!-- Content -->
@@ -192,7 +192,7 @@
                 <div class="comment-body" [innerHTML]="comment.commentContent"></div>
 
                 @if (currentUser$ | async; as cu) {
-                  @if (cu.userId === comment.commentUserId) {
+                  @if (cu.userId === comment.authorId) {
                     <div class="comment-actions">
                       <button class="action-btn edit" (click)="startEdit(comment)">
                         <i class="material-icons">edit</i> Edit

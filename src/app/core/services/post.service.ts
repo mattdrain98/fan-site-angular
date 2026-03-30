@@ -3,11 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
-  PostIndexModel,
-  PostListingModel,
-  NewPostModel,
-  PostEditModel,
-  PostTopicModel
+  PostDto,
+  AddPostDto,
+  EditPostDto,
+  PostDetailDto
 } from '../models';
 
 @Injectable({ providedIn: 'root' })
@@ -23,29 +22,29 @@ export class PostService {
    *           date, postContent, replies (PostReplyModel[]), totalLikes,
    *           likes, forumId, forumName, userHasLiked
    */
-  getById(id: number): Observable<PostIndexModel> {
-    return this.http.get<PostIndexModel>(`${this.base}/${id}`);
+  getById(id: number): Observable<PostDetailDto> {
+    return this.http.get<PostDetailDto>(`${this.base}/${id}`);
   }
 
   /**
    * GET /api/post/user
    * Returns posts belonging to the currently logged-in user
-   * Returns: PostListingModel[]
+   * Returns: PostDetailDto[]
    * Fields: id, title, authorId, authorName, authorRating, datePosted,
    *         forumId, forumName, totalLikes, repliesCount
    */
-  getUserPosts(): Observable<PostListingModel[]> {
-    return this.http.get<PostListingModel[]>(`${this.base}/user`);
+  getUserPosts(): Observable<PostDetailDto[]> {
+    return this.http.get<PostDetailDto[]>(`${this.base}/user`);
   }
 
   /**
    * POST /api/post/create
    * Body: { title, content, forumId, imageUrls }
-   * Returns: PostIndexModel (201 Created)
+   * Returns: PostDetailDto (201 Created)
    * Requires auth
    */
-  add(payload: NewPostModel): Observable<PostIndexModel> {
-    return this.http.post<PostIndexModel>(`${this.base}/create`, payload);
+  add(payload: AddPostDto): Observable<PostDetailDto> {
+    return this.http.post<PostDetailDto>(`${this.base}/create`, payload);
   }
 
   /**
@@ -53,8 +52,8 @@ export class PostService {
    * Body: { searchQuery: string }
    * Returns: PostListingModel[]
    */
-  search(searchQuery: string): Observable<PostListingModel[]> {
-    return this.http.post<PostListingModel[]>(`${this.base}/search`, { searchQuery });
+  search(searchQuery: string): Observable<PostDetailDto[]> {
+    return this.http.post<PostDetailDto[]>(`${this.base}/search`, { searchQuery });
   }
 
   /**
@@ -73,7 +72,7 @@ export class PostService {
    * Returns: 204 No Content
    * Requires auth
    */
-  edit(id: number, payload: PostEditModel): Observable<void> {
+  edit(id: number, payload: EditPostDto): Observable<void> {
     return this.http.put<void>(`${this.base}/${id}`, payload);
   }
 

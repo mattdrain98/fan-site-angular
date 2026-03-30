@@ -99,10 +99,10 @@
       </div>
 
       <ul class="mini-list">
-        @for (post of topPosts; track post.id; let i = $index) {
+        @for (post of topPosts; track post.postId; let i = $index) {
           <li class="mini-item" [style.animation-delay]="i * 55 + 'ms'">
             <span class="mini-item__rank">{{ i + 1 }}</span>
-            <a class="mini-item__title" [routerLink]="['/post', post.id]">{{ post.title }}</a>
+            <a class="mini-item__title" [routerLink]="['/post', post.postId]">{{ post.title }}</a>
             <span class="mini-item__stat mini-item__stat--likes">
               <i class="material-icons">favorite</i>{{ post.totalLikes }}
             </span>
@@ -128,12 +128,12 @@
       </div>
 
       <ul class="mini-list">
-        @for (post of latestPosts.slice(0, 5); track post.id; let i = $index) {
+        @for (post of latestPosts.slice(0, 5); track post.postId; let i = $index) {
           <li class="mini-item" [style.animation-delay]="i * 55 + 'ms'">
             <span class="mini-item__rank mini-item__rank--new">
               <i class="material-icons">fiber_new</i>
             </span>
-            <a class="mini-item__title" [routerLink]="['/post', post.id]">{{ post.title }}</a>
+            <a class="mini-item__title" [routerLink]="['/post', post.postId]">{{ post.title }}</a>
             <span class="mini-item__stat">{{ post.datePosted | date:'MMM d' }}</span>
           </li>
         }

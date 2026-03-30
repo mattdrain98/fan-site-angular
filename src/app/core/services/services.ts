@@ -3,10 +3,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
-  ForumListingModel, ForumTopicModel,
-  PostIndexModel, PostListingModel, PostReplyDto,
-  ScreenshotDto, ProfileModel, ProfileCommentDto,
-  SearchResultModel
+  PostDetailDto, PostReplyDto,
+  ScreenshotDto, ProfileDto, ProfileCommentDto,
+  SearchResultDto,
+  PostDto,
+  ForumDto
 } from '../models';
 
 // ── Forum ──────────────────────────────────────────────────────────────────
@@ -15,14 +16,15 @@ export class ForumService {
   private http = inject(HttpClient);
   private base = `${environment.apiBaseUrl}/forum`;
 
-  getAll(): Observable<ForumListingModel[]> {
-    return this.http.get<ForumListingModel[]>(this.base);
+  getAll(): Observable<ForumDto[]> {
+    return this.http.get<ForumDto[]>(this.base);
   }
 
-  getById(id: number, searchQuery?: string): Observable<ForumTopicModel> {
-    let params = new HttpParams();
+  getById(id: number, searchQuery?: string, page: number = 1): Observable<SearchResultDto> {
+    let params = new HttpParams()
+      .set('page', page.toString());
     if (searchQuery) params = params.set('searchQuery', searchQuery);
-    return this.http.get<ForumTopicModel>(`${this.base}/${id}`, { params });
+    return this.http.get<SearchResultDto>(`${this.base}/${id}`, { params });
   }
 
   create(title: string, description?: string): Observable<unknown> {
@@ -40,35 +42,35 @@ export class PostService {
   private http = inject(HttpClient);
   private base = `${environment.apiBaseUrl}/posts`;
 
-  getById(id: number): Observable<PostIndexModel> {
-    return this.http.get<PostIndexModel>(`${this.base}/${id}`);
+  getById(id: number): Observable<PostDetailDto> {
+    return this.http.get<PostDetailDto>(`${this.base}/${id}`);
   }
 
-  getUserPosts(page: number = 1): Observable<{ posts: PostListingModel[]; page: number; totalPages: number; totalUserPosts: number }> {
-    return this.http.get<{ posts: PostListingModel[]; page: number; totalPages: number; totalUserPosts: number }>(
+  getUserPosts(page: number = 1): Observable<{ posts: PostDto[]; page: number; totalPages: number; totalUserPosts: number }> {
+    return this.http.get<{ posts: PostDto[]; page: number; totalPages: number; totalUserPosts: number }>(
       `${this.base}/user?page=${page}&pageSize=6`
     );
   }
 
-  getTopPosts(page: number = 1): Observable<PostListingModel[]> {
-    return this.http.get<{ posts: PostListingModel[] }>(`${this.base}/top?page=${page}`)
+  getTopPosts(page: number = 1): Observable<PostDto[]> {
+    return this.http.get<{ posts: PostDto[] }>(`${this.base}/top?page=${page}`)
       .pipe(map(response => response.posts));
   }
 
-  getLatestPosts(page: number = 1): Observable<{ posts: PostListingModel[]; page: number; totalPages: number; totalPosts: number }> {
-    return this.http.get<{ posts: PostListingModel[]; page: number; totalPages: number; totalPosts: number }>(
+  getLatestPosts(page: number = 1): Observable<{ posts: PostDto[]; page: number; totalPages: number; totalPosts: number }> {
+    return this.http.get<{ posts: PostDto[]; page: number; totalPages: number; totalPosts: number }>(
       `${this.base}/latest?page=${page}`
     );
   }
 
-  getLikedPosts(page: number = 1): Observable<{ posts: PostListingModel[]; page: number; totalPages: number; totalPosts: number }> {
-    return this.http.get<{ posts: PostListingModel[]; page: number; totalPages: number; totalPosts: number }>(
+  getLikedPosts(page: number = 1): Observable<{ posts: PostDto[]; page: number; totalPages: number; totalPosts: number }> {
+    return this.http.get<{ posts: PostDto[]; page: number; totalPages: number; totalPosts: number }>(
       `${this.base}/liked?page=${page}&pageSize=6`
     );
   }
 
-  add(title: string, content: string, forumId: number): Observable<PostIndexModel> {
-    return this.http.post<PostIndexModel>(this.base, { title, content, forumId });
+  add(title: string, content: string, forumId: number): Observable<PostDto> {
+    return this.http.post<PostDetailDto>(this.base, { title, content, forumId });
   }
 
   edit(id: number, title: string, content: string): Observable<void> {
@@ -132,8 +134,8 @@ export class ProfileService {
   private http = inject(HttpClient);
   private base = `${environment.apiBaseUrl}/profile`;
 
-  getProfile(id: string): Observable<ProfileModel> {
-    return this.http.get<ProfileModel>(`${this.base}/${id}`);
+  getProfile(id: string): Observable<ProfileDto> {
+    return this.http.get<ProfileDto>(`${this.base}/${id}`);
   }
 
   toggleFollow(id: string): Observable<{ followers: number; following: number }> {
@@ -183,8 +185,8 @@ export class ProfileCommentService {
 export class SearchService {
   private http = inject(HttpClient);
 
-  search(query: string): Observable<SearchResultModel> {
-    return this.http.get<SearchResultModel>(`${environment.apiBaseUrl}/search`, {
+  search(query: string): Observable<SearchResultDto> {
+    return this.http.get<SearchResultDto>(`${environment.apiBaseUrl}/search`, {
       params: new HttpParams().set('query', query)
     });
   }

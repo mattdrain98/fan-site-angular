@@ -7,7 +7,7 @@ import { PostService } from 'src/app/core/services/post.service';
 import { ReplyService } from 'src/app/core/services/reply.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ImageUploadService } from 'src/app/core/services/image-upload.service';
-import { PostIndexModel } from '../../core/models';
+import { PostDetailDto, PostReplyDto } from '../../core/models';
 import { ToastService } from 'src/app/core/services/toast.service';
 import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
 
@@ -25,7 +25,6 @@ export class PostIndexComponent implements OnInit {
   ) {}
 
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
   private postService = inject(PostService);
   private replyService = inject(ReplyService);
   private imageUploadService = inject(ImageUploadService);
@@ -35,7 +34,7 @@ export class PostIndexComponent implements OnInit {
 
   @ViewChild('editTextarea') editTextarea!: ElementRef<HTMLTextAreaElement>;
 
-  post: PostIndexModel | null = null;
+  post: PostDetailDto | null = null;
   currentUser$ = this.auth.currentUser$;
 
   editingReplyId: number | null = null;
@@ -65,7 +64,7 @@ export class PostIndexComponent implements OnInit {
   getFormattedContent(): SafeHtml {
     if (!this.post) return this.sanitizer.bypassSecurityTrustHtml('');
 
-    let content = this.post.postContent;
+    let content = this.post.content;
 
     if (this.post.postImages && this.post.postImages.length > 0) {
       this.post.postImages.forEach((image, index) => {
@@ -193,7 +192,7 @@ export class PostIndexComponent implements OnInit {
     if (!this.post) return;
     this.isEditingPost = true;
     this.editPostTitle = this.post.title ?? '';
-    this.editPostContent = this.post.postContent ?? '';
+    this.editPostContent = this.post.content ?? '';
     this.newImageUrls = [];
     this.uploadError = '';
   }
@@ -201,7 +200,7 @@ export class PostIndexComponent implements OnInit {
   cancelEditPost(): void {
     this.isEditingPost = false;
     this.editPostTitle = this.post?.title ?? '';
-    this.editPostContent = this.post?.postContent ?? '';
+    this.editPostContent = this.post?.content ?? '';
     this.newImageUrls = [];
     this.uploadError = '';
   }
@@ -336,7 +335,7 @@ export class PostIndexComponent implements OnInit {
     });
   }
 
-  startEditReply(reply: any): void {
+  startEditReply(reply: PostReplyDto): any { 
     this.editingReplyId = reply.id;
     this.editReplyContent = reply.replyContent;
   }
@@ -349,7 +348,7 @@ export class PostIndexComponent implements OnInit {
   saveEditReply(replyId: number): void {
     this.replyService.edit(replyId, this.editReplyContent).subscribe({
       next: () => {
-        const reply = this.post?.replies.find(r => r.id === replyId);
+        const reply = this.post?.replies.find(r => r.id === replyId); 
         if (reply) reply.replyContent = this.editReplyContent;
         this.toastService.success('Reply updated');
         this.cancelEditReply();
@@ -364,7 +363,7 @@ export class PostIndexComponent implements OnInit {
     if (confirmed) {
       this.replyService.delete(replyId).subscribe({
         next: () => {
-          this.post!.replies = this.post!.replies.filter(r => r.id !== replyId);
+          this.post!.replies = this.post!.replies.filter(r => r.id !== replyId); 
           this.toastService.success('Reply deleted');
         },
         error: () => this.toastService.error('Failed to delete reply')

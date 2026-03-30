@@ -25,7 +25,7 @@ export class LoginComponent {
       error: err => {
         if (err.error === 'Please confirm your email before logging in.') {
           this.emailUnconfirmed = true;
-          this.unconfirmedEmail = form.value.userName; // or email if you collect it
+          this.unconfirmedEmail = form.value.userName; 
         }
         this.errors = [err.error];
       }

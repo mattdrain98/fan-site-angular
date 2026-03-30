@@ -13,9 +13,9 @@
 
     <div class="user-posts-grid">
       @if (posts.length > 0) {
-        @for (post of posts; track post.id; let i = $index) {
+        @for (post of posts; track post.postId; let i = $index) {
           <div class="user-grid-card" [style.animation-delay]="i * 40 + 'ms'">
-            <a class="user-card-link" [routerLink]="['/post', post.id]">
+            <a class="user-card-link" [routerLink]="['/post', post.postId]">
 
               <div class="user-card-image">
                 @if (post.postImages && post.postImages.length > 0) {
@@ -53,7 +53,7 @@
 
             </a>
 
-            <button (click)="delete(post.id, $event)">
+            <button (click)="delete(post.postId, $event)">
               <i class="material-icons">delete_outline</i>
             </button>
           </div>

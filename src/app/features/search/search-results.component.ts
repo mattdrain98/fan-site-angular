@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SearchService } from '../../core/services/services';
-import { SearchResultModel } from '../../core/models';
+import { SearchResultDto } from '../../core/models';
 
 @Component({
   selector: 'app-search-results',
@@ -16,7 +16,7 @@ export class SearchResultsComponent implements OnInit {
   private router = inject(Router);
   private searchService = inject(SearchService);
 
-  result: SearchResultModel | null = null;
+  result: SearchResultDto | null = null;
   searchQuery = '';
 
   ngOnInit(): void {

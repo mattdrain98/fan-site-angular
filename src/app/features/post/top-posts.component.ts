@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { PostService } from '../../core/services/services';
 import { AuthService } from '../../core/services/auth.service';
-import { PostListingModel } from '../../core/models';
+import { PostDto } from '../../core/models';
 import { Router } from '@angular/router';
 import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
 import { ToastService } from 'src/app/core/services/toast.service';
@@ -22,7 +22,7 @@ export class TopPostsComponent implements OnInit {
   private toastService = inject(ToastService);
   auth = inject(AuthService);
 
-  posts: PostListingModel[] = [];
+  posts: PostDto[] = [];
   currentUser$ = this.auth.currentUser$;
 
   ngOnInit(): void {
@@ -39,7 +39,7 @@ export class TopPostsComponent implements OnInit {
     if (confirmed) {
       this.postService.delete(postId).subscribe({
         next: () => {
-          this.posts = this.posts.filter(p => p.id !== postId);
+          this.posts = this.posts.filter(p => p.postId !== postId);
           this.toastService.success('Post deleted successfully');
         },
         error: () => this.toastService.error('Failed to delete post')

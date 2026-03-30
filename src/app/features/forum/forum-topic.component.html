@@ -7,7 +7,7 @@
     <div class="forum-topic-header-bar">
       <div class="forum-topic-header-left">
         <i class="material-icons">forum</i>
-        <span>{{ t.forum.forumTitle }} Forum</span>
+        <span>{{ t.forum?.forumTitle }} Forum</span>
         @if (t.posts.length > 0) {
           <span class="forum-topic-count">{{ t.posts.length }}</span>
         }
@@ -29,7 +29,7 @@
 
         <!-- Create Post -->
         @if (currentUser$ | async) {
-          <a [routerLink]="['/post/create', t.forum.forumId]" class="forum-create-btn">
+          <a [routerLink]="['/post/create', forumId]" class="forum-create-btn">
             <i class="material-icons">add</i> Create Post
           </a>
         }
@@ -47,10 +47,10 @@
     <!-- Posts Grid -->
     <div class="forum-posts-grid">
       @if (t.posts.length > 0) {
-        @for (post of t.posts; track post.id; let i = $index) {
+        @for (post of t.posts; track post.postId; let i = $index) {
           <div class="forum-grid-card" [style.animation-delay]="i * 40 + 'ms'">
 
-            <a class="forum-card-link" [routerLink]="['/post', post.id]">
+            <a class="forum-card-link" [routerLink]="['/post', post.postId]">
               <div class="forum-card-image">
                 @if (post.postImages && post.postImages.length > 0) {
                   <img [src]="post.postImages[0].url" alt="Post image" />
@@ -68,8 +68,8 @@
                 <h3 class="forum-card-title">{{ post.title }}</h3>
                 <div class="forum-card-author-section">
                   <div class="forum-card-avatar"
-                    [style.background-image]="post.authorUrl
-                      ? 'url(' + post.authorUrl + ')'
+                    [style.background-image]="post.authorImagePath
+                      ? 'url(' + post.authorImagePath + ')'
                       : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'"
                     (click)="navigateToProfile($event, post.authorId)"
                     style="cursor: pointer">
@@ -100,7 +100,7 @@
             <!-- Owner Actions -->
             @if ((currentUser$ | async)?.userName === post.authorName) {
               <div class="forum-card-actions">
-                <button class="forum-action-btn delete" (click)="deletePost(post.id)">
+                <button class="forum-action-btn delete" (click)="deletePost(post.postId)">
                   <i class="material-icons">delete_outline</i>
                 </button>
               </div>
@@ -114,7 +114,7 @@
           <p>
             No posts yet.
             @if (currentUser$ | async) {
-              Why not <a [routerLink]="['/post/create', t.forum.forumId]">create one</a>?
+              Why not <a [routerLink]="['/post/create', forumId]">create one</a>?
             }
           </p>
         </div>

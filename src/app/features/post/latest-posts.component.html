@@ -21,9 +21,9 @@
   </div>
 
   <div class="posts-grid" [class.no-pagination]="totalPages <= 1">
-    @for (post of latestPosts; track post.id) {
+    @for (post of latestPosts; track post.postId) {
       <div class="post-grid-card">
-        <a class="post-grid-link" [routerLink]="['/post', post.id]">
+        <a class="post-grid-link" [routerLink]="['/post', post.postId]">
 
           @if (post.postImages && post.postImages.length > 0) {
             <div class="post-grid-image">
@@ -42,8 +42,8 @@
             <h3 class="grid-title">{{ post.title }}</h3>
             <div class="grid-author-section">
                 <div class="grid-author-avatar"
-                  [style.background-image]="post.authorUrl
-                    ? 'url(' + post.authorUrl + ')'
+                  [style.background-image]="post.authorImagePath
+                    ? 'url(' + post.authorImagePath + ')'
                     : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'"
                   (click)="navigateToProfile($event, post.authorId)"
                   style="cursor: pointer">
@@ -63,7 +63,7 @@
         </a>
 
         @if ((currentUser$ | async)?.userName === post.authorName) {
-          <button class="grid-delete-btn" (click)="deletePost(post.id, $event)">
+          <button class="grid-delete-btn" (click)="deletePost(post.postId, $event)">
             <i class="material-icons">delete_outline</i>
           </button>
         }

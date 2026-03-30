@@ -36,13 +36,13 @@
             Results for <strong>"{{ result.searchQuery }}"</strong>
           </div>
 
-          @for (post of result.posts; track post.id; let i = $index) {
+          @for (post of result.posts; track post.postId; let i = $index) {
             <div class="search-post-row" [style.animation-delay]="i * 40 + 'ms'">
 
               <div class="search-post-index">{{ i + 1 }}</div>
 
               <div class="search-post-body">
-                <a class="search-post-title" [routerLink]="['/post', post.id]">
+                <a class="search-post-title" [routerLink]="['/post', post.postId]">
                   {{ post.title }}
                 </a>
                 <div class="search-post-meta">

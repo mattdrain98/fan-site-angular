@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { PostService } from '../../core/services/services';
 import { AuthService } from '../../core/services/auth.service';
-import { PostListingModel } from '../../core/models';
+import {PostDto} from '../../core/models';
 import { ToastService } from 'src/app/core/services/toast.service';
 import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
 
@@ -22,7 +22,7 @@ export class LatestPostsComponent implements OnInit {
   private confirmService = inject(ConfirmService);
   auth = inject(AuthService);
 
-  latestPosts: PostListingModel[] = [];
+  latestPosts: PostDto[] = [];
   searchQuery = '';
   loading = true;
   currentUser$ = this.auth.currentUser$;

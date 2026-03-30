@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { PostService } from '../../core/services/services';
-import { PostListingModel } from '../../core/models';
+import { PostDto, ProfileDto } from '../../core/models';
 import { ToastService } from 'src/app/core/services/toast.service';
 import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
 
@@ -18,7 +18,7 @@ export class UserPostsComponent implements OnInit {
   private toastService = inject(ToastService);
   private confirmService = inject(ConfirmService);
 
-  posts: PostListingModel[] = [];
+  posts: PostDto[] = [];
   loading = true;
   currentPage = 1;
   totalPages = 1;

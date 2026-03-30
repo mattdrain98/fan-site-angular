@@ -16,15 +16,15 @@
       <div class="post-detail-card">
         <div class="post-author">
           <div class="author-avatar"
-            [style.background-image]="post.authorImageUrl
-              ? 'url(' + post.authorImageUrl + ')'
+            [style.background-image]="post.authorImagePath
+              ? 'url(' + post.authorImagePath + ')'
               : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'">
           </div>
           <a class="author-name" [routerLink]="['/profile', post.authorId]">
             {{ post.authorName }}
           </a>
           <span class="author-rating">{{ post.authorRating }}</span>
-          <span class="post-date">{{ post.date | date: 'medium' }}</span>
+          <span class="post-date">{{ post.datePosted | date: 'medium' }}</span>
         </div>
 
         <div class="post-content-area">
@@ -159,15 +159,15 @@
             <div class="reply-card">
               <div class="post-author">
                 <div class="author-avatar"
-                  [style.background-image]="reply.authorImageUrl
-                    ? 'url(' + reply.authorImageUrl + ')'
+                  [style.background-image]="reply.authorImagePath
+                    ? 'url(' + reply.authorImagePath + ')'
                     : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'">
                 </div>
                 <a class="author-name" [routerLink]="['/profile', reply.authorId]">
                   {{ reply.authorName }}
                 </a>
                 <span class="author-rating">{{ reply.authorRating }}</span>
-                <span class="post-date">{{ reply.date | date: 'short' }}</span>
+                <span class="post-date">{{ reply.datePosted | date: 'short' }}</span>
               </div>
 
               <div class="post-content-area">

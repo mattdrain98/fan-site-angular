@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ProfileModel, ProfileEditModel, ApplicationUser, FollowDto } from '../models';
+import { ProfileDto, ProfileEditModel, FollowDto } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
@@ -16,8 +16,8 @@ export class ProfileService {
    * Fields: userId, userName, userRating, profileImageUrl, memberSince,
    *         following, followers, follows, followings, profileComments, bio
    */
-  getProfile(userId: string): Observable<ProfileModel> {
-    return this.http.get<ProfileModel>(`${this.base}/${userId}`);
+  getProfile(userId: string): Observable<ProfileDto> {
+    return this.http.get<ProfileDto>(`${this.base}/${userId}`);
   }
 
   /**
