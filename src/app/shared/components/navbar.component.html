@@ -128,6 +128,55 @@
       </div>
     </div>
 
+    <!-- Notification Bell -->
+    @if (currentUser$ | async) {
+      <div class="notif-wrap" [class.open]="notifOpen">
+        <button class="notif-btn" (click)="toggleNotif()" title="Notifications">
+          <i class="material-icons">notifications</i>
+          @if (unreadCount > 0) {
+            <span class="notif-badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+          }
+        </button>
+
+        <div class="notif-dropdown">
+          <div class="notif-header">
+            <span class="notif-title">Notifications</span>
+            @if (unreadCount > 0) {
+              <button class="notif-mark-all" (click)="markAllAsRead()">Mark all read</button>
+            }
+          </div>
+
+          <div class="notif-list">
+            @if (notifLoading) {
+              <div class="notif-state">
+                <i class="material-icons spinning">refresh</i>
+              </div>
+            } @else if (notifications.length === 0) {
+              <div class="notif-state">
+                <i class="material-icons">notifications_none</i>
+                <p>You're all caught up!</p>
+              </div>
+            } @else {
+              @for (n of notifications; track n.id) {
+                <button class="notif-item" [class.unread]="!n.isRead" (click)="onNotifClick(n)">
+                  <div class="notif-icon" [attr.data-type]="n.type?.toLowerCase()">
+                    <i class="material-icons">{{ notifIcon(n.type) }}</i>
+                  </div>
+                  <div class="notif-body">
+                    <p class="notif-msg">{{ n.message }}</p>
+                    <span class="notif-time">{{ timeAgo(n.createdOn) }}</span>
+                  </div>
+                  @if (!n.isRead) {
+                    <span class="notif-dot"></span>
+                  }
+                </button>
+              }
+            }
+          </div>
+        </div>
+      </div>
+    }
+
     <!-- Desktop Auth -->
     <div class="nav-auth">
       @if (currentUser$ | async; as currentUser) {

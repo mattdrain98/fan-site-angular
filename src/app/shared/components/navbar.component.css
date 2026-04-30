@@ -337,6 +337,203 @@
   margin-top: 1px;
 }
 
+/* ── Notification Bell ───────────────────────────────── */
+.notif-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.notif-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  color: #64748b;
+  transition: border-color .15s, background .15s, color .15s, box-shadow .15s;
+
+  .material-icons { font-size: 18px !important; }
+
+  &:hover {
+    border-color: skyblue;
+    color: #0284c7;
+    background: #f0f9ff;
+    box-shadow: 0 2px 10px rgba(135,206,235,.25);
+  }
+}
+
+.notif-wrap.open .notif-btn {
+  border-color: skyblue;
+  color: #0284c7;
+  background: #f0f9ff;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: #dc2626;
+  color: #fff;
+  font-size: .65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 2px solid #fff;
+}
+
+/* ── Notification Dropdown ───────────────────────────── */
+.notif-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 340px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.12);
+  z-index: 200;
+  overflow: hidden;
+
+  .notif-wrap.open & {
+    display: flex;
+    flex-direction: column;
+    animation: dropDown .22s cubic-bezier(.16,1,.3,1);
+  }
+}
+
+.notif-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .9rem 1rem .75rem;
+  border-bottom: 1px solid #f1f5f9;
+  flex-shrink: 0;
+}
+
+.notif-title {
+  font-size: .9rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.notif-mark-all {
+  font-size: .75rem;
+  font-weight: 500;
+  color: #0284c7;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: .2rem .4rem;
+  border-radius: 5px;
+  transition: background .15s;
+  font-family: inherit;
+
+  &:hover { background: #f0f9ff; }
+}
+
+.notif-list {
+  overflow-y: auto;
+  max-height: 360px;
+}
+
+.notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  padding: .75rem 1rem;
+  border: none;
+  border-bottom: 1px solid #f8fafc;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s;
+  position: relative;
+
+  &:last-child { border-bottom: none; }
+  &:hover      { background: #f8fafc; }
+  &.unread     { background: #f0f9ff; }
+  &.unread:hover { background: #e0f2fe; }
+}
+
+.notif-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #e2e8f0;
+  color: #64748b;
+
+  .material-icons { font-size: 15px !important; }
+
+  &[data-type="like"]    { background: #fee2e2; color: #dc2626; }
+  &[data-type="reply"]   { background: #dcfce7; color: #16a34a; }
+  &[data-type="follow"]  { background: #dbeafe; color: #2563eb; }
+  &[data-type="comment"] { background: #fef9c3; color: #ca8a04; }
+}
+
+.notif-body  { flex: 1; min-width: 0; }
+
+.notif-msg {
+  font-size: .83rem;
+  color: #334155;
+  margin: 0;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.notif-time {
+  font-size: .73rem;
+  color: #94a3b8;
+  margin-top: 2px;
+  display: block;
+}
+
+.notif-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #0284c7;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.notif-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  color: #94a3b8;
+  gap: .5rem;
+
+  .material-icons { font-size: 32px !important; }
+  p { margin: 0; font-size: .85rem; }
+}
+
+.spinning { animation: spin 1s linear infinite; }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
 /* ── Shared util ─────────────────────────────────────── */
 .mobile-divider {
   height: 1px;
@@ -519,4 +716,14 @@
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+/* On mobile the bell sits near the left edge — open dropdown rightward */
+@media (max-width: 768px) {
+  .notif-dropdown {
+    right: auto;
+    left: 0;
+    width: calc(100vw - 1.5rem);
+    max-width: 340px;
+  }
 }

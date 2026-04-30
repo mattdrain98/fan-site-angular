@@ -148,6 +148,16 @@ export interface MediaDto extends AuthorDto {
   slug: string;
 }
 
+//------------------NOTIFICATIONS------------------\\
+export interface NotificationDto {
+  id: number;
+  message: string;
+  link: string;
+  isRead: boolean;
+  type: string;
+  createdOn: string;
+}
+
 //------------------AUTHOR------------------\\
 export interface AuthorDto {
   authorId: string;
