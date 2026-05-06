@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, finalize, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ApplicationUser } from '../models';
 
@@ -22,11 +22,11 @@ export class AuthService {
   login(payload: { userName: string; password: string; rememberMe: boolean }): Observable<{ message: string; token: string }> {
     return this.http.post<{ message: string; user: CurrentUser; token: string }>(`${this.base}/login`, payload).pipe(
       tap(response => {
+        if (response.token) {
+          this.setToken(response.token);
+        }
         if (response.user) {
           this.setCurrentUser(response.user);
-        }
-        if (response.token) {
-          this.setToken(response.token);  
         }
       })
     );
@@ -44,10 +44,10 @@ export class AuthService {
 
   logout(): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.base}/logout`, {}).pipe(
-      tap(() => {
+      finalize(() => {
         this.userSubject.next(null);
         localStorage.removeItem('currentUser');
-        localStorage.removeItem('authToken'); 
+        localStorage.removeItem('authToken');
       })
     );
   }

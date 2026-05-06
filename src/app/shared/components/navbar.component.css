@@ -453,13 +453,8 @@
   align-items: flex-start;
   gap: .75rem;
   padding: .75rem 1rem;
-  border: none;
   border-bottom: 1px solid #f8fafc;
-  background: none;
-  width: 100%;
-  text-align: left;
   cursor: pointer;
-  font-family: inherit;
   transition: background .15s;
   position: relative;
 
@@ -482,10 +477,37 @@
 
   .material-icons { font-size: 15px !important; }
 
-  &[data-type="like"]    { background: #fee2e2; color: #dc2626; }
-  &[data-type="reply"]   { background: #dcfce7; color: #16a34a; }
-  &[data-type="follow"]  { background: #dbeafe; color: #2563eb; }
-  &[data-type="comment"] { background: #fef9c3; color: #ca8a04; }
+  &[data-type="like"]            { background: #fee2e2; color: #dc2626; }
+  &[data-type="reply"]           { background: #dcfce7; color: #16a34a; }
+  &[data-type="follow"]          { background: #dbeafe; color: #2563eb; }
+  &[data-type="comment"],
+  &[data-type="profile_comment"] { background: #fef9c3; color: #ca8a04; }
+}
+
+.notif-dismiss {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0;
+  transition: background .15s, border-color .15s, color .15s, transform .15s;
+  align-self: center;
+
+  .material-icons { font-size: 14px !important; }
+
+  &:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #dc2626;
+    transform: scale(1.1);
+  }
 }
 
 .notif-body  { flex: 1; min-width: 0; }

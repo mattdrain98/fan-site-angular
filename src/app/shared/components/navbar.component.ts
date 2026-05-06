@@ -83,13 +83,21 @@ export class NavbarComponent implements OnInit, OnDestroy {
     );
   }
 
+  deleteNotification(notif: NotificationDto, e: Event): void {
+    e.stopPropagation();
+    this.notifSvc.delete(notif.id, !notif.isRead).subscribe(() => {
+      this.notifications = this.notifications.filter(n => n.id !== notif.id);
+    });
+  }
+
   notifIcon(type: string): string {
     switch (type?.toLowerCase()) {
-      case 'like':    return 'favorite';
-      case 'reply':   return 'reply';
-      case 'follow':  return 'person_add';
-      case 'comment': return 'chat_bubble';
-      default:        return 'notifications';
+      case 'like':            return 'favorite';
+      case 'reply':           return 'reply';
+      case 'follow':          return 'person_add';
+      case 'comment':
+      case 'profile_comment': return 'chat_bubble';
+      default:                return 'notifications';
     }
   }
 

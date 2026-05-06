@@ -52,4 +52,15 @@ export class NotificationService {
       tap(() => this._unreadCount.next(0))
     );
   }
+
+  delete(id: number, wasUnread: boolean): Observable<void> {
+    return this.http.delete<void>(`${this.base}/${id}`).pipe(
+      tap(() => {
+        if (wasUnread) {
+          const c = this._unreadCount.value;
+          if (c > 0) this._unreadCount.next(c - 1);
+        }
+      })
+    );
+  }
 }

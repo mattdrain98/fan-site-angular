@@ -235,6 +235,7 @@
 /* ── Textarea ────────────────────────────────────────── */
 .profile-textarea {
   width: 100%;
+  box-sizing: border-box;
   padding: .75rem 1rem;
   border: 1.5px solid #e2e8f0;
   border-radius: 10px;
@@ -251,6 +252,8 @@
     background: #fff;
     box-shadow: 0 0 0 3px rgba(135,206,235,.2);
   }
+
+  &::placeholder { color: #94a3b8; }
 }
 
 .profile-edit-actions {
@@ -259,48 +262,41 @@
   margin-top: .5rem;
 }
 
-/* ── Action Buttons (shared) ─────────────────────────── */
+/* ── Action Buttons (ghost style, matches reply section) */
 .action-btn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: .35rem .8rem;
-  border-radius: 8px;
-  font-size: .8rem;
+  padding: 0;
+  border-radius: 0;
+  font-size: .78rem;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  border: 1.5px solid transparent;
-  transition: all .15s;
+  border: none;
+  background: none;
+  transition: color .15s, transform .15s;
+  letter-spacing: -.01em;
+  color: #94a3b8;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 
-  .material-icons { font-size: 14px !important; }
+  .material-icons { font-size: 16px !important; }
 
   &.edit {
-    background: #f8fafc;
-    border-color: #e2e8f0;
-    color: #64748b;
-    &:hover { background: #f1f5f9; border-color: #94a3b8; color: #0f172a; }
+    &:hover { color: #0284c7; transform: scale(1.05); }
   }
 
   &.delete {
-    background: #fff1f2;
-    border-color: #fecdd3;
-    color: #e11d48;
-    &:hover { background: #ffe4e6; border-color: #fda4af; }
+    &:hover { color: #ff6b81; transform: scale(1.05); }
   }
 
   &.save {
-    background: skyblue;
-    color: #fff;
-    border-color: skyblue;
-    &:hover { background: #5bb8e0; }
+    color: #0284c7;
+    &:hover { color: #0369a1; transform: scale(1.05); }
   }
 
   &.cancel {
-    background: #f8fafc;
-    border-color: #e2e8f0;
-    color: #64748b;
-    &:hover { background: #f1f5f9; border-color: #94a3b8; }
+    &:hover { color: #64748b; transform: scale(1.05); }
   }
 }
 
@@ -317,7 +313,18 @@
   justify-content: space-between;
   background: skyblue;
   padding: .75rem 1.1rem;
-  border-radius: 12px 12px 0 0;
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 4px 16px rgba(135, 206, 235, .35);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
 }
 
 .profile-comments-header-left {
@@ -327,17 +334,44 @@
   color: #fff;
   font-weight: 700;
   font-size: .95rem;
+  position: relative;
 
-  .material-icons { font-size: 17px !important; }
+  .material-icons { font-size: 18px !important; opacity: .85; }
 }
 
 .profile-comments-count {
-  background: rgba(255,255,255,0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,.25);
   color: #fff;
-  font-size: .7rem;
+  font-size: .68rem;
   font-weight: 700;
   border-radius: 999px;
   padding: 1px 8px;
+  border: 1px solid rgba(255, 255, 255, .3);
+}
+
+.reply-trigger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,.22);
+  border: 1.5px solid rgba(255,255,255,.4);
+  border-radius: 999px;
+  padding: .3rem .9rem;
+  color: #fff;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  position: relative;
+
+  &:hover {
+    background: rgba(255,255,255,.38);
+    border-color: rgba(255,255,255,.65);
+  }
+  .material-icons { font-size: 15px !important; }
 }
 
 .profile-comments-container {
@@ -346,19 +380,47 @@
   border-radius: 0 0 14px 14px;
   overflow: hidden;
   background: #fff;
+  position: relative;
+}
+
+/* ── Reply input card ────────────────────────────────── */
+.reply-input-card {
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  overflow: hidden;
+  transform-origin: top;
+  background: #fff;
+}
+
+.reply-slide-in  { animation: slideOpen  300ms cubic-bezier(.16, 1, .3, 1) forwards; }
+.reply-slide-out { animation: slideClose 200ms ease-in forwards; }
+
+@keyframes slideOpen {
+  from { opacity: 0; transform: scaleY(0); max-height: 0; padding-top: 0; padding-bottom: 0; }
+  to   { opacity: 1; transform: scaleY(1); max-height: 400px; padding-top: 1.1rem; padding-bottom: 1.25rem; }
+}
+
+@keyframes slideClose {
+  from { opacity: 1; transform: scaleY(1); max-height: 400px; padding-top: 1.1rem; padding-bottom: 1.25rem; }
+  to   { opacity: 0; transform: scaleY(0); max-height: 0; padding-top: 0; padding-bottom: 0; }
 }
 
 /* ── Comment Card ────────────────────────────────────── */
 .profile-comment-card {
   display: flex;
   border-bottom: 1px solid #f1f5f9;
-  animation: profileFadeIn .3s ease both;
+  transition: background .15s;
+  animation: fadeUp .28s ease both;
 
   &:last-child { border-bottom: none; }
+  &:hover { background: #f8fafc; }
 }
 
-@keyframes profileFadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(5px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -368,22 +430,28 @@
   flex-direction: column;
   align-items: center;
   gap: .4rem;
-  padding: 1.1rem .9rem;
-  width: 120px;
+  padding: 1.25rem .9rem;
+  width: 126px;
   flex-shrink: 0;
   border-right: 1px solid #f1f5f9;
-  background: #fafafa;
+  background: #f8fafc;
   text-align: center;
 }
 
 .comment-avatar {
-  width: 52px;
-  height: 52px;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
   background-size: cover;
   background-position: center;
   border: 2px solid #e2e8f0;
   flex-shrink: 0;
+  transition: border-color .18s, box-shadow .18s;
+
+  &:hover {
+    border-color: skyblue;
+    box-shadow: 0 0 0 3px rgba(135, 206, 235, .18);
+  }
 }
 
 .comment-author-name {
@@ -392,8 +460,10 @@
   color: #0284c7;
   text-decoration: none;
   word-break: break-word;
+  line-height: 1.3;
+  transition: color .15s;
 
-  &:hover { text-decoration: underline; }
+  &:hover { color: skyblue; text-decoration: underline; }
 }
 
 .comment-author-rating {
@@ -405,32 +475,35 @@
   font-size: .65rem;
   font-weight: 700;
   border-radius: 999px;
-  padding: 1px 7px;
+  padding: 1px 9px;
 }
 
 .comment-date {
   font-size: .7rem;
   color: #94a3b8;
+  line-height: 1.2;
 }
 
 /* ── Comment Content ─────────────────────────────────── */
 .comment-content-area {
   flex: 1;
-  padding: 1.1rem 1.25rem;
+  padding: 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: .6rem;
+  gap: .75rem;
 }
 
 .comment-body {
-  font-size: .875rem;
-  color: #334155;
-  line-height: 1.6;
+  font-size: .9rem;
+  color: #3d5166;
+  line-height: 1.75;
 }
 
 .comment-actions {
   display: flex;
-  gap: .5rem;
+  gap: .4rem;
+  margin-top: .15rem;
+  flex-wrap: wrap;
 }
 
 /* ── No Comments ─────────────────────────────────────── */
@@ -439,12 +512,11 @@
   flex-direction: column;
   align-items: center;
   gap: .5rem;
-  padding: 2.5rem 1rem;
-  color: #94a3b8;
+  padding: 2.75rem 1rem;
   text-align: center;
 
   .material-icons { font-size: 36px !important; color: #cbd5e1; }
-  p { font-size: .875rem; margin: 0; }
+  p { font-size: .875rem; color: #64748b; margin: 0; }
 }
 
 /* ── Mobile ──────────────────────────────────────────── */
@@ -464,35 +536,13 @@
     width: 100%;
     border-right: none;
     border-bottom: 1px solid #f1f5f9;
-    padding: .75rem 1rem;
+    padding: .85rem 1rem;
     text-align: left;
     justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: .5rem;
   }
-}
 
-.profile-comments-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: skyblue;
-  padding: .75rem 1.1rem;
-  border-radius: 12px 12px 0 0;
-}
-
-.reply-trigger-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(255,255,255,0.25);
-  border: 1.5px solid rgba(255,255,255,0.5);
-  border-radius: 999px;
-  padding: .3rem .9rem;
-  color: #fff;
-  font-size: .82rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background .15s;
-
-  &:hover { background: rgba(255,255,255,0.4); }
-  .material-icons { font-size: 15px !important; }
+  .comment-avatar { width: 42px; height: 42px; }
+  .comment-content-area { padding: 1rem; }
 }
