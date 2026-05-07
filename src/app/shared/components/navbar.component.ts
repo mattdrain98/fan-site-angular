@@ -25,7 +25,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   mobileUserOpen    = false;
   postsDropdownOpen = false;
   notifOpen         = false;
-  badgePulse        = false;
 
   notifications: NotificationDto[] = [];
   notifLoading = false;
@@ -36,11 +35,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subs.push(
       this.notifSvc.unreadCount$.subscribe(c => this.unreadCount = c),
-      this.notifSvc.newNotif$.subscribe(() => {
-        this.badgePulse = false;
-        setTimeout(() => this.badgePulse = true, 0);
-        setTimeout(() => this.badgePulse = false, 600);
-      }),
       this.auth.currentUser$.subscribe(user => {
         if (user) {
           this.notifSvc.startPolling();

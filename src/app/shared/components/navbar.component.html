@@ -134,7 +134,7 @@
         <button class="notif-btn" (click)="toggleNotif()" title="Notifications">
           <i class="material-icons">notifications</i>
           @if (unreadCount > 0) {
-            <span class="notif-badge" [class.pulse]="badgePulse">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+            <span class="notif-badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
           }
         </button>
 

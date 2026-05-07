@@ -373,22 +373,9 @@
   background: #f0f9ff;
 }
 
-.notif-badge.pulse {
-  animation: badgePop 0.5s cubic-bezier(.36, .07, .19, .97) both;
-}
-
 @keyframes badgeEnter {
   from { transform: scale(0); opacity: 0; }
   to   { transform: scale(1); opacity: 1; }
-}
-
-@keyframes badgePop {
-  0%   { transform: scale(1); }
-  20%  { transform: scale(1.5); }
-  40%  { transform: scale(0.9); }
-  60%  { transform: scale(1.2); }
-  80%  { transform: scale(0.95); }
-  100% { transform: scale(1); }
 }
 
 .notif-badge {
@@ -415,7 +402,7 @@
 .notif-dropdown {
   display: none;
   position: absolute;
-  right: 0;
+  left: 0;
   top: calc(100% + 10px);
   width: 340px;
   background: #fff;
@@ -616,9 +603,10 @@
 
 /* ── Mobile ──────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .nav-toggler     { display: flex; }
+  .nav-toggler     { display: flex; margin-left: .5rem; }
   .nav-auth        { display: none; }
   .nav-auth-mobile { display: block; }
+  .notif-wrap      { margin-left: auto; }
 
   .nav-links {
     display: none;
@@ -759,11 +747,10 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* On mobile the bell sits near the left edge — open dropdown rightward */
 @media (max-width: 768px) {
   .notif-dropdown {
-    right: auto;
-    left: 0;
+    left: auto;
+    right: 0;
     width: calc(100vw - 1.5rem);
     max-width: 340px;
   }
