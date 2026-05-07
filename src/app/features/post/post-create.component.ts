@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, inject, OnInit } from '@angular/core';
 import { ImageUploadService } from '../../core/services/image-upload.service';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { PostService } from 'src/app/core/services/post.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ForumService } from 'src/app/core/services/services';
@@ -12,7 +12,7 @@ import { ToastService } from 'src/app/core/services/toast.service';
   selector: 'app-create-post',
   templateUrl: './post-create.component.html',
   styleUrl: './post-create.component.css',
-  imports: [FormsModule, CommonModule]
+  imports: [FormsModule]
 })
 export class PostCreateComponent implements OnInit{
   @ViewChild('contentInput') contentInput!: ElementRef<HTMLTextAreaElement>;
