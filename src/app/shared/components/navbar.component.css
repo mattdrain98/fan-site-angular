@@ -373,6 +373,24 @@
   background: #f0f9ff;
 }
 
+.notif-badge.pulse {
+  animation: badgePop 0.5s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes badgeEnter {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+@keyframes badgePop {
+  0%   { transform: scale(1); }
+  20%  { transform: scale(1.5); }
+  40%  { transform: scale(0.9); }
+  60%  { transform: scale(1.2); }
+  80%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
 .notif-badge {
   position: absolute;
   top: -4px;
@@ -390,6 +408,7 @@
   justify-content: center;
   line-height: 1;
   border: 2px solid #fff;
+  animation: badgeEnter 0.35s cubic-bezier(.34, 1.56, .64, 1) both;
 }
 
 /* ── Notification Dropdown ───────────────────────────── */

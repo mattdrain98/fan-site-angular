@@ -1,31 +1,56 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import * as signalR from '@microsoft/signalr';
 import { NotificationDto } from '../models';
 import { environment } from '../../../environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
-  private http = inject(HttpClient);
-  private base = `${environment.apiBaseUrl}/notifications`;
+  private http    = inject(HttpClient);
+  private auth    = inject(AuthService);
+  private zone    = inject(NgZone);
+  private base    = `${environment.apiBaseUrl}/notifications`;
+  private hubUrl  = environment.apiBaseUrl.replace('/api', '') + '/hubs/notifications';
 
   private _unreadCount = new BehaviorSubject<number>(0);
   readonly unreadCount$ = this._unreadCount.asObservable();
 
-  private pollSub?: Subscription;
+  private _newNotif = new Subject<void>();
+  readonly newNotif$ = this._newNotif.asObservable();
+
+  private hubConnection?: signalR.HubConnection;
 
   startPolling(): void {
-    if (this.pollSub) return;
-    this.fetchUnreadCount();
-    this.pollSub = interval(30_000)
-      .pipe(switchMap(() => this.http.get<{ count: number }>(`${this.base}/unread-count`)))
-      .subscribe({ next: r => this._unreadCount.next(r.count) });
+    if (this.hubConnection) return;
+
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl(this.hubUrl, {
+        accessTokenFactory: () => this.auth.getToken() ?? ''
+      })
+      .withAutomaticReconnect()
+      .configureLogging(signalR.LogLevel.Information)
+      .build();
+
+    this.hubConnection.on('ReceiveNotification', () => {
+      this.zone.run(() => {
+        this._unreadCount.next(this._unreadCount.value + 1);
+        this._newNotif.next();
+      });
+    });
+
+    this.hubConnection.onreconnected(() => this.fetchUnreadCount());
+
+    this.hubConnection.start()
+      .then(() => this.fetchUnreadCount())
+      .catch(err => console.error('SignalR connection error:', err));
   }
 
   stopPolling(): void {
-    this.pollSub?.unsubscribe();
-    this.pollSub = undefined;
+    this.hubConnection?.stop();
+    this.hubConnection = undefined;
     this._unreadCount.next(0);
   }
 
