@@ -158,6 +158,16 @@ form {
   border-color: skyblue;
 }
 
+.checkbox-input:checked ~ .checkbox-custom::after {
+  content: '';
+  display: block;
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
 .checkbox-text {
   font-size: .82rem;
   color: #475569;

@@ -97,9 +97,17 @@ export class AuthService {
   }
 
   resendConfirmation(email: string): Observable<string> {
-    return this.http.post(`${this.base}/resend-confirmation`, 
-      JSON.stringify(email), 
+    return this.http.post(`${this.base}/resend-confirmation`,
+      JSON.stringify(email),
       { headers: { 'Content-Type': 'application/json' }, responseType: 'text' }
     );
+  }
+
+  forgotPassword(email: string): Observable<string> {
+    return this.http.post(`${this.base}/forgot-password`, { email }, { responseType: 'text' });
+  }
+
+  resetPassword(email: string, token: string, newPassword: string): Observable<string> {
+    return this.http.post(`${this.base}/reset-password`, { email, token, newPassword }, { responseType: 'text' });
   }
 }

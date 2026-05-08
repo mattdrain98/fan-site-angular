@@ -23,5 +23,7 @@ export const routes: Routes = [
   { path: 'profile/following/:id', loadComponent: () => import('./features/profile/following.component').then(m => m.FollowingComponent) },
   { path: 'profile/:id', loadComponent: () => import('./features/profile/profile-detail.component').then(m => m.ProfileDetailComponent) },
   { path: 'search', loadComponent: () => import('./features/search/search-results.component').then(m => m.SearchResultsComponent) },
+  { path: 'forgot-password', loadComponent: () => import('./features/auth/forgot-password.component').then(m => m.ForgotPasswordComponent) },
+  { path: 'reset-password', loadComponent: () => import('./features/auth/reset-password.component').then(m => m.ResetPasswordComponent) },
   { path: '**', redirectTo: '' }
 ];
