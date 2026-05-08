@@ -1,22 +1,28 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { PostService } from '../../core/services/services';
 import { PostDto } from '../../core/models';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from 'src/app/core/services/toast.service';
+import { AuthService } from '../../core/services/auth.service';
+import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
 
 @Component({
   selector: 'app-liked-posts',
   standalone: true,
-  imports: [RouterLink, DatePipe, FormsModule],
+  imports: [RouterLink, DatePipe, FormsModule, AsyncPipe],
   templateUrl: './liked-posts.component.html',
   styleUrl: './liked-posts.component.css'
 })
 export class LikedPostsComponent implements OnInit {
-  private postService = inject(PostService);
-  private router = inject(Router);
-  private toastService = inject(ToastService);
+  private postService     = inject(PostService);
+  private router          = inject(Router);
+  private toastService    = inject(ToastService);
+  private auth            = inject(AuthService);
+  private confirmService  = inject(ConfirmService);
+
+  currentUser$ = this.auth.currentUser$;
 
   likedPosts: PostDto[] = [];
   searchQuery = '';
@@ -62,6 +68,22 @@ export class LikedPostsComponent implements OnInit {
   search(): void {
     if (this.searchQuery.trim()) {
       this.router.navigate(['/search'], { queryParams: { query: this.searchQuery } });
+    }
+  }
+
+  async deletePost(postId: number, event: MouseEvent): Promise<void> {
+    event.stopPropagation();
+    event.preventDefault();
+    const confirmed = await this.confirmService.confirm('Delete this post?');
+    if (confirmed) {
+      this.postService.delete(postId).subscribe({
+        next: () => {
+          this.likedPosts = this.likedPosts.filter(p => p.postId !== postId);
+          this.totalPosts--;
+          this.toastService.success('Post deleted successfully');
+        },
+        error: () => this.toastService.error('Failed to delete post')
+      });
     }
   }
 

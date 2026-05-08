@@ -73,6 +73,11 @@
               </div>
 
             </a>
+            @if ((currentUser$ | async)?.userId === post.authorId) {
+              <button class="grid-delete-btn" (click)="deletePost(post.postId, $event)" title="Delete post">
+                <i class="material-icons">delete_outline</i>
+              </button>
+            }
           </div>
         }
       } @else if (!loading) {
