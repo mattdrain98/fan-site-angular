@@ -14,6 +14,7 @@
 .user-posts-header-bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background: skyblue;
   padding: 0.75rem 1.1rem;
   border-radius: 12px 12px 0 0;
@@ -317,6 +318,265 @@
     opacity: 1;
   }
 }
+
+/* ── Admin Badge ── */
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 2px 8px 2px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  .material-icons { font-size: 12px !important; }
+}
+
+/* ── Admin Panel Toggle Button ── */
+.admin-panel-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+
+  .material-icons { font-size: 16px !important; }
+
+  &:hover { background: rgba(255, 255, 255, 0.35); }
+}
+
+/* ── Admin Panel ── */
+.admin-panel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  overflow: hidden;
+}
+
+.admin-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8fafc;
+  border-top: 2px solid rgba(135, 206, 235, 0.4);
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.6rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #0f172a;
+
+  .material-icons { font-size: 16px !important; color: skyblue; }
+}
+
+.admin-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  color: #94a3b8;
+  font-size: 0.85rem;
+
+  .material-icons { font-size: 18px !important; color: #cbd5e1; }
+}
+
+.admin-users-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-user-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.12s;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: #f8fafc; }
+}
+
+.admin-user-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.admin-user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-user-email {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-user-roles {
+  display: flex;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+.role-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.role-badge.admin-role {
+  background: rgba(135, 206, 235, 0.2);
+  color: #0284c7;
+}
+
+.role-badge.moderator-role {
+  background: rgba(168, 85, 247, 0.12);
+  color: #7c3aed;
+}
+
+.role-badge.member-role {
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+.role-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.role-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+  padding: 0.3rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid rgba(135, 206, 235, 0.6);
+  background: rgba(135, 206, 235, 0.1);
+  color: #0284c7;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+
+  .material-icons { font-size: 15px !important; }
+
+  &:hover:not(:disabled) {
+    background: rgba(135, 206, 235, 0.2);
+    border-color: skyblue;
+  }
+
+  &.moderator {
+    border-color: rgba(168, 85, 247, 0.4);
+    background: rgba(168, 85, 247, 0.08);
+    color: #7c3aed;
+
+    &:hover:not(:disabled) {
+      background: rgba(168, 85, 247, 0.15);
+      border-color: #7c3aed;
+    }
+
+    &.remove {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #dc2626;
+
+      &:hover:not(:disabled) {
+        background: rgba(239, 68, 68, 0.15);
+        border-color: #dc2626;
+      }
+    }
+  }
+
+  &.remove {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #dc2626;
+
+    &:hover:not(:disabled) {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #dc2626;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.self-row {
+  background: #fafcff;
+}
+
+.you-label {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(135, 206, 235, 0.2);
+  color: #0284c7;
+  border-radius: 999px;
+  padding: 1px 6px;
+  vertical-align: middle;
+}
+
+.self-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  color: #cbd5e1;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  .material-icons { font-size: 13px !important; }
+}
+
+.admin-no-users {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spin { animation: spin 0.8s linear infinite; }
 
 @media (max-width: 480px) {
   .user-posts-grid {

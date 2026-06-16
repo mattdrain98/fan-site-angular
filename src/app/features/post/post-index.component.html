@@ -33,11 +33,13 @@
             <div class="post-title-row">
               <h2 class="post-title-heading">{{ post.title }}</h2>
               @if (currentUser$ | async; as cu) {
-                @if (cu.userName === post.authorName) {
+                @if (cu.userName === post.authorName || canModerate) {
                   <div class="owner-actions">
-                    <button class="owner-btn edit" (click)="startEditPost()">
-                      <i class="material-icons">edit</i>
-                    </button>
+                    @if (cu.userName === post.authorName) {
+                      <button class="owner-btn edit" (click)="startEditPost()">
+                        <i class="material-icons">edit</i>
+                      </button>
+                    }
                     <button class="owner-btn delete" (click)="deletePost()">
                       <i class="material-icons">delete_outline</i>
                     </button>
@@ -175,11 +177,13 @@
                   <div class="post-body" [innerHTML]="reply.replyContent"></div>
 
                   @if (currentUser$ | async; as cu) {
-                    @if (cu.userName == reply.authorName) {
+                    @if (cu.userName == reply.authorName || canModerate) {
                       <div class="owner-actions">
-                        <button class="owner-btn edit" (click)="startEditReply(reply)">
-                          <i class="material-icons">edit</i>
-                        </button>
+                        @if (cu.userName == reply.authorName) {
+                          <button class="owner-btn edit" (click)="startEditReply(reply)">
+                            <i class="material-icons">edit</i>
+                          </button>
+                        }
                         <button class="owner-btn delete" (click)="deleteReply(reply.id)">
                           <i class="material-icons">delete_outline</i>
                         </button>

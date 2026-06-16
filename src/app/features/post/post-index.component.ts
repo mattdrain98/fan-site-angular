@@ -36,6 +36,7 @@ export class PostIndexComponent implements OnInit {
 
   post: PostDetailDto | null = null;
   currentUser$ = this.auth.currentUser$;
+  canModerate = this.auth.canModerate();
 
   editingReplyId: number | null = null;
   editReplyContent = '';

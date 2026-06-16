@@ -180,6 +180,29 @@ export class ProfileCommentService {
   }
 }
 
+// ── Admin ──────────────────────────────────────────────────────────────────
+@Injectable({ providedIn: 'root' })
+export class AdminService {
+  private http = inject(HttpClient);
+  private base = `${environment.apiBaseUrl}/admin`;
+
+  getUsers(): Observable<{ id: string; userName: string; email: string }[]> {
+    return this.http.get<{ id: string; userName: string; email: string }[]>(`${this.base}/users`);
+  }
+
+  getUserRoles(userId: string): Observable<{ userName: string; roles: string[] }> {
+    return this.http.get<{ userName: string; roles: string[] }>(`${this.base}/user-roles/${userId}`);
+  }
+
+  assignRole(userId: string, role: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.base}/assign-role`, { userId, role });
+  }
+
+  removeRole(userId: string, role: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.base}/remove-role`, { userId, role });
+  }
+}
+
 // ── Search ─────────────────────────────────────────────────────────────────
 @Injectable({ providedIn: 'root' })
 export class SearchService {

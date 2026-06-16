@@ -80,6 +80,24 @@ export class AuthService {
     return !!this.getToken();
   }
 
+  isInRole(role: string): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const roleClaim = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+      const roles = payload[roleClaim];
+      if (Array.isArray(roles)) return roles.includes(role);
+      return roles === role;
+    } catch {
+      return false;
+    }
+  }
+
+  isAdmin(): boolean { return this.isInRole('Admin'); }
+
+  canModerate(): boolean { return this.isInRole('Admin') || this.isInRole('Moderator'); }
+
   private loadStored(): CurrentUser | null {
     const s = localStorage.getItem('currentUser');
     return s ? JSON.parse(s) : null;
