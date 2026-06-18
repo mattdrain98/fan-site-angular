@@ -85,8 +85,10 @@ export class AuthService {
     if (!token) return false;
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      const roleClaim = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
-      const roles = payload[roleClaim];
+      // .NET's JwtSecurityTokenHandler maps ClaimTypes.Role → "role" by default.
+      // Fall back to the full Microsoft URI in case mapping was disabled.
+      const roles = payload['role']
+        ?? payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
       if (Array.isArray(roles)) return roles.includes(role);
       return roles === role;
     } catch {
@@ -95,6 +97,13 @@ export class AuthService {
   }
 
   isAdmin(): boolean { return this.isInRole('Admin'); }
+
+  getTokenPayload(): Record<string, unknown> | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try { return JSON.parse(atob(token.split('.')[1])); }
+    catch { return null; }
+  }
 
   canModerate(): boolean { return this.isInRole('Admin') || this.isInRole('Moderator'); }
 

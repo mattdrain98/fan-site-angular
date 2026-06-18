@@ -519,6 +519,81 @@
   p { font-size: .875rem; color: #64748b; margin: 0; }
 }
 
+/* ── Role Badges ─────────────────────────────────────── */
+.profile-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 3px 9px 3px 6px;
+
+  .material-icons { font-size: 12px !important; }
+
+  &.admin {
+    background: rgba(135, 206, 235, 0.2);
+    color: #0284c7;
+    border: 1px solid rgba(135, 206, 235, 0.5);
+  }
+
+  &.moderator {
+    background: rgba(168, 85, 247, 0.12);
+    color: #7c3aed;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+  }
+}
+
+/* ── Admin Role Management ───────────────────────────── */
+.profile-role-management {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.role-mgmt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+
+  .material-icons { font-size: 15px !important; }
+
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  &.moderator {
+    background: rgba(168, 85, 247, 0.08);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    color: #7c3aed;
+    &:hover:not(:disabled) { background: rgba(168, 85, 247, 0.15); border-color: #7c3aed; }
+  }
+
+  &.admin {
+    background: rgba(135, 206, 235, 0.1);
+    border: 1px solid rgba(135, 206, 235, 0.6);
+    color: #0284c7;
+    &:hover:not(:disabled) { background: rgba(135, 206, 235, 0.2); border-color: skyblue; }
+  }
+
+  &.remove {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #dc2626;
+    &:hover:not(:disabled) { background: rgba(239, 68, 68, 0.15); border-color: #dc2626; }
+  }
+}
+
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.spin { animation: spin 0.8s linear infinite; }
+
 /* ── Mobile ──────────────────────────────────────────── */
 @media (max-width: 600px) {
   .profile-card {

@@ -58,9 +58,19 @@
         <!-- Right: Info -->
         <div class="profile-right">
 
-          <!-- Username -->
+          <!-- Username + Role Badges -->
           <div class="profile-username-row">
             <span class="profile-username">{{ profile.userName }}</span>
+            @if (profile.roles?.includes('Admin')) {
+              <span class="profile-role-badge admin">
+                <i class="material-icons">shield</i> Admin
+              </span>
+            }
+            @if (profile.roles?.includes('Moderator')) {
+              <span class="profile-role-badge moderator">
+                <i class="material-icons">security</i> Moderator
+              </span>
+            }
           </div>
 
           <!-- Rating -->
@@ -88,6 +98,36 @@
               <span class="follow-label">Following</span>
             </a>
           </div>
+
+          <!-- Admin Role Management -->
+          @if (isAdmin && !isOwnProfile) {
+            <div class="profile-role-management">
+              <button
+                class="role-mgmt-btn moderator"
+                [class.remove]="profile.roles?.includes('Moderator')"
+                [disabled]="togglingRoles.has('Moderator')"
+                (click)="toggleRole('Moderator')">
+                @if (togglingRoles.has('Moderator')) {
+                  <i class="material-icons spin">sync</i>
+                } @else {
+                  <i class="material-icons">{{ profile.roles?.includes('Moderator') ? 'person_remove' : 'person_add' }}</i>
+                }
+                {{ profile.roles?.includes('Moderator') ? 'Remove Moderator' : 'Make Moderator' }}
+              </button>
+              <button
+                class="role-mgmt-btn admin"
+                [class.remove]="profile.roles?.includes('Admin')"
+                [disabled]="togglingRoles.has('Admin')"
+                (click)="toggleRole('Admin')">
+                @if (togglingRoles.has('Admin')) {
+                  <i class="material-icons spin">sync</i>
+                } @else {
+                  <i class="material-icons">{{ profile.roles?.includes('Admin') ? 'remove_moderator' : 'add_moderator' }}</i>
+                }
+                {{ profile.roles?.includes('Admin') ? 'Remove Admin' : 'Make Admin' }}
+              </button>
+            </div>
+          }
 
           <!-- Bio -->
           @if (currentUser$ | async; as cu) {

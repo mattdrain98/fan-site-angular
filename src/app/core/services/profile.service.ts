@@ -20,6 +20,10 @@ export class ProfileService {
     return this.http.get<ProfileDto>(`${this.base}/${userId}`);
   }
 
+  getRoles(userId: string): Observable<string[]> {
+    return this.http.get<string[]>(`${environment.apiBaseUrl}/account/user-roles/${userId}`);
+  }
+
   /**
    * POST /api/profile/UpdateFollows/{id}
    * Toggles follow/unfollow for the target user

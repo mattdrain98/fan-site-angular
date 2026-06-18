@@ -1,14 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfileService } from 'src/app/core/services/profile.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ProfileCommentService } from 'src/app/core/services/profile-comment.service';
+import { AdminService } from '../../core/services/services';
 import { ProfileDto, ProfileCommentDto } from '../../core/models';
 import { ToastService } from 'src/app/core/services/toast.service';
 import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
-import { switchMap } from 'rxjs';
+import { switchMap, forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile-detail',
@@ -21,6 +23,7 @@ export class ProfileDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private profileService = inject(ProfileService);
   private commentService = inject(ProfileCommentService);
+  private adminService = inject(AdminService);
   private toastService = inject(ToastService);
   private confirmService = inject(ConfirmService);
   auth = inject(AuthService);
@@ -30,6 +33,8 @@ export class ProfileDetailComponent implements OnInit {
   isFollowing = false;
   isOwnProfile = false;
   currentUser: any;
+  isAdmin = this.auth.isAdmin();
+  togglingRoles = new Set<string>();
 
   editingCommentId: number | null | undefined = null;
   editContent = '';
@@ -56,14 +61,20 @@ export class ProfileDetailComponent implements OnInit {
     this.isEditingBio = false;
     this.editBioContent = '';
 
-    this.profileService.getProfile(id).subscribe({
-      next: p => {
-        this.profile = p;
-        this.profile.profileComments = p.profileComments.reverse();
+    forkJoin({
+      profile: this.profileService.getProfile(id),
+      roles: this.profileService.getRoles(id).pipe(catchError(err => {
+        this.toastService.error(`Roles failed: ${err.status}`);
+        return of<string[]>([]);
+      }))
+    }).subscribe({
+      next: ({ profile, roles }) => {
+        this.profile = { ...profile, roles };
+        this.profile.profileComments = profile.profileComments.reverse();
         const cu = this.auth.currentUser;
         if (cu) {
-          this.isOwnProfile = cu.userId === p.userId;
-          this.isFollowing = p.isFollowing;
+          this.isOwnProfile = cu.userId === profile.userId;
+          this.isFollowing = profile.isFollowing;
         }
       },
       error: () => this.toastService.error('Failed to load profile')
@@ -165,6 +176,47 @@ export class ProfileDetailComponent implements OnInit {
         error: () => this.toastService.error('Failed to delete comment')
       });
     }
+  }
+
+  async toggleRole(role: string): Promise<void> {
+    if (!this.profile) return;
+    const currentRoles = this.profile.roles ?? [];
+    const hasRole = currentRoles.includes(role);
+    const action = hasRole ? `remove ${role} from` : `make`;
+    const confirmed = await this.confirmService.confirm(
+      `Are you sure you want to ${action} ${this.profile.userName}${hasRole ? '' : ' a'} ${role}?`
+    );
+    if (!confirmed) return;
+
+    this.togglingRoles.add(role);
+    const call = hasRole
+      ? this.adminService.removeRole(this.profile.userId, role)
+      : this.adminService.assignRole(this.profile.userId, role);
+
+    call.subscribe({
+      next: res => {
+        this.toastService.success(res.message);
+        if (this.profile) {
+          this.profile.roles = hasRole
+            ? currentRoles.filter(r => r !== role)
+            : [...currentRoles, role];
+        }
+        this.togglingRoles.delete(role);
+        // Verify with server and self-correct if the write didn't persist
+        const userId = this.profile?.userId;
+        if (userId) {
+          this.adminService.getUserRoles(userId).subscribe({
+            next: rolesRes => {
+              if (this.profile) this.profile.roles = rolesRes.roles;
+            }
+          });
+        }
+      },
+      error: () => {
+        this.toastService.error('Failed to update role');
+        this.togglingRoles.delete(role);
+      }
+    });
   }
 
   startEditBio(): void {
