@@ -24,6 +24,10 @@ export class ProfileService {
     return this.http.get<string[]>(`${environment.apiBaseUrl}/account/user-roles/${userId}`);
   }
 
+  toggleHidden(userId: string): Observable<{ isHidden: boolean }> {
+    return this.http.post<{ isHidden: boolean }>(`${this.base}/toggle-hidden/${userId}`, {});
+  }
+
   /**
    * POST /api/profile/UpdateFollows/{id}
    * Toggles follow/unfollow for the target user

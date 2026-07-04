@@ -92,6 +92,7 @@ export interface ProfileDto {
   bio?: string;
   isFollowing: boolean;
   roles?: string[];
+  isHidden?: boolean;
 }
 
 export interface ProfileCommentDto extends AuthorDto {

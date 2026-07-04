@@ -2,6 +2,23 @@
 
   @if (profile) {
 
+    <!-- Hidden account: non-moderators see a blocked screen -->
+    @if (profile.isHidden && !auth.canModerate()) {
+      <div class="profile-hidden-screen">
+        <i class="material-icons">visibility_off</i>
+        <h3>Account Hidden</h3>
+        <p>This account has been hidden by a moderator.</p>
+      </div>
+    } @else {
+
+    <!-- Moderator banner for hidden accounts -->
+    @if (profile.isHidden) {
+      <div class="profile-hidden-banner">
+        <i class="material-icons">visibility_off</i>
+        This account is currently <strong>hidden</strong> from regular users.
+      </div>
+    }
+
     <!-- Profile Card -->
     <div class="profile-wrapper">
       <div class="profile-header-bar">
@@ -10,6 +27,52 @@
       </div>
 
       <div class="profile-card">
+
+        <!-- Mod actions: top-right circle icons -->
+        @if (!isOwnProfile) {
+          @if (isAdmin || auth.canModerate()) {
+            <div class="profile-mod-actions">
+              @if (isAdmin) {
+                <button
+                  class="mod-circle-btn admin"
+                  [class.active]="profile.roles?.includes('Admin')"
+                  [disabled]="togglingRoles.has('Admin')"
+                  [title]="profile.roles?.includes('Admin') ? 'Remove Admin' : 'Make Admin'"
+                  (click)="toggleRole('Admin')">
+                  @if (togglingRoles.has('Admin')) {
+                    <i class="material-icons spin">sync</i>
+                  } @else {
+                    <i class="material-icons">shield</i>
+                  }
+                </button>
+                <button
+                  class="mod-circle-btn moderator"
+                  [class.active]="profile.roles?.includes('Moderator')"
+                  [disabled]="togglingRoles.has('Moderator')"
+                  [title]="profile.roles?.includes('Moderator') ? 'Remove Moderator' : 'Make Moderator'"
+                  (click)="toggleRole('Moderator')">
+                  @if (togglingRoles.has('Moderator')) {
+                    <i class="material-icons spin">sync</i>
+                  } @else {
+                    <i class="material-icons">security</i>
+                  }
+                </button>
+              }
+              <button
+                class="mod-circle-btn hide-btn"
+                [class.active]="profile.isHidden"
+                [disabled]="isHidingAccount"
+                [title]="profile.isHidden ? 'Unhide Account' : 'Hide Account'"
+                (click)="toggleHidden()">
+                @if (isHidingAccount) {
+                  <i class="material-icons spin">sync</i>
+                } @else {
+                  <i class="material-icons">{{ profile.isHidden ? 'visibility' : 'visibility_off' }}</i>
+                }
+              </button>
+            </div>
+          }
+        }
 
         <!-- Left: Avatar + Actions -->
         <div class="profile-left">
@@ -98,36 +161,6 @@
               <span class="follow-label">Following</span>
             </a>
           </div>
-
-          <!-- Admin Role Management -->
-          @if (isAdmin && !isOwnProfile) {
-            <div class="profile-role-management">
-              <button
-                class="role-mgmt-btn moderator"
-                [class.remove]="profile.roles?.includes('Moderator')"
-                [disabled]="togglingRoles.has('Moderator')"
-                (click)="toggleRole('Moderator')">
-                @if (togglingRoles.has('Moderator')) {
-                  <i class="material-icons spin">sync</i>
-                } @else {
-                  <i class="material-icons">{{ profile.roles?.includes('Moderator') ? 'person_remove' : 'person_add' }}</i>
-                }
-                {{ profile.roles?.includes('Moderator') ? 'Remove Moderator' : 'Make Moderator' }}
-              </button>
-              <button
-                class="role-mgmt-btn admin"
-                [class.remove]="profile.roles?.includes('Admin')"
-                [disabled]="togglingRoles.has('Admin')"
-                (click)="toggleRole('Admin')">
-                @if (togglingRoles.has('Admin')) {
-                  <i class="material-icons spin">sync</i>
-                } @else {
-                  <i class="material-icons">{{ profile.roles?.includes('Admin') ? 'remove_moderator' : 'add_moderator' }}</i>
-                }
-                {{ profile.roles?.includes('Admin') ? 'Remove Admin' : 'Make Admin' }}
-              </button>
-            </div>
-          }
 
           <!-- Bio -->
           @if (currentUser$ | async; as cu) {
@@ -270,6 +303,8 @@
       </div>
 
     </div>
+
+    } <!-- end @else (not hidden / is moderator) -->
 
   }
 

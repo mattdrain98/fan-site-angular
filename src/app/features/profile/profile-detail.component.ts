@@ -35,6 +35,7 @@ export class ProfileDetailComponent implements OnInit {
   currentUser: any;
   isAdmin = this.auth.isAdmin();
   togglingRoles = new Set<string>();
+  isHidingAccount = false;
 
   editingCommentId: number | null | undefined = null;
   editContent = '';
@@ -63,10 +64,7 @@ export class ProfileDetailComponent implements OnInit {
 
     forkJoin({
       profile: this.profileService.getProfile(id),
-      roles: this.profileService.getRoles(id).pipe(catchError(err => {
-        this.toastService.error(`Roles failed: ${err.status}`);
-        return of<string[]>([]);
-      }))
+      roles: this.profileService.getRoles(id).pipe(catchError(() => of<string[]>([])))
     }).subscribe({
       next: ({ profile, roles }) => {
         this.profile = { ...profile, roles };
@@ -215,6 +213,22 @@ export class ProfileDetailComponent implements OnInit {
       error: () => {
         this.toastService.error('Failed to update role');
         this.togglingRoles.delete(role);
+      }
+    });
+  }
+
+  toggleHidden(): void {
+    if (!this.profile) return;
+    this.isHidingAccount = true;
+    this.profileService.toggleHidden(this.profile.userId).subscribe({
+      next: res => {
+        if (this.profile) this.profile.isHidden = res.isHidden;
+        this.toastService.success(res.isHidden ? 'Account hidden' : 'Account unhidden');
+        this.isHidingAccount = false;
+      },
+      error: () => {
+        this.toastService.error('Failed to update visibility');
+        this.isHidingAccount = false;
       }
     });
   }
