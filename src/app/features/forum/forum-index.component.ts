@@ -20,13 +20,36 @@ export class ForumIndexComponent implements OnInit {
 
   forums: ForumDto[] = [];
   currentUser$ = this.auth.currentUser$;
+  isAdmin = this.auth.isAdmin();
+  currentPage = 1;
+  totalPages = 1;
+  totalForums = 0;
 
-  ngOnInit(): void { this.forumService.getAll().subscribe(f => this.forums = f); }
+  get pageNumbers(): number[] {
+    const start = Math.max(1, this.currentPage - 2);
+    const end = Math.min(this.totalPages, this.currentPage + 2);
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }
+
+  ngOnInit(): void { this.loadPage(1); }
+
+  loadPage(page: number): void {
+    if (page < 1) return;
+    this.forumService.getAll(page).subscribe(res => {
+      this.forums = res.forums;
+      this.currentPage = res.page;
+      this.totalPages = res.totalPages;
+      this.totalForums = res.totalForums;
+    });
+  }
 
   async delete(id: number): Promise<void> {
     const confirmed = await this.confirmService.confirm('Delete this forum?');
     if (confirmed) {
-      this.forumService.delete(id).subscribe(() => this.forums = this.forums.filter(f => f.forumId !== id));
+      this.forumService.delete(id).subscribe(() => {
+        this.forums = this.forums.filter(f => f.forumId !== id);
+        this.totalForums--;
+      });
     }
   }
 }

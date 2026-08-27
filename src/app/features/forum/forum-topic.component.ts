@@ -30,6 +30,13 @@ export class ForumTopicComponent implements OnInit {
   currentPage = 1;
   currentUser$ = this.auth.currentUser$;
 
+  get pageNumbers(): number[] {
+    const total = this.topic?.totalPages ?? 1;
+    const start = Math.max(1, this.currentPage - 2);
+    const end = Math.min(total, this.currentPage + 2);
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }
+
   ngOnInit(): void {
     this.forumId = +this.route.snapshot.paramMap.get('id')!;
     this.load();

@@ -5,8 +5,8 @@
     <div class="forums-header-left">
       <i class="material-icons">forum</i>
       <span>Forums</span>
-      @if (forums.length) {
-        <span class="forums-count">{{ forums.length }}</span>
+      @if (totalForums > 0) {
+        <span class="forums-count">{{ totalForums }}</span>
       }
     </div>
 
@@ -17,30 +17,40 @@
     }
   </div>
 
-  <!-- Forum List -->
-  <div class="forums-container">
+  <!-- Forum Cards -->
+  <div class="forums-list">
     @for (forum of forums; track forum.forumId; let i = $index) {
       <div class="forum-card" [style.animation-delay]="i * 40 + 'ms'">
 
         <div class="forum-icon">
-          <i class="material-icons">chat</i>
+          <i class="material-icons">forum</i>
         </div>
 
         <div class="forum-body">
-          <a class="forum-name" [routerLink]="['/forum', forum.forumId]">
-            {{ forum.forumTitle }}
-          </a>
-          <p class="forum-description">{{ forum.description }}</p>
+          <a class="forum-name" [routerLink]="['/forum', forum.forumId]">{{ forum.forumTitle }}</a>
+          @if (forum.description) {
+            <p class="forum-description">{{ forum.description }}</p>
+          }
+          <div class="forum-meta">
+            <div class="forum-meta-avatar"
+              [style.background-image]="forum.authorImagePath
+                ? 'url(' + forum.authorImagePath + ')'
+                : 'url(assets/images/blankpicture.png)'">
+            </div>
+            <span class="forum-meta-text">{{ forum.authorName }}</span>
+            <span class="forum-meta-dot"></span>
+            <i class="material-icons forum-meta-icon">article</i>
+            <span class="forum-meta-text">{{ forum.postsCount }} posts</span>
+          </div>
         </div>
 
         <div class="forum-actions">
           <a class="forum-browse-btn" [routerLink]="['/forum', forum.forumId]">
-            <i class="material-icons">arrow_forward</i>
+            <i class="material-icons">chevron_right</i>
           </a>
-
-          @if ((currentUser$ | async)?.userName === forum.authorName) {
+          @if ((currentUser$ | async)?.userName === forum.authorName || isAdmin) {
             <button class="forum-delete-btn" (click)="delete(forum.forumId)">
-              <i class="material-icons">delete</i>
+              <i class="material-icons">delete_outline</i>
             </button>
           }
         </div>
@@ -55,5 +65,26 @@
       </div>
     }
   </div>
+
+  <!-- Pagination -->
+  @if (totalPages > 1) {
+    <div class="forums-pagination">
+      <button class="page-btn" [disabled]="currentPage === 1" (click)="loadPage(1)">
+        <i class="material-icons">first_page</i>
+      </button>
+      <button class="page-btn" [disabled]="currentPage === 1" (click)="loadPage(currentPage - 1)">
+        <i class="material-icons">chevron_left</i>
+      </button>
+      @for (p of pageNumbers; track p) {
+        <button class="page-btn" [class.active]="p === currentPage" (click)="loadPage(p)">{{ p }}</button>
+      }
+      <button class="page-btn" [disabled]="currentPage === totalPages" (click)="loadPage(currentPage + 1)">
+        <i class="material-icons">chevron_right</i>
+      </button>
+      <button class="page-btn" [disabled]="currentPage === totalPages" (click)="loadPage(totalPages)">
+        <i class="material-icons">last_page</i>
+      </button>
+    </div>
+  }
 
 </div>

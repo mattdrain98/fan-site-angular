@@ -7,33 +7,29 @@
     <div class="forum-topic-header-bar">
       <div class="forum-topic-header-left">
         <i class="material-icons">forum</i>
-        <span>{{ t.forum?.forumTitle }} Forum</span>
+        <span>{{ t.forum?.forumTitle }}</span>
         @if (t.posts.length > 0) {
           <span class="forum-topic-count">{{ t.posts.length }}</span>
         }
       </div>
 
-      <div class="forum-topic-header-right">
-        <!-- Search -->
-        <div class="forum-search-wrap">
-          <i class="material-icons">search</i>
-          <input
-            type="text"
-            [(ngModel)]="searchQuery"
-            placeholder="Search posts..."
-            class="forum-search-input"
-            (focus)="searchQuery = ''"
-            (keyup.enter)="search()" />
-          <button class="forum-search-btn" (click)="search()">Go</button>
-        </div>
+      @if (currentUser$ | async) {
+        <a [routerLink]="['/post/create', forumId]" class="forum-create-btn">
+          <i class="material-icons">add</i> Create Post
+        </a>
+      }
+    </div>
 
-        <!-- Create Post -->
-        @if (currentUser$ | async) {
-          <a [routerLink]="['/post/create', forumId]" class="forum-create-btn">
-            <i class="material-icons">add</i> Create Post
-          </a>
-        }
-      </div>
+    <!-- Search Bar -->
+    <div class="forum-search-bar">
+      <i class="material-icons">search</i>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Search posts..."
+        class="forum-search-input"
+        (keyup.enter)="search()" />
+      <button class="forum-search-btn" (click)="search()">Go</button>
     </div>
 
     <!-- Guest notice -->
@@ -49,6 +45,13 @@
       @if (t.posts.length > 0) {
         @for (post of t.posts; track post.postId; let i = $index) {
           <div class="forum-grid-card" [style.animation-delay]="i * 40 + 'ms'">
+
+            <!-- Delete overlay (top-right of image) -->
+            @if ((currentUser$ | async)?.userName === post.authorName || auth.canModerate()) {
+              <button class="forum-card-delete" (click)="deletePost(post.postId)">
+                <i class="material-icons">delete_outline</i>
+              </button>
+            }
 
             <a class="forum-card-link" [routerLink]="['/post', post.postId]">
               <div class="forum-card-image">
@@ -66,45 +69,36 @@
 
               <div class="forum-card-info">
                 <h3 class="forum-card-title">{{ post.title }}</h3>
-                <div class="forum-card-author-section">
-                  <div class="forum-card-avatar"
-                    [style.background-image]="post.authorImagePath
-                      ? 'url(' + post.authorImagePath + ')'
-                      : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'"
+                <div class="forum-card-footer">
+                  <div class="forum-card-author-row"
                     (click)="navigateToProfile($event, post.authorId)"
                     style="cursor: pointer">
-                  </div>
-                  <div class="forum-card-author-info">
-                    <div class="forum-card-author-row">
-                      <span class="forum-card-author">{{ post.authorName }}</span>
-                      <span class="forum-card-rating">{{ post.authorRating }}</span>
+                    <div class="forum-card-avatar"
+                      [style.background-image]="post.authorImagePath
+                        ? 'url(' + post.authorImagePath + ')'
+                        : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'">
                     </div>
-                    @if (post.datePosted) {
-                      <span class="forum-card-date">{{ post.datePosted | date: 'mediumDate' }}</span>
-                    }
+                    <div class="forum-card-author-info">
+                      <div class="forum-card-name-row">
+                        <span class="forum-card-author">{{ post.authorName }}</span>
+                        <span class="forum-card-rating">{{ post.authorRating }}</span>
+                      </div>
+                      @if (post.datePosted) {
+                        <span class="forum-card-date">{{ post.datePosted | date: 'mediumDate' }}</span>
+                      }
+                    </div>
                   </div>
                   <div class="forum-card-stats">
-                    <span class="forum-card-stat replies">
-                      <i class="material-icons">chat_bubble_outline</i>
-                      {{ post.repliesCount }}
+                    <span class="forum-card-stat">
+                      <i class="material-icons heart">favorite</i>{{ post.totalLikes }}
                     </span>
-                    <span class="forum-card-stat likes">
-                      <i class="material-icons">favorite</i>
-                      {{ post.totalLikes }}
+                    <span class="forum-card-stat">
+                      <i class="material-icons">chat_bubble_outline</i>{{ post.repliesCount }}
                     </span>
                   </div>
                 </div>
               </div>
             </a>
-
-            <!-- Owner Actions -->
-            @if ((currentUser$ | async)?.userName === post.authorName) {
-              <div class="forum-card-actions">
-                <button class="forum-action-btn delete" (click)="deletePost(post.postId)">
-                  <i class="material-icons">delete_outline</i>
-                </button>
-              </div>
-            }
 
           </div>
         }
@@ -120,6 +114,27 @@
         </div>
       }
     </div>
+
+    <!-- Pagination -->
+    @if (topic && topic.totalPages > 1) {
+      <div class="forum-pagination">
+        <button class="page-btn" [disabled]="currentPage === 1" (click)="loadPage(1)">
+          <i class="material-icons">first_page</i>
+        </button>
+        <button class="page-btn" [disabled]="currentPage === 1" (click)="loadPage(currentPage - 1)">
+          <i class="material-icons">chevron_left</i>
+        </button>
+        @for (p of pageNumbers; track p) {
+          <button class="page-btn" [class.active]="p === currentPage" (click)="loadPage(p)">{{ p }}</button>
+        }
+        <button class="page-btn" [disabled]="currentPage === topic.totalPages" (click)="loadPage(currentPage + 1)">
+          <i class="material-icons">chevron_right</i>
+        </button>
+        <button class="page-btn" [disabled]="currentPage === topic.totalPages" (click)="loadPage(topic.totalPages)">
+          <i class="material-icons">last_page</i>
+        </button>
+      </div>
+    }
 
   </div>
 </div>

@@ -16,8 +16,10 @@ export class ForumService {
   private http = inject(HttpClient);
   private base = `${environment.apiBaseUrl}/forum`;
 
-  getAll(): Observable<ForumDto[]> {
-    return this.http.get<{ forums: ForumDto[] }>(this.base).pipe(map(r => r.forums));
+  getAll(page: number = 1): Observable<{ forums: ForumDto[]; page: number; totalPages: number; totalForums: number }> {
+    return this.http.get<{ forums: ForumDto[]; page: number; totalPages: number; totalForums: number }>(
+      `${this.base}?page=${page}`
+    );
   }
 
   getById(id: number, searchQuery?: string, page: number = 1): Observable<SearchResultDto> {
