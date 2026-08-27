@@ -17,7 +17,7 @@ export class ForumService {
   private base = `${environment.apiBaseUrl}/forum`;
 
   getAll(): Observable<ForumDto[]> {
-    return this.http.get<ForumDto[]>(this.base);
+    return this.http.get<{ forums: ForumDto[] }>(this.base).pipe(map(r => r.forums));
   }
 
   getById(id: number, searchQuery?: string, page: number = 1): Observable<SearchResultDto> {
@@ -108,7 +108,7 @@ export class ScreenshotService {
   private base = `${environment.apiBaseUrl}/screenshot`;
 
   getAll(): Observable<ScreenshotDto[]> {
-    return this.http.get<ScreenshotDto[]>(this.base);
+    return this.http.get<{ screenshots: ScreenshotDto[] }>(this.base).pipe(map(r => r.screenshots));
   }
 
   getUserScreenshots(): Observable<ScreenshotDto[]> {
