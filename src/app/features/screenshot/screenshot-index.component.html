@@ -46,11 +46,21 @@
               }
             </div>
 
-            <!-- Delete -->
-            @if ((currentUser$ | async)?.userName === s.authorName) {
-              <button class="screenshot-delete-btn" (click)="delete(s.id)">
-                <i class="material-icons">delete</i>
-              </button>
+            <!-- Owner / Report actions -->
+            @if (currentUser$ | async; as cu) {
+              <div class="screenshot-action-row">
+                @if (cu.userName === s.authorName || auth.canModerate()) {
+                  <button class="screenshot-delete-btn" (click)="delete(s.id)">
+                    <i class="material-icons">delete</i>
+                  </button>
+                }
+                @if (cu.userName !== s.authorName) {
+                  <button class="screenshot-report-btn" title="Report screenshot"
+                    (click)="reportService.open({ targetUserId: s.authorId, contentType: 'Screenshot', contentId: s.id, contentLabel: s.title })">
+                    <i class="material-icons">flag</i>
+                  </button>
+                }
+              </div>
             }
 
           </div>

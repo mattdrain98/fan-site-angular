@@ -33,8 +33,8 @@
             <div class="post-title-row">
               <h2 class="post-title-heading">{{ post.title }}</h2>
               @if (currentUser$ | async; as cu) {
-                @if (cu.userName === post.authorName || canModerate) {
-                  <div class="owner-actions">
+                <div class="owner-actions">
+                  @if (cu.userName === post.authorName || canModerate) {
                     @if (cu.userName === post.authorName) {
                       <button class="owner-btn edit" (click)="startEditPost()">
                         <i class="material-icons">edit</i>
@@ -43,8 +43,14 @@
                     <button class="owner-btn delete" (click)="deletePost()">
                       <i class="material-icons">delete_outline</i>
                     </button>
-                  </div>
-                }
+                  }
+                  @if (cu.userName !== post.authorName) {
+                    <button class="owner-btn report" title="Report post"
+                      (click)="reportService.open({ targetUserId: post.authorId, contentType: 'Post', contentId: post.postId, contentLabel: post.title })">
+                      <i class="material-icons">flag</i>
+                    </button>
+                  }
+                </div>
               }
             </div>
             <div class="post-body" [innerHTML]="getFormattedContent()"></div>
@@ -177,8 +183,8 @@
                   <div class="post-body" [innerHTML]="reply.replyContent"></div>
 
                   @if (currentUser$ | async; as cu) {
-                    @if (cu.userName == reply.authorName || canModerate) {
-                      <div class="owner-actions">
+                    <div class="owner-actions">
+                      @if (cu.userName == reply.authorName || canModerate) {
                         @if (cu.userName == reply.authorName) {
                           <button class="owner-btn edit" (click)="startEditReply(reply)">
                             <i class="material-icons">edit</i>
@@ -187,8 +193,14 @@
                         <button class="owner-btn delete" (click)="deleteReply(reply.id)">
                           <i class="material-icons">delete_outline</i>
                         </button>
-                      </div>
-                    }
+                      }
+                      @if (cu.userName !== reply.authorName) {
+                        <button class="owner-btn report" title="Report reply"
+                          (click)="reportService.open({ targetUserId: reply.authorId, contentType: 'Reply', contentId: reply.id })">
+                          <i class="material-icons">flag</i>
+                        </button>
+                      }
+                    </div>
                   }
                 } @else {
                   <textarea class="reply-textarea" rows="4" [(ngModel)]="editReplyContent"></textarea>

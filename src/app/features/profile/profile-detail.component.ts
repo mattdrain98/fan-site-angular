@@ -9,6 +9,7 @@ import { AdminService } from '../../core/services/services';
 import { ProfileDto, ProfileCommentDto } from '../../core/models';
 import { ToastService } from 'src/app/core/services/toast.service';
 import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
+import { ReportDialogService } from 'src/app/core/services/report-dialog.service';
 import { switchMap, forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -27,6 +28,7 @@ export class ProfileDetailComponent implements OnInit {
   private toastService = inject(ToastService);
   private confirmService = inject(ConfirmService);
   auth = inject(AuthService);
+  reportService = inject(ReportDialogService);
 
   profile: ProfileDto | null = null;
   currentUser$ = this.auth.currentUser$;

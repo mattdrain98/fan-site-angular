@@ -10,6 +10,7 @@ import { ImageUploadService } from 'src/app/core/services/image-upload.service';
 import { PostDetailDto, PostReplyDto } from '../../core/models';
 import { ToastService } from 'src/app/core/services/toast.service';
 import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
+import { ReportDialogService } from 'src/app/core/services/report-dialog.service';
 
 @Component({
   selector: 'app-post-index',
@@ -31,6 +32,7 @@ export class PostIndexComponent implements OnInit {
   private toastService = inject(ToastService);
   private confirmService = inject(ConfirmService);
   auth = inject(AuthService);
+  reportService = inject(ReportDialogService);
 
   @ViewChild('editTextarea') editTextarea!: ElementRef<HTMLTextAreaElement>;
 

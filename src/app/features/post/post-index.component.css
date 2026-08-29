@@ -240,6 +240,17 @@
   transform: scale(1.15);
 }
 
+.owner-btn.report {
+  color: #cbd5e1;
+  opacity: 0.6;
+}
+
+.owner-btn.report:hover {
+  color: #ef4444;
+  opacity: 1;
+  transform: scale(1.1);
+}
+
 /* ── Post body ───────────────────────────────────────── */
 .post-body {
   font-size: .9rem;

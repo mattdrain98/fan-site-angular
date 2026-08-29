@@ -193,16 +193,22 @@
 }
 
 /* ── Delete ──────────────────────────────────────────── */
-.screenshot-delete-btn {
+.screenshot-action-row {
   position: absolute;
   top: .5rem;
   right: .5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.screenshot-delete-btn,
+.screenshot-report-btn {
   width: 30px;
   height: 30px;
   border-radius: 8px;
   background: rgba(255,255,255,0.9);
   border: none;
-  color: #e11d48;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -211,8 +217,17 @@
   transition: opacity .15s, background .15s;
 
   .screenshot-card:hover & { opacity: 1; }
-  &:hover { background: #fff1f2; }
   .material-icons { font-size: 16px !important; }
+}
+
+.screenshot-delete-btn {
+  color: #e11d48;
+  &:hover { background: #fff1f2; }
+}
+
+.screenshot-report-btn {
+  color: #94a3b8;
+  &:hover { background: #fff1f2; color: #ef4444; }
 }
 
 /* ── No Screenshots ──────────────────────────────────── */
@@ -303,7 +318,8 @@
 /* ── Mobile ──────────────────────────────────────────── */
 @media (max-width: 560px) {
   .screenshots-grid { grid-template-columns: 1fr 1fr; }
-  .screenshot-delete-btn { opacity: 1; }
+  .screenshot-delete-btn,
+  .screenshot-report-btn { opacity: 1; }
 }
 
 @media (max-width: 380px) {

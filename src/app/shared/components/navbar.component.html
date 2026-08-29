@@ -29,6 +29,13 @@
         <i class="material-icons">people</i>
         <span>New Users</span>
       </a>
+      @if (canModerate()) {
+        <a class="nav-link nav-link-reports" routerLink="/reports" routerLinkActive="active"
+           (click)="menuOpen = false">
+          <i class="material-icons">flag</i>
+          <span>Reports</span>
+        </a>
+      }
 
       <!-- Posts Dropdown -->
       <div class="nav-posts-dropdown" [class.open]="postsDropdownOpen">
@@ -107,6 +114,12 @@
                    (click)="menuOpen = false; mobileUserOpen = false">
                   <i class="material-icons">lock</i><span>Change Password</span>
                 </a>
+                @if (canModerate()) {
+                  <a class="nav-link nav-link-reports" routerLink="/reports"
+                     (click)="menuOpen = false; mobileUserOpen = false">
+                    <i class="material-icons">flag</i><span>Reports</span>
+                  </a>
+                }
                 <div class="mobile-divider"></div>
                 <button class="nav-link logout-btn"
                         (click)="logout(); menuOpen = false; mobileUserOpen = false">

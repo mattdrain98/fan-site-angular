@@ -747,6 +747,12 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+.nav-link-reports {
+  color: #ef4444 !important;
+  .material-icons { color: #ef4444; }
+  &.active { background: #fef2f2; }
+}
+
 @media (max-width: 768px) {
   .notif-dropdown {
     left: auto;

@@ -30,8 +30,8 @@
 
         <!-- Mod actions: top-right circle icons -->
         @if (!isOwnProfile) {
-          @if (isAdmin || auth.canModerate()) {
-            <div class="profile-mod-actions">
+          <div class="profile-mod-actions">
+            @if (isAdmin || auth.canModerate()) {
               @if (isAdmin) {
                 <button
                   class="mod-circle-btn admin"
@@ -70,8 +70,16 @@
                   <i class="material-icons">{{ profile.isHidden ? 'visibility' : 'visibility_off' }}</i>
                 }
               </button>
-            </div>
-          }
+            }
+            @if (currentUser$ | async) {
+              <button
+                class="mod-circle-btn report-btn"
+                title="Report this user"
+                (click)="reportService.open({ targetUserId: profile.userId, contentType: 'User', contentLabel: profile.userName })">
+                <i class="material-icons">flag</i>
+              </button>
+            }
+          </div>
         }
 
         <!-- Left: Avatar + Actions -->

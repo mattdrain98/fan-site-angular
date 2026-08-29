@@ -122,6 +122,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.router.url.startsWith('/top-posts') || this.router.url.startsWith('/latest-posts');
   }
 
+  canModerate(): boolean {
+    return this.auth.canModerate();
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(e: Event) {
     const t = e.target as HTMLElement;

@@ -1,0 +1,129 @@
+<div class="reports-page">
+
+  <div class="reports-wrapper">
+
+    <!-- Header -->
+    <div class="reports-header-bar">
+      <div class="reports-header-left">
+        <i class="material-icons">flag</i>
+        <span>Reports</span>
+        @if (total > 0) {
+          <span class="reports-count">{{ total }}</span>
+        }
+      </div>
+
+      <div class="reports-status-tabs">
+        @for (s of statuses; track s) {
+          <button
+            class="status-tab"
+            [class.active]="currentStatus === s"
+            (click)="setStatus(s)">
+            {{ s }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="reports-list">
+      @if (loading) {
+        <div class="reports-loading">
+          <i class="material-icons spin">sync</i>
+          <span>Loading reports...</span>
+        </div>
+      } @else if (reports.length === 0) {
+        <div class="reports-empty">
+          <i class="material-icons">check_circle_outline</i>
+          <p>No {{ currentStatus.toLowerCase() }} reports.</p>
+        </div>
+      } @else {
+        @for (report of reports; track report.id) {
+          <div class="report-card" [class.reviewed]="report.status === 'Reviewed'" [class.dismissed]="report.status === 'Dismissed'">
+
+            <div class="report-card-header">
+              <span class="report-type-badge">{{ report.contentType }}</span>
+              <span class="report-date">{{ report.createdAt | date: 'mediumDate' }}</span>
+              @if (report.status !== 'Pending') {
+                <span class="report-status-badge" [class.reviewed]="report.status === 'Reviewed'" [class.dismissed]="report.status === 'Dismissed'">
+                  {{ report.status }}
+                </span>
+              }
+            </div>
+
+            <div class="report-card-body">
+              <div class="report-meta-row">
+                <span class="report-meta-label">Reporter:</span>
+                <a [routerLink]="['/profile', report.reporterId]" class="report-user-link">{{ report.reporterName }}</a>
+              </div>
+              <div class="report-meta-row">
+                <span class="report-meta-label">Reported User:</span>
+                <a [routerLink]="['/profile', report.targetUserId]" class="report-user-link target">{{ report.targetUserName }}</a>
+              </div>
+              @if (report.contentId && contentLink(report)) {
+                <div class="report-meta-row">
+                  <span class="report-meta-label">Content:</span>
+                  <a [routerLink]="contentLink(report)" class="report-content-link">View {{ report.contentType }} #{{ report.contentId }}</a>
+                </div>
+              }
+              <div class="report-reason">
+                <i class="material-icons">report_problem</i>
+                <span>{{ report.reason }}</span>
+              </div>
+              @if (report.details) {
+                <p class="report-details-text">{{ report.details }}</p>
+              }
+              @if (report.status !== 'Pending') {
+                <p class="report-review-note">
+                  <i class="material-icons">{{ report.status === 'Reviewed' ? 'check_circle' : 'cancel' }}</i>
+                  {{ report.status === 'Reviewed' ? 'Reviewed' : 'Dismissed' }} by {{ report.reviewedByName }}
+                  @if (report.reviewedAt) { · {{ report.reviewedAt | date: 'mediumDate' }} }
+                  @if (report.reviewNote) { — "{{ report.reviewNote }}" }
+                </p>
+              }
+            </div>
+
+            @if (currentStatus === 'Pending') {
+              <div class="report-card-actions">
+                <button
+                  class="report-action-btn review"
+                  [disabled]="actionLoading[report.id]"
+                  (click)="review(report, 'reviewed')">
+                  @if (actionLoading[report.id]) { <i class="material-icons spin">sync</i> } @else { Mark Reviewed }
+                </button>
+                <button
+                  class="report-action-btn dismiss"
+                  [disabled]="actionLoading[report.id]"
+                  (click)="review(report, 'dismissed')">
+                  Dismiss
+                </button>
+              </div>
+            }
+
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1) {
+      <div class="reports-pagination">
+        <button class="page-btn" [disabled]="currentPage === 1" (click)="loadPage(1)">
+          <i class="material-icons">first_page</i>
+        </button>
+        <button class="page-btn" [disabled]="currentPage === 1" (click)="loadPage(currentPage - 1)">
+          <i class="material-icons">chevron_left</i>
+        </button>
+        @for (p of pageNumbers; track p) {
+          <button class="page-btn" [class.active]="p === currentPage" (click)="loadPage(p)">{{ p }}</button>
+        }
+        <button class="page-btn" [disabled]="currentPage === totalPages" (click)="loadPage(currentPage + 1)">
+          <i class="material-icons">chevron_right</i>
+        </button>
+        <button class="page-btn" [disabled]="currentPage === totalPages" (click)="loadPage(totalPages)">
+          <i class="material-icons">last_page</i>
+        </button>
+      </div>
+    }
+
+  </div>
+</div>
