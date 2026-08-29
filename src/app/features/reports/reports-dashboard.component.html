@@ -62,7 +62,9 @@
               @if (report.contentId && contentLink(report)) {
                 <div class="report-meta-row">
                   <span class="report-meta-label">Content:</span>
-                  <a [routerLink]="contentLink(report)" class="report-content-link">View {{ report.contentType }} #{{ report.contentId }}</a>
+                  <a [routerLink]="contentLink(report)" class="report-content-link">
+                    View {{ report.contentType === 'Reply' ? 'Reply' : report.contentType + ' #' + report.contentId }}
+                  </a>
                 </div>
               }
               <div class="report-reason">

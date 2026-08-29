@@ -62,6 +62,18 @@ export interface PostReplyDto extends AuthorDto {
   replyContent: string;
 }
 
+export interface ReplyDetailDto {
+  id: number;
+  replyContent: string;
+  datePosted: string;
+  authorId: string;
+  authorName: string;
+  authorImagePath?: string;
+  authorRating: number;
+  postId: number;
+  postTitle: string;
+}
+
 //------------------LIKES------------------\\
 export interface LikeDto {
   id?: number;

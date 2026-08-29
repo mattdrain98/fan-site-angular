@@ -25,6 +25,7 @@ export const routes: Routes = [
   { path: 'search', loadComponent: () => import('./features/search/search-results.component').then(m => m.SearchResultsComponent) },
   { path: 'forgot-password', loadComponent: () => import('./features/auth/forgot-password.component').then(m => m.ForgotPasswordComponent) },
   { path: 'reset-password', loadComponent: () => import('./features/auth/reset-password.component').then(m => m.ResetPasswordComponent) },
+  { path: 'reply/:id', loadComponent: () => import('./features/reply/reply-detail.component').then(m => m.ReplyDetailComponent) },
   { path: 'reports', loadComponent: () => import('./features/reports/reports-dashboard.component').then(m => m.ReportsDashboardComponent) },
   { path: '**', redirectTo: '' }
 ];

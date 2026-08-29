@@ -1,0 +1,67 @@
+<div class="reply-detail-page">
+
+  @if (loading) {
+    <div class="rd-loading">
+      <i class="material-icons spin">sync</i>
+      <span>Loading reply...</span>
+    </div>
+  } @else if (error) {
+    <div class="rd-error">
+      <i class="material-icons">error_outline</i>
+      <p>{{ error }}</p>
+      <a routerLink="/reports" class="rd-back-link">Back to Reports</a>
+    </div>
+  } @else if (reply) {
+
+    <div class="rd-wrapper">
+
+      <!-- Header bar -->
+      <div class="rd-header-bar">
+        <a routerLink="/reports" class="rd-back-btn">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <span class="rd-header-label">
+          <i class="material-icons">flag</i>
+          Reported - Reply
+        </span>
+        <a [routerLink]="['/post', reply.postId]" class="rd-post-link">
+          <i class="material-icons">open_in_new</i>
+          View full post
+        </a>
+      </div>
+
+      <!-- Reply card -->
+      <div class="rd-card">
+
+        <!-- Author sidebar -->
+        <div class="rd-author">
+          <a [routerLink]="['/profile', reply.authorId]">
+            <div class="rd-avatar"
+                 [style.background-image]="reply.authorImagePath
+                   ? 'url(' + reply.authorImagePath + ')'
+                   : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'">
+            </div>
+          </a>
+          <a [routerLink]="['/profile', reply.authorId]" class="rd-author-name">
+            {{ reply.authorName }}
+          </a>
+          <span class="rd-rating">{{ reply.authorRating }}</span>
+          <span class="rd-date">{{ reply.datePosted | date: 'short' }}</span>
+        </div>
+
+        <!-- Content area -->
+        <div class="rd-content">
+          <div class="rd-post-context">
+            <i class="material-icons">forum</i>
+            <span>From post:</span>
+            <a [routerLink]="['/post', reply.postId]" class="rd-post-title-link">{{ reply.postTitle }}</a>
+          </div>
+          <div class="rd-body" [innerHTML]="safeContent"></div>
+        </div>
+
+      </div>
+    </div>
+
+  }
+
+</div>
