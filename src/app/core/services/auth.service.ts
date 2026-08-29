@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, finalize, tap } from 'rxjs';
+import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { ApplicationUser } from '../models';
 
@@ -10,23 +11,44 @@ export interface CurrentUser {
   imagePath?: string;
 }
 
+const TOKEN_KEY = 'authToken';
+const USER_KEY = 'currentUser';
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
+  private router = inject(Router);
   private base = `${environment.apiBaseUrl}/account`;
-  private userSubject = new BehaviorSubject<CurrentUser | null>(this.loadStored());
+  private userSubject = new BehaviorSubject<CurrentUser | null>(null);
   currentUser$ = this.userSubject.asObservable();
 
   get currentUser(): CurrentUser | null { return this.userSubject.value; }
+
+  /** Call once on app startup to restore session and evict expired tokens. */
+  initAuth(): void {
+    const token = this.getToken();
+    if (!token) {
+      this.clearState();
+      return;
+    }
+    if (this.isTokenExpired(token)) {
+      this.clearState();
+      return;
+    }
+    const stored = localStorage.getItem(USER_KEY) ?? sessionStorage.getItem(USER_KEY);
+    if (stored) {
+      this.userSubject.next(JSON.parse(stored));
+    }
+  }
 
   login(payload: { userName: string; password: string; rememberMe: boolean }): Observable<{ message: string; token: string }> {
     return this.http.post<{ message: string; user: CurrentUser; token: string }>(`${this.base}/login`, payload).pipe(
       tap(response => {
         if (response.token) {
-          this.setToken(response.token);
+          this.setToken(response.token, payload.rememberMe);
         }
         if (response.user) {
-          this.setCurrentUser(response.user);
+          this.setCurrentUser(response.user, payload.rememberMe);
         }
       })
     );
@@ -44,12 +66,14 @@ export class AuthService {
 
   logout(): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.base}/logout`, {}).pipe(
-      finalize(() => {
-        this.userSubject.next(null);
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('authToken');
-      })
+      finalize(() => this.clearState())
     );
+  }
+
+  /** Called by the interceptor on 401 — clears state without an API call. */
+  forceLogout(): void {
+    this.clearState();
+    this.router.navigate(['/login']);
   }
 
   changePassword(password: string, newPassword: string): Observable<{ message: string }> {
@@ -63,21 +87,24 @@ export class AuthService {
     return this.http.post<{ message: string }>(`${this.base}/edit-profile`, fd);
   }
 
-  setCurrentUser(user: CurrentUser): void {
+  setCurrentUser(user: CurrentUser, persist = true): void {
     this.userSubject.next(user);
-    localStorage.setItem('currentUser', JSON.stringify(user));
+    const store = persist ? localStorage : sessionStorage;
+    store.setItem(USER_KEY, JSON.stringify(user));
   }
 
-  setToken(token: string): void {
-    localStorage.setItem('authToken', token);
+  setToken(token: string, persist = true): void {
+    const store = persist ? localStorage : sessionStorage;
+    store.setItem(TOKEN_KEY, token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem(TOKEN_KEY) ?? sessionStorage.getItem(TOKEN_KEY);
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    return !!token && !this.isTokenExpired(token);
   }
 
   isInRole(role: string): boolean {
@@ -85,8 +112,6 @@ export class AuthService {
     if (!token) return false;
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      // .NET's JwtSecurityTokenHandler maps ClaimTypes.Role → "role" by default.
-      // Fall back to the full Microsoft URI in case mapping was disabled.
       const roles = payload['role']
         ?? payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
       if (Array.isArray(roles)) return roles.includes(role);
@@ -97,19 +122,13 @@ export class AuthService {
   }
 
   isAdmin(): boolean { return this.isInRole('Admin'); }
+  canModerate(): boolean { return this.isInRole('Admin') || this.isInRole('Moderator'); }
 
   getTokenPayload(): Record<string, unknown> | null {
     const token = this.getToken();
     if (!token) return null;
     try { return JSON.parse(atob(token.split('.')[1])); }
     catch { return null; }
-  }
-
-  canModerate(): boolean { return this.isInRole('Admin') || this.isInRole('Moderator'); }
-
-  private loadStored(): CurrentUser | null {
-    const s = localStorage.getItem('currentUser');
-    return s ? JSON.parse(s) : null;
   }
 
   getLatestUsers(): Observable<ApplicationUser[]> {
@@ -136,5 +155,23 @@ export class AuthService {
 
   resetPassword(email: string, token: string, newPassword: string): Observable<string> {
     return this.http.post(`${this.base}/reset-password`, { email, token, newPassword }, { responseType: 'text' });
+  }
+
+  private isTokenExpired(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // `exp` is Unix seconds
+      return payload['exp'] * 1000 < Date.now();
+    } catch {
+      return true;
+    }
+  }
+
+  private clearState(): void {
+    this.userSubject.next(null);
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(USER_KEY);
   }
 }
