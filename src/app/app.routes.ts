@@ -17,6 +17,7 @@ export const routes: Routes = [
   { path: 'latest-posts', loadComponent: () => import('./features/post/latest-posts.component').then(m => m.LatestPostsComponent) },
   { path: 'liked', loadComponent: () => import('./features/post/liked-posts.component').then(m => m.LikedPostsComponent) },
   { path: 'screenshots', loadComponent: () => import('./features/screenshot/screenshot-index.component').then(m => m.ScreenshotIndexComponent) },
+  { path: 'screenshots/:id', loadComponent: () => import('./features/screenshot/screenshot-detail.component').then(m => m.ScreenshotDetailComponent) },
   { path: 'screenshots/create', loadComponent: () => import('./features/screenshot/screenshot-create.component').then(m => m.ScreenshotCreateComponent) },
   { path: 'screenshots/mine', loadComponent: () => import('./features/screenshot/user-screenshots.component').then(m => m.UserScreenshotsComponent) },
   { path: 'profile/followers/:id', loadComponent: () => import('./features/profile/followers.component').then(m => m.FollowersComponent) },

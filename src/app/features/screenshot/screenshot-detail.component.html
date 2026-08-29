@@ -1,0 +1,79 @@
+<div class="sd-page">
+
+  @if (loading) {
+    <div class="sd-loading">
+      <i class="material-icons spin">sync</i>
+      <span>Loading screenshot...</span>
+    </div>
+  } @else if (error) {
+    <div class="sd-error">
+      <i class="material-icons">error_outline</i>
+      <p>{{ error }}</p>
+      <a routerLink="/reports" class="sd-text-link">Back to Reports</a>
+    </div>
+  } @else if (screenshot) {
+
+    <div class="sd-wrapper">
+
+      <!-- Header bar -->
+      <div class="sd-header-bar">
+        <a routerLink="/reports" class="sd-back-btn">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <span class="sd-header-label">
+          <i class="material-icons">photo_camera</i>
+          Reported Screenshot
+        </span>
+        <a routerLink="/screenshots" class="sd-gallery-link">
+          <i class="material-icons">photo_library</i>
+          All Screenshots
+        </a>
+      </div>
+
+      <!-- Content container -->
+      <div class="sd-container">
+
+        <!-- Image -->
+        <div class="sd-img-wrap" (click)="lightboxOpen = true">
+          <img class="sd-img" [src]="screenshot.imageUrl" [alt]="screenshot.title" />
+          <div class="sd-img-overlay">
+            <i class="material-icons">zoom_in</i>
+          </div>
+        </div>
+
+        <!-- Info row -->
+        <div class="sd-info">
+          <div class="sd-info-left">
+            <span class="sd-title">{{ screenshot.title }}</span>
+            <div class="sd-meta">
+              <a [routerLink]="['/profile', screenshot.authorId]" class="sd-author">
+                <i class="material-icons">person</i>{{ screenshot.authorName }}
+              </a>
+              <span class="sd-rating">{{ screenshot.authorRating }}</span>
+              <span class="sd-date">{{ screenshot.datePosted | date: 'medium' }}</span>
+            </div>
+            @if (screenshot.content) {
+              <p class="sd-content">{{ screenshot.content }}</p>
+            }
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Lightbox -->
+    @if (lightboxOpen) {
+      <div class="sd-lightbox" (click)="lightboxOpen = false">
+        <button class="sd-lightbox-close" (click)="lightboxOpen = false">
+          <i class="material-icons">close</i>
+        </button>
+        <img class="sd-lightbox-img" [src]="screenshot.imageUrl" [alt]="screenshot.title" (click)="$event.stopPropagation()" />
+        @if (screenshot.content) {
+          <p class="sd-lightbox-caption" (click)="$event.stopPropagation()">{{ screenshot.content }}</p>
+        }
+      </div>
+    }
+
+  }
+
+</div>

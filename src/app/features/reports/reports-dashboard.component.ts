@@ -86,7 +86,7 @@ export class ReportsDashboardComponent implements OnInit {
     switch (report.contentType) {
       case 'Post': return `/post/${report.contentId}`;
       case 'Reply': return `/reply/${report.contentId}`;
-      case 'Screenshot': return `/screenshots`;
+      case 'Screenshot': return `/screenshots/${report.contentId}`;
       default: return null;
     }
   }

@@ -63,7 +63,7 @@
                 <div class="report-meta-row">
                   <span class="report-meta-label">Content:</span>
                   <a [routerLink]="contentLink(report)" class="report-content-link">
-                    View {{ report.contentType === 'Reply' ? 'Reply' : report.contentType + ' #' + report.contentId }}
+                    View {{ (report.contentType === 'Reply' || report.contentType === 'Screenshot') ? report.contentType : report.contentType + ' #' + report.contentId }}
                   </a>
                 </div>
               }

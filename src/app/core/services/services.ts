@@ -113,6 +113,10 @@ export class ScreenshotService {
     return this.http.get<{ screenshots: ScreenshotDto[] }>(this.base).pipe(map(r => r.screenshots));
   }
 
+  getById(id: number): Observable<ScreenshotDto> {
+    return this.http.get<ScreenshotDto>(`${this.base}/${id}`);
+  }
+
   getUserScreenshots(): Observable<ScreenshotDto[]> {
     return this.http.get<ScreenshotDto[]>(`${this.base}/user`);
   }
