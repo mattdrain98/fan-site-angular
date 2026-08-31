@@ -642,6 +642,13 @@
 
   &:last-child { border-bottom: none; }
   &:hover { background: #f8fafc; }
+
+  .post-content-area { justify-content: space-between; }
+
+  .owner-actions {
+    justify-content: flex-end;
+    margin-top: auto;
+  }
 }
 
 @keyframes fadeUp {
