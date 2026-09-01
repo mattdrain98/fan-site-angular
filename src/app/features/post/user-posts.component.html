@@ -8,19 +8,7 @@
         @if (posts.length > 0) {
           <span class="user-posts-count">{{ posts.length }}</span>
         }
-        @if (isAdmin) {
-          <span class="admin-badge">
-            <i class="material-icons">shield</i>
-            Admin
-          </span>
-        }
       </div>
-      @if (isAdmin) {
-        <button class="admin-panel-toggle" (click)="toggleAdminPanel()">
-          <i class="material-icons">{{ showAdminPanel ? 'expand_less' : 'manage_accounts' }}</i>
-          <span>{{ showAdminPanel ? 'Hide Panel' : 'Manage Users' }}</span>
-        </button>
-      }
     </div>
 
     <div class="user-posts-grid">
@@ -78,83 +66,6 @@
       }
     </div>
 
-    @if (isAdmin && showAdminPanel) {
-      <div class="admin-panel">
-        <div class="admin-panel-title">
-          <i class="material-icons">admin_panel_settings</i>
-          <span>User Management</span>
-        </div>
-
-        @if (loadingAdminUsers) {
-          <div class="admin-loading">
-            <i class="material-icons">hourglass_top</i>
-            Loading users...
-          </div>
-        } @else {
-          <div class="admin-users-list">
-            @for (user of adminUsers; track user.id) {
-              <div class="admin-user-row" [class.self-row]="user.id === currentUserId">
-                <div class="admin-user-info">
-                  <span class="admin-user-name">
-                    {{ user.userName }}
-                    @if (user.id === currentUserId) {
-                      <span class="you-label">you</span>
-                    }
-                  </span>
-                  <span class="admin-user-email">{{ user.email }}</span>
-                </div>
-                <div class="admin-user-roles">
-                  @if (user.roles.length === 0) {
-                    <span class="role-badge member-role">Member</span>
-                  }
-                  @for (role of user.roles; track role) {
-                    <span class="role-badge"
-                      [class.admin-role]="role === 'Admin'"
-                      [class.moderator-role]="role === 'Moderator'">{{ role }}</span>
-                  }
-                </div>
-                @if (user.id !== currentUserId) {
-                  <div class="role-actions">
-                    <button
-                      class="role-toggle-btn moderator"
-                      [class.remove]="user.roles.includes('Moderator')"
-                      [disabled]="user.togglingRoles.has('Moderator')"
-                      (click)="toggleRole(user, 'Moderator')">
-                      @if (user.togglingRoles.has('Moderator')) {
-                        <i class="material-icons spin">sync</i>
-                      } @else {
-                        <i class="material-icons">{{ user.roles.includes('Moderator') ? 'person_remove' : 'person_add' }}</i>
-                      }
-                      <span>{{ user.roles.includes('Moderator') ? 'Remove Mod' : 'Make Mod' }}</span>
-                    </button>
-                    <button
-                      class="role-toggle-btn"
-                      [class.remove]="user.roles.includes('Admin')"
-                      [disabled]="user.togglingRoles.has('Admin')"
-                      (click)="toggleRole(user, 'Admin')">
-                      @if (user.togglingRoles.has('Admin')) {
-                        <i class="material-icons spin">sync</i>
-                      } @else {
-                        <i class="material-icons">{{ user.roles.includes('Admin') ? 'remove_moderator' : 'add_moderator' }}</i>
-                      }
-                      <span>{{ user.roles.includes('Admin') ? 'Remove Admin' : 'Make Admin' }}</span>
-                    </button>
-                  </div>
-                } @else {
-                  <span class="self-note">
-                    <i class="material-icons">lock</i>
-                    Cannot modify own role
-                  </span>
-                }
-              </div>
-            }
-            @if (adminUsers.length === 0) {
-              <div class="admin-no-users">No users found.</div>
-            }
-          </div>
-        }
-      </div>
-    }
   </div>
 
 </div>
