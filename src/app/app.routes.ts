@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { moderatorGuard } from './core/guards/moderator.guard';
 
 export const routes: Routes = [
   { path: '', loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent) },
@@ -27,6 +28,6 @@ export const routes: Routes = [
   { path: 'forgot-password', loadComponent: () => import('./features/auth/forgot-password.component').then(m => m.ForgotPasswordComponent) },
   { path: 'reset-password', loadComponent: () => import('./features/auth/reset-password.component').then(m => m.ResetPasswordComponent) },
   { path: 'reply/:id', loadComponent: () => import('./features/reply/reply-detail.component').then(m => m.ReplyDetailComponent) },
-  { path: 'reports', loadComponent: () => import('./features/reports/reports-dashboard.component').then(m => m.ReportsDashboardComponent) },
+  { path: 'reports', canActivate: [moderatorGuard], loadComponent: () => import('./features/reports/reports-dashboard.component').then(m => m.ReportsDashboardComponent) },
   { path: '**', redirectTo: '' }
 ];
