@@ -28,6 +28,11 @@ export class ChatService {
   private _connected = new BehaviorSubject<boolean>(false);
   readonly connected$ = this._connected.asObservable();
 
+  private _typingUsers = new BehaviorSubject<string[]>([]);
+  readonly typingUsers$ = this._typingUsers.asObservable();
+
+  private typingTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+
   private hubConnection?: signalR.HubConnection;
   private currentForumId?: number;
 
@@ -60,6 +65,20 @@ export class ChatService {
       );
     });
 
+    this.hubConnection.on('UserTyping', (payload: { userId: string; userName: string }) => {
+      this.zone.run(() => {
+        const current = this._typingUsers.value;
+        if (!current.includes(payload.userName)) {
+          this._typingUsers.next([...current, payload.userName]);
+        }
+        // Auto-clear after 3s in case the StopTyping signal is missed
+        clearTimeout(this.typingTimeouts.get(payload.userId));
+        this.typingTimeouts.set(payload.userId, setTimeout(() => {
+          this.zone.run(() => this.removeTypingUser(payload.userName));
+        }, 3000));
+      });
+    });
+
     this.hubConnection.onreconnected(() => {
       this.hubConnection?.invoke('JoinRoom', forumId);
     });
@@ -80,12 +99,23 @@ export class ChatService {
     }
     this._connected.next(false);
     this._messages.next([]);
+    this._typingUsers.next([]);
+    this.typingTimeouts.forEach(t => clearTimeout(t));
+    this.typingTimeouts.clear();
     this.currentForumId = undefined;
+  }
+
+  sendTyping(forumId: number): void {
+    this.hubConnection?.invoke('Typing', forumId).catch(() => {});
   }
 
   sendMessage(forumId: number, content: string): Promise<void> {
     if (!this.hubConnection) return Promise.reject('Not connected');
     return this.hubConnection.invoke('SendMessage', forumId, content);
+  }
+
+  private removeTypingUser(userName: string): void {
+    this._typingUsers.next(this._typingUsers.value.filter(u => u !== userName));
   }
 
   deleteMessage(id: number) {

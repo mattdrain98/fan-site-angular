@@ -53,12 +53,25 @@
         }
       </div>
 
+      <!-- Typing indicator -->
+      @if (typingUsers$ | async; as typers) {
+        @if (typers.length > 0) {
+          <div class="chat-typing">
+            <span class="typing-dots"><span></span><span></span><span></span></span>
+            <span class="typing-text">
+              {{ typers.length === 1 ? typers[0] + ' is typing…' : typers.join(', ') + ' are typing…' }}
+            </span>
+          </div>
+        }
+      }
+
       <!-- Input -->
       <div class="chat-input-row">
         <textarea
           class="chat-input"
           [(ngModel)]="newMessage"
           (keydown)="onKeydown($event)"
+          (input)="onInput()"
           placeholder="Type a message… (Enter to send)"
           rows="1"
           maxlength="500">

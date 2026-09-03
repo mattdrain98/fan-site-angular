@@ -1,6 +1,6 @@
 import {
   Component, Input, OnInit, OnDestroy, OnChanges,
-  ViewChild, ElementRef, AfterViewChecked, inject, NgZone
+  ViewChild, ElementRef, AfterViewChecked, inject
 } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -27,10 +27,12 @@ export class ChatPanelComponent implements OnInit, OnChanges, OnDestroy, AfterVi
   messages$ = this.chat.messages$;
   connected$ = this.chat.connected$;
   currentUser$ = this.auth.currentUser$;
+  typingUsers$ = this.chat.typingUsers$;
 
   newMessage = '';
   collapsed = false;
   private shouldScroll = false;
+  private typingTimer?: ReturnType<typeof setTimeout>;
 
   ngOnInit(): void {
     if (this.auth.currentUser) {
@@ -52,6 +54,7 @@ export class ChatPanelComponent implements OnInit, OnChanges, OnDestroy, AfterVi
   }
 
   ngOnDestroy(): void {
+    clearTimeout(this.typingTimer);
     this.chat.leaveRoom();
   }
 
@@ -92,9 +95,16 @@ export class ChatPanelComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     if (!this.collapsed) this.shouldScroll = true;
   }
 
+  onInput(): void {
+    this.chat.sendTyping(this.forumId);
+    clearTimeout(this.typingTimer);
+    this.typingTimer = setTimeout(() => {}, 2500); // server auto-clears at 3s
+  }
+
   onKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
+      clearTimeout(this.typingTimer);
       this.send();
     }
   }
