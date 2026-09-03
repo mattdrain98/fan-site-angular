@@ -7,11 +7,12 @@ import { AuthService } from '../../core/services/auth.service';
 import { SearchResultDto } from '../../core/models';
 import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
 import { ToastService } from 'src/app/core/services/toast.service';
+import { ChatPanelComponent } from '../../shared/components/chat-panel.component';
 
 @Component({
   selector: 'app-forum-topic',
   standalone: true,
-  imports: [FormsModule, RouterLink, AsyncPipe, DatePipe],
+  imports: [FormsModule, RouterLink, AsyncPipe, DatePipe, ChatPanelComponent],
   templateUrl: './forum-topic.component.html',
   styleUrl: './forum-topic.component.css'
 })

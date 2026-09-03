@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 
 export interface ReportContext {
   targetUserId: string;
-  contentType: 'Post' | 'Reply' | 'Screenshot' | 'ProfileComment' | 'User';
+  contentType: 'Post' | 'Reply' | 'Screenshot' | 'ProfileComment' | 'User' | 'ChatMessage';
   contentId?: number;
   contentLabel?: string;
 }
@@ -24,6 +24,7 @@ export interface ReportDto {
   reviewNote: string | null;
   reviewedAt: string | null;
   reviewedByName: string | null;
+  contentPreview: string | null;
 }
 
 @Injectable({ providedIn: 'root' })

@@ -1,0 +1,77 @@
+<div class="chat-panel">
+  <!-- Header -->
+  <div class="chat-header" (click)="toggleCollapse()">
+    <div class="chat-header-left">
+      <i class="material-icons">chat</i>
+      <span>Forum Chat</span>
+      @if (connected$ | async) {
+        <span class="chat-status online" title="Connected"></span>
+      } @else {
+        <span class="chat-status offline" title="Connecting..."></span>
+      }
+    </div>
+    <i class="material-icons collapse-icon" [class.open]="!collapsed">expand_more</i>
+  </div>
+
+  <div class="chat-body" [class.collapsed]="collapsed">
+    @if (currentUser$ | async; as user) {
+      <!-- Message list -->
+      <div class="chat-messages" #messageList>
+        @if (messages$ | async; as messages) {
+          @if (messages.length === 0) {
+            <div class="chat-empty">
+              <i class="material-icons">chat_bubble_outline</i>
+              <span>No messages yet. Be the first!</span>
+            </div>
+          }
+          @for (msg of messages; track msg.id) {
+            <div class="chat-message" [class.own]="msg.userId === user.userId">
+              <a class="chat-avatar" [routerLink]="['/profile', msg.userId]"
+                [style.background-image]="msg.userImagePath
+                  ? 'url(' + msg.userImagePath + ')'
+                  : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'">
+              </a>
+              <div class="chat-bubble-group">
+                <div class="chat-meta">
+                  <a class="chat-author" [routerLink]="['/profile', msg.userId]">{{ msg.userName }}</a>
+                  <span class="chat-time">{{ msg.createdAt | date:'shortTime' }}</span>
+                </div>
+                <div class="chat-bubble">{{ msg.content }}</div>
+              </div>
+              <div class="chat-msg-actions">
+                <button class="chat-action-btn" title="Report" (click)="reportMessage(msg)">
+                  <i class="material-icons">flag</i>
+                </button>
+                @if (auth.canModerate()) {
+                  <button class="chat-action-btn danger" title="Delete" (click)="deleteMessage(msg.id)">
+                    <i class="material-icons">delete_outline</i>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+
+      <!-- Input -->
+      <div class="chat-input-row">
+        <textarea
+          class="chat-input"
+          [(ngModel)]="newMessage"
+          (keydown)="onKeydown($event)"
+          placeholder="Type a message… (Enter to send)"
+          rows="1"
+          maxlength="500">
+        </textarea>
+        <button class="chat-send-btn" (click)="send()" [disabled]="!newMessage.trim()">
+          <i class="material-icons">send</i>
+        </button>
+      </div>
+    } @else {
+      <div class="chat-guest">
+        <i class="material-icons">lock</i>
+        <span><a routerLink="/login">Log in</a> to join the chat</span>
+      </div>
+    }
+  </div>
+</div>

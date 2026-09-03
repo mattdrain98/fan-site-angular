@@ -59,12 +59,18 @@
                 <span class="report-meta-label">Reported User:</span>
                 <a [routerLink]="['/profile', report.targetUserId]" class="report-user-link target">{{ report.targetUserName }}</a>
               </div>
-              @if (report.contentId && contentLink(report)) {
+              @if (report.contentId) {
                 <div class="report-meta-row">
                   <span class="report-meta-label">Content:</span>
-                  <a [routerLink]="contentLink(report)" class="report-content-link">
-                    View {{ (report.contentType === 'Reply' || report.contentType === 'Screenshot') ? report.contentType : report.contentType + ' #' + report.contentId }}
-                  </a>
+                  @if (contentLink(report)) {
+                    <a [routerLink]="contentLink(report)" class="report-content-link">
+                      View {{ (report.contentType === 'Reply' || report.contentType === 'Screenshot') ? report.contentType : report.contentType + ' #' + report.contentId }}
+                    </a>
+                  } @else if (report.contentPreview) {
+                    <span class="report-content-preview">"{{ report.contentPreview }}"</span>
+                  } @else {
+                    <span class="report-content-link muted">Message #{{ report.contentId }}</span>
+                  }
                 </div>
               }
               <div class="report-reason">

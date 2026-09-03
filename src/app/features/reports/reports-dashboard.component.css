@@ -186,6 +186,22 @@
   text-decoration: none;
 
   &:hover { text-decoration: underline; }
+  &.muted { color: var(--text-muted, #888); cursor: default; }
+}
+
+.report-content-preview {
+  font-size: 0.82rem;
+  color: var(--text, #222);
+  font-style: italic;
+  background: var(--bg, #f4f5f9);
+  border-left: 3px solid #4a90d9;
+  padding: 4px 8px;
+  border-radius: 0 4px 4px 0;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .report-reason {
