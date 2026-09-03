@@ -9,9 +9,12 @@ export interface ChatMessageDto {
   id: number;
   userId: string;
   userName: string;
-  userImagePath?: string;
+  userImagePath?: string | null;
   content: string;
   createdAt: string;
+  replyToMessageId?: number | null;
+  replyToUserName?: string | null;
+  replyToContent?: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -106,12 +109,12 @@ export class ChatService {
   }
 
   sendTyping(forumId: number): void {
-    this.hubConnection?.invoke('Typing', forumId).catch(() => {});
+    this.hubConnection?.send('Typing', forumId).catch(() => {});
   }
 
-  sendMessage(forumId: number, content: string): Promise<void> {
+  sendMessage(forumId: number, content: string, replyToMessageId: number | null = null): Promise<void> {
     if (!this.hubConnection) return Promise.reject('Not connected');
-    return this.hubConnection.invoke('SendMessage', forumId, content);
+    return this.hubConnection.invoke('SendMessage', forumId, content, replyToMessageId);
   }
 
   private removeTypingUser(userName: string): void {
