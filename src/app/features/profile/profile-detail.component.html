@@ -94,6 +94,7 @@
                 [style.background-image]="'url(' + profile.profileImageUrl + ')'">
               </div>
             }
+            <span class="presence-dot" [class.online]="isOnline" [title]="isOnline ? 'Online' : 'Offline'"></span>
           </div>
 
           <!-- Actions -->

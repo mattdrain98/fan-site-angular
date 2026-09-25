@@ -7,7 +7,8 @@ import {
   ScreenshotDto, ProfileDto, ProfileCommentDto,
   SearchResultDto,
   PostDto,
-  ForumDto
+  ForumDto,
+  FollowDto
 } from '../models';
 
 // ── Forum ──────────────────────────────────────────────────────────────────
@@ -148,12 +149,12 @@ export class ProfileService {
     return this.http.post<{ followers: number; following: number }>(`${this.base}/UpdateFollows/${id}`, {});
   }
 
-  getFollowers(id: string): Observable<{ userName: string; followersCount: number; followers: string[] }> {
-    return this.http.get<any>(`${this.base}/Followers/${id}`);
+  getFollowers(id: string): Observable<{ userName: string; followersCount: number; followers: FollowDto[] }> {
+    return this.http.get<{ userName: string; followersCount: number; followers: FollowDto[] }>(`${this.base}/Followers/${id}`);
   }
 
-  getFollowing(id: string): Observable<{ userName: string; followingCount: number; following: string[] }> {
-    return this.http.get<any>(`${this.base}/Following/${id}`);
+  getFollowing(id: string): Observable<{ userName: string; followingCount: number; following: FollowDto[] }> {
+    return this.http.get<{ userName: string; followingCount: number; following: FollowDto[] }>(`${this.base}/Following/${id}`);
   }
 
   editBio(userId: string, bio: string, userName: string): Observable<{ message: string }> {

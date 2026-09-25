@@ -1,90 +1,208 @@
-<div class="chat-panel">
-  <!-- Header -->
-  <div class="chat-header" (click)="toggleCollapse()">
-    <div class="chat-header-left">
-      <i class="material-icons">chat</i>
-      <span>Forum Chat</span>
-      @if (connected$ | async) {
-        <span class="chat-status online" title="Connected"></span>
-      } @else {
-        <span class="chat-status offline" title="Connecting..."></span>
-      }
-    </div>
-    <i class="material-icons collapse-icon" [class.open]="!collapsed">expand_more</i>
-  </div>
+<div class="chat-widget" [class.open]="!collapsed">
 
-  <div class="chat-body" [class.collapsed]="collapsed">
+  <!-- Slide-up panel body -->
+  <div class="chat-body">
+
     @if (currentUser$ | async; as user) {
-      <!-- Message list -->
-      <div class="chat-messages" #messageList>
-        @if (messages$ | async; as messages) {
-          @if (messages.length === 0) {
-            <div class="chat-empty">
-              <i class="material-icons">chat_bubble_outline</i>
-              <span>No messages yet. Be the first!</span>
-            </div>
-          }
-          @for (msg of messages; track msg.id) {
-            <div class="chat-message" [class.own]="msg.userId === user.userId">
-              <a class="chat-avatar" [routerLink]="['/profile', msg.userId]"
-                [style.background-image]="msg.userImagePath
-                  ? 'url(' + msg.userImagePath + ')'
-                  : 'url(https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png)'">
-              </a>
-              <div class="chat-bubble-group">
-                <div class="chat-meta">
-                  <a class="chat-author" [routerLink]="['/profile', msg.userId]">{{ msg.userName }}</a>
-                  <span class="chat-time">{{ msg.createdAt | date:'shortTime' }}</span>
-                </div>
-                <div class="chat-bubble">{{ msg.content }}</div>
-              </div>
-              <div class="chat-msg-actions">
-                <button class="chat-action-btn" title="Report" (click)="reportMessage(msg)">
-                  <i class="material-icons">flag</i>
-                </button>
-                @if (auth.canModerate()) {
-                  <button class="chat-action-btn danger" title="Delete" (click)="deleteMessage(msg.id)">
-                    <i class="material-icons">delete_outline</i>
-                  </button>
-                }
-              </div>
-            </div>
-          }
-        }
-      </div>
 
-      <!-- Typing indicator -->
-      @if (typingUsers$ | async; as typers) {
-        @if (typers.length > 0) {
-          <div class="chat-typing">
-            <span class="typing-dots"><span></span><span></span><span></span></span>
-            <span class="typing-text">
-              {{ typers.length === 1 ? typers[0] + ' is typing…' : typers.join(', ') + ' are typing…' }}
+      <!-- ── Members panel (overlays body) ─────────────────────────────── -->
+      @if (showMembers) {
+        <div class="members-panel">
+          <div class="members-header">
+            <span class="members-title">
+              <i class="material-icons">people</i>
+              Members
+              @if (participantCount > 0) {
+                <span class="members-count-badge">{{ participantCount }}</span>
+              }
             </span>
+            <div class="members-header-actions">
+              @if (hasJoined) {
+                <button class="leave-btn" (click)="leaveChat()" title="Leave chat">Leave</button>
+              }
+              <button class="close-members-btn" (click)="toggleMembers($event)" title="Close">
+                <i class="material-icons">close</i>
+              </button>
+            </div>
+          </div>
+
+          <div class="members-list">
+            @if (membersLoading) {
+              <div class="members-loading">
+                <span class="typing-dots"><span></span><span></span><span></span></span>
+              </div>
+            } @else if (memberList.length === 0) {
+              <div class="members-empty">No members yet</div>
+            } @else {
+              @for (member of memberList; track member.userId) {
+                <div class="member-item">
+                  <div class="member-avatar-wrap">
+                    <a class="member-avatar" [routerLink]="['/profile', member.userId]"
+                       [style.background-image]="avatarUrl(member.userImagePath)">
+                    </a>
+                    <span class="presence-dot" [class.online]="isRoomMember(member.userId)"></span>
+                  </div>
+                  <div class="member-info">
+                    <a class="member-name" [routerLink]="['/profile', member.userId]">{{ member.userName }}</a>
+                    @if (isRoomMember(member.userId)) {
+                      <span class="member-here">here now</span>
+                    }
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        </div>
+
+      } @else {
+
+        <!-- ── Join banner (not yet a participant) ────────────────────── -->
+        @if (!hasJoined) {
+          <div class="join-banner">
+            <i class="material-icons">chat_bubble_outline</i>
+            <div class="join-banner-text">
+              <strong>Join to participate</strong>
+              @if (participantCount > 0) {
+                <span>{{ participantCount }} member{{ participantCount !== 1 ? 's' : '' }} have joined</span>
+              }
+            </div>
+            <button class="join-btn" (click)="joinChat()" [disabled]="joining">
+              {{ joining ? '…' : 'Join' }}
+            </button>
           </div>
         }
+
+        <!-- ── Messages ───────────────────────────────────────────────── -->
+        <div class="chat-messages" #messageList>
+          @if (messages$ | async; as messages) {
+            @if (messages.length === 0) {
+              <div class="chat-empty">
+                <i class="material-icons">chat_bubble_outline</i>
+                <span>{{ hasJoined ? 'No messages yet — start the conversation!' : 'Be the first to join this chat!' }}</span>
+              </div>
+            }
+            @if (onlineUsers$ | async; as online) {
+              @for (msg of messages; track msg.id) {
+
+                @if (msg.isSystem) {
+                  <!-- System message (join/leave notice) -->
+                  <div class="system-msg">{{ msg.content }}</div>
+
+                } @else if (msg.userId === user.userId) {
+                  <!-- Own message -->
+                  <div class="chat-row own">
+                    @if (auth.canModerate()) {
+                      <div class="row-actions">
+                        <button class="action-btn danger" title="Delete" (click)="deleteMessage(msg.id)">
+                          <i class="material-icons">delete_outline</i>
+                        </button>
+                      </div>
+                    }
+                    <div class="own-body">
+                      <span class="msg-time">{{ msg.createdAt | date:'shortTime' }}</span>
+                      <div class="bubble own">{{ msg.content }}</div>
+                    </div>
+                    <div class="avatar-wrap own-avatar">
+                      <div class="avatar" [style.background-image]="avatarUrl(user.imagePath ?? null)"></div>
+                    </div>
+                  </div>
+
+                } @else {
+                  <!-- Other user message -->
+                  <div class="chat-row other">
+                    <div class="avatar-wrap">
+                      <a class="avatar" [routerLink]="['/profile', msg.userId]"
+                        [style.background-image]="avatarUrl(msg.userImagePath)">
+                      </a>
+                      <span class="presence-dot" [class.online]="online.has(msg.userId)"></span>
+                    </div>
+                    <div class="other-body">
+                      <div class="msg-meta">
+                        <a class="msg-author" [routerLink]="['/profile', msg.userId]">{{ msg.userName }}</a>
+                        <span class="msg-time">{{ msg.createdAt | date:'shortTime' }}</span>
+                      </div>
+                      <div class="bubble other">{{ msg.content }}</div>
+                    </div>
+                    <div class="row-actions">
+                      <button class="action-btn" title="Report" (click)="reportMessage(msg)">
+                        <i class="material-icons">flag</i>
+                      </button>
+                      @if (auth.canModerate()) {
+                        <button class="action-btn danger" title="Delete" (click)="deleteMessage(msg.id)">
+                          <i class="material-icons">delete_outline</i>
+                        </button>
+                      }
+                    </div>
+                  </div>
+                }
+
+              }
+            }
+          }
+        </div>
+
+        <!-- ── Typing indicator (participants only) ───────────────────── -->
+        @if (hasJoined) {
+          @if (typingUsers$ | async; as typers) {
+            @if (typers.length > 0) {
+              <div class="typing-bar">
+                <span class="typing-dots"><span></span><span></span><span></span></span>
+                <span class="typing-label">
+                  {{ typers.length === 1 ? typers[0] + ' is typing…' : typers.join(', ') + ' are typing…' }}
+                </span>
+              </div>
+            }
+          }
+
+          <!-- ── Input ──────────────────────────────────────────────── -->
+          <div class="input-row">
+            <textarea
+              class="msg-input"
+              [(ngModel)]="newMessage"
+              (keydown)="onKeydown($event)"
+              (input)="onInput()"
+              placeholder="Say something…"
+              rows="1"
+              maxlength="500">
+            </textarea>
+            <button class="send-btn" (click)="send()" [disabled]="!newMessage.trim()">
+              <i class="material-icons">send</i>
+            </button>
+          </div>
+        }
+
       }
 
-      <!-- Input -->
-      <div class="chat-input-row">
-        <textarea
-          class="chat-input"
-          [(ngModel)]="newMessage"
-          (keydown)="onKeydown($event)"
-          (input)="onInput()"
-          placeholder="Type a message… (Enter to send)"
-          rows="1"
-          maxlength="500">
-        </textarea>
-        <button class="chat-send-btn" (click)="send()" [disabled]="!newMessage.trim()">
-          <i class="material-icons">send</i>
-        </button>
-      </div>
     } @else {
-      <div class="chat-guest">
-        <i class="material-icons">lock</i>
+      <div class="guest-notice">
+        <i class="material-icons">lock_outline</i>
         <span><a routerLink="/login">Log in</a> to join the chat</span>
       </div>
     }
+
   </div>
+
+  <!-- ── Tab header — always visible ──────────────────────────────────────── -->
+  <div class="chat-tab" (click)="toggleCollapse()">
+    <div class="tab-left">
+      <span class="tab-status" [class.online]="connected$ | async"></span>
+      <i class="material-icons tab-icon">chat_bubble</i>
+      <span class="tab-title">{{ forumName }}</span>
+      @if (participantCount > 0) {
+        <span class="participant-pill">{{ participantCount }}</span>
+      }
+      @if (unreadCount > 0) {
+        <span class="unread-badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+      }
+    </div>
+    <div class="tab-right">
+      @if (connected$ | async) {
+        <button class="tab-btn" (click)="toggleMembers($event)" title="Members">
+          <i class="material-icons">people</i>
+        </button>
+      }
+      <i class="material-icons tab-chevron">{{ collapsed ? 'expand_less' : 'expand_more' }}</i>
+    </div>
+  </div>
+
 </div>

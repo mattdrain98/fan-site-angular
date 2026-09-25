@@ -1,9 +1,10 @@
 import { Injectable, inject, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import * as signalR from '@microsoft/signalr';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
+import { PresenceService } from './presence.service';
 
 export interface ChatMessageDto {
   id: number;
@@ -15,6 +16,20 @@ export interface ChatMessageDto {
   replyToMessageId?: number | null;
   replyToUserName?: string | null;
   replyToContent?: string | null;
+  isSystem?: boolean;
+}
+
+export interface RoomMemberInfo {
+  userId: string;
+  userName?: string | null;
+  userImagePath?: string | null;
+}
+
+export interface ChatMemberDto {
+  userId: string;
+  userName?: string | null;
+  userImagePath?: string | null;
+  joinedAt: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -22,6 +37,7 @@ export class ChatService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
   private zone = inject(NgZone);
+  private presence = inject(PresenceService);
   private base = `${environment.apiBaseUrl}/chat`;
   private hubUrl = environment.apiBaseUrl.replace('/api', '') + '/hubs/chat';
 
@@ -34,8 +50,16 @@ export class ChatService {
   private _typingUsers = new BehaviorSubject<string[]>([]);
   readonly typingUsers$ = this._typingUsers.asObservable();
 
-  private typingTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+  private _onlineUsers = new BehaviorSubject<Set<string>>(new Set());
+  readonly onlineUsers$ = this._onlineUsers.asObservable();
 
+  private _participantCount = new BehaviorSubject<number>(0);
+  readonly participantCount$ = this._participantCount.asObservable();
+
+  private _roomMembers = new BehaviorSubject<RoomMemberInfo[]>([]);
+  readonly roomMembers$ = this._roomMembers.asObservable();
+
+  private typingTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
   private hubConnection?: signalR.HubConnection;
   private currentForumId?: number;
 
@@ -55,7 +79,15 @@ export class ChatService {
       .build();
 
     this.hubConnection.on('LoadHistory', (messages: ChatMessageDto[]) => {
-      this.zone.run(() => this._messages.next(messages));
+      this.zone.run(() => {
+        this._messages.next(messages);
+        const userIds = [...new Set(messages.map(m => m.userId))];
+        if (userIds.length) {
+          this.presence.getOnline(userIds).subscribe(online => {
+            this.zone.run(() => this._onlineUsers.next(new Set(online)));
+          });
+        }
+      });
     });
 
     this.hubConnection.on('ReceiveMessage', (msg: ChatMessageDto) => {
@@ -74,12 +106,19 @@ export class ChatService {
         if (!current.includes(payload.userName)) {
           this._typingUsers.next([...current, payload.userName]);
         }
-        // Auto-clear after 3s in case the StopTyping signal is missed
         clearTimeout(this.typingTimeouts.get(payload.userId));
         this.typingTimeouts.set(payload.userId, setTimeout(() => {
           this.zone.run(() => this.removeTypingUser(payload.userName));
         }, 3000));
       });
+    });
+
+    this.hubConnection.on('ParticipantCount', (count: number) => {
+      this.zone.run(() => this._participantCount.next(count));
+    });
+
+    this.hubConnection.on('RoomMembersUpdated', (members: RoomMemberInfo[]) => {
+      this.zone.run(() => this._roomMembers.next(members));
     });
 
     this.hubConnection.onreconnected(() => {
@@ -103,9 +142,30 @@ export class ChatService {
     this._connected.next(false);
     this._messages.next([]);
     this._typingUsers.next([]);
+    this._onlineUsers.next(new Set());
+    this._participantCount.next(0);
+    this._roomMembers.next([]);
     this.typingTimeouts.forEach(t => clearTimeout(t));
     this.typingTimeouts.clear();
     this.currentForumId = undefined;
+  }
+
+  joinChat(forumId: number): Observable<{ joined: boolean }> {
+    return this.http.post<{ joined: boolean }>(`${this.base}/${forumId}/join`, {});
+  }
+
+  leaveChat(forumId: number): Observable<{ joined: boolean }> {
+    return this.http.post<{ joined: boolean }>(`${this.base}/${forumId}/leave`, {});
+  }
+
+  checkJoined(forumId: number): Observable<{ joined: boolean }> {
+    return this.http.get<{ joined: boolean }>(`${this.base}/${forumId}/joined`);
+  }
+
+  getMembers(forumId: number, page = 1): Observable<{ members: ChatMemberDto[]; totalMembers: number; totalPages: number }> {
+    return this.http.get<{ members: ChatMemberDto[]; totalMembers: number; totalPages: number }>(
+      `${this.base}/${forumId}/members?page=${page}&pageSize=20`
+    );
   }
 
   sendTyping(forumId: number): void {
@@ -117,11 +177,11 @@ export class ChatService {
     return this.hubConnection.invoke('SendMessage', forumId, content, replyToMessageId);
   }
 
-  private removeTypingUser(userName: string): void {
-    this._typingUsers.next(this._typingUsers.value.filter(u => u !== userName));
-  }
-
   deleteMessage(id: number) {
     return this.http.delete(`${this.base}/${id}`);
+  }
+
+  private removeTypingUser(userName: string): void {
+    this._typingUsers.next(this._typingUsers.value.filter(u => u !== userName));
   }
 }

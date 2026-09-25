@@ -51,6 +51,18 @@
 
 .profile-avatar-wrap { position: relative; }
 
+.presence-dot {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #aaa;
+  border: 2px solid #fff;
+}
+.presence-dot.online { background: #4caf50; }
+
 .profile-avatar {
   width: 110px;
   height: 110px;

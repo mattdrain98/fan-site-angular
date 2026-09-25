@@ -6,6 +6,7 @@ import { ProfileService } from 'src/app/core/services/profile.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ProfileCommentService } from 'src/app/core/services/profile-comment.service';
 import { AdminService } from '../../core/services/services';
+import { PresenceService } from '../../core/services/presence.service';
 import { ProfileDto, ProfileCommentDto } from '../../core/models';
 import { ToastService } from 'src/app/core/services/toast.service';
 import { ConfirmService } from 'src/app/core/services/confirm-dialogue.service';
@@ -38,6 +39,9 @@ export class ProfileDetailComponent implements OnInit {
   isAdmin = this.auth.isAdmin();
   togglingRoles = new Set<string>();
   isHidingAccount = false;
+
+  private presenceService = inject(PresenceService);
+  isOnline = false;
 
   editingCommentId: number | null | undefined = null;
   editContent = '';
@@ -76,6 +80,9 @@ export class ProfileDetailComponent implements OnInit {
           this.isOwnProfile = cu.userId === profile.userId;
           this.isFollowing = profile.isFollowing;
         }
+        this.presenceService.getOnline([profile.userId]).subscribe(online => {
+          this.isOnline = online.includes(profile.userId);
+        });
       },
       error: () => this.toastService.error('Failed to load profile')
     });

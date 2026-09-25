@@ -20,7 +20,7 @@ export class FollowersComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;
     this.svc.getFollowers(id).subscribe(data => {
-      this.followers = (data.followers as unknown as FollowDto[]).filter(f => f.id !== id);
+      this.followers = data.followers.filter(f => f.id !== id);
     });
   }
 }
