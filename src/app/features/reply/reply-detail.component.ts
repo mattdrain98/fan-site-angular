@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReplyService } from 'src/app/core/services/reply.service';
 import { ReplyDetailDto } from 'src/app/core/models';
 
@@ -15,17 +14,10 @@ import { ReplyDetailDto } from 'src/app/core/models';
 export class ReplyDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private replyService = inject(ReplyService);
-  private sanitizer = inject(DomSanitizer);
 
   reply: ReplyDetailDto | null = null;
   loading = true;
   error = '';
-
-  get safeContent(): SafeHtml {
-    return this.reply
-      ? this.sanitizer.bypassSecurityTrustHtml(this.reply.replyContent)
-      : '';
-  }
 
   ngOnInit(): void {
     const id = +this.route.snapshot.paramMap.get('id')!;

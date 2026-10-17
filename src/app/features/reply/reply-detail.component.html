@@ -56,7 +56,7 @@
             <span>From post:</span>
             <a [routerLink]="['/post', reply.postId]" class="rd-post-title-link">{{ reply.postTitle }}</a>
           </div>
-          <div class="rd-body" [innerHTML]="safeContent"></div>
+          <div class="rd-body" [innerHTML]="reply.replyContent"></div>
         </div>
 
       </div>

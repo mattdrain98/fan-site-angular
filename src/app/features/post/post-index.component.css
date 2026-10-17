@@ -275,21 +275,23 @@
 }
 
 /* ── Inline post images ──────────────────────────────── */
-.inline-post-image {
-  max-width: 100% !important;
-  max-height: 250px !important;
-  width: auto !important;
-  height: auto !important;
-  margin: 1rem 0 !important;
-  border-radius: 10px !important;
-  border: 1px solid #e2e8f0 !important;
-  display: block !important;
-  transition: box-shadow .2s !important;
-  object-fit: contain !important;
+/* ::ng-deep is required: [innerHTML]-injected elements don't receive the
+   component's scoped attribute, so a plain class selector never matches them. */
+:host ::ng-deep .inline-post-image {
+  max-width: 100%;
+  max-height: 250px;
+  width: auto;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  display: block;
+  transition: box-shadow .2s;
+  object-fit: contain;
 }
 
-.inline-post-image:hover {
-  box-shadow: 0 4px 12px rgba(135, 206, 235, .2) !important;
+:host ::ng-deep .inline-post-image:hover {
+  box-shadow: 0 4px 12px rgba(135, 206, 235, .2);
 }
 
 /* ── Edit image upload ── */
@@ -692,7 +694,7 @@
   .post-title-heading { font-size: 1rem; }
   .action-row { flex-wrap: wrap; }
   
-  .inline-post-image {
+  :host ::ng-deep .inline-post-image {
     margin: .75rem 0;
   }
 }

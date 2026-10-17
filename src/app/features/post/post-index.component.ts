@@ -2,7 +2,6 @@ import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AsyncPipe, Location, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PostService } from 'src/app/core/services/post.service';
 import { ReplyService } from 'src/app/core/services/reply.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -20,10 +19,7 @@ import { ReportDialogService } from 'src/app/core/services/report-dialog.service
   styleUrl: './post-index.component.css'
 })
 export class PostIndexComponent implements OnInit {
-  constructor(
-    private location: Location,
-    private sanitizer: DomSanitizer
-  ) {}
+  constructor(private location: Location) {}
 
   private route = inject(ActivatedRoute);
   private postService = inject(PostService);
@@ -64,20 +60,20 @@ export class PostIndexComponent implements OnInit {
     });
   }
 
-  getFormattedContent(): SafeHtml {
-    if (!this.post) return this.sanitizer.bypassSecurityTrustHtml('');
+  getFormattedContent(): string {
+    if (!this.post) return '';
 
     let content = this.post.content;
 
     if (this.post.postImages && this.post.postImages.length > 0) {
       this.post.postImages.forEach((image, index) => {
         const placeholder = `[Image-${index}-${image.id}]`;
-        const imageHtml = `<img src="${image.url}" alt="Post image" class="inline-post-image" style="max-width: 100%; max-height: 250px; height: auto; margin: 1rem 0; border-radius: 10px; border: 1px solid #e2e8f0; display: block;" />`;
+        const imageHtml = `<img src="${image.url}" alt="Post image" class="inline-post-image" />`;
         content = content.split(placeholder).join(imageHtml);
       });
     }
 
-    return this.sanitizer.bypassSecurityTrustHtml(content);
+    return content;
   }
 
   onDragOver(event: DragEvent): void {
