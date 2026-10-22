@@ -28,3 +28,7 @@
 2. User pages also include the Following page, and Followers page since users can follow each other. 
 <img width="2560" height="1301" alt="NewUsers" src="https://github.com/user-attachments/assets/77328cb4-b487-4511-8295-fd5260de193c" />
 
+# Notifications
+1. Notifications on the site are handled with SignalR, just like the chats, so they display as they occur.
+2. Anytime a user follows someone, receives a message, receives a like, or receives a reply, they should receive a notification for it.
+<img width="441" height="268" alt="NotificationsPage" src="https://github.com/user-attachments/assets/7771461b-74e2-4381-b608-81a2fbd9ed86" />
