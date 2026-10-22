@@ -13,3 +13,9 @@
 2. Users can edit or delete their created forums, admins/moderators can also delete any forums.
 3. Pagination used (this is used on any list pages on the website). 
 <img width="2560" height="1301" alt="ForumPage" src="https://github.com/user-attachments/assets/cfd97cd8-d1d0-41b7-89d0-f0e0215fbc96" />
+
+# New Users Page
+1. Nothing too fancy, just a simple EF query to pull the last 10 users who joined the site. This is meant to increase interactivity on the website.
+2. User pages also include the Following page, and Followers page since users can follow each other. 
+<img width="2560" height="1301" alt="NewUsers" src="https://github.com/user-attachments/assets/77328cb4-b487-4511-8295-fd5260de193c" />
+
