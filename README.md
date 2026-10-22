@@ -19,6 +19,8 @@
 2. The forum chat uses SignalR to dynamically update the chat, as well as create a typing indicator to show when users are typing. This is also limited to display 2 users, anymore should say "multiple users typing". 
 3. Users can choose to post within these forums, allowed them to also edit or delete these posts after they are created. 
 <img width="2560" height="1303" alt="ForumListingPage" src="https://github.com/user-attachments/assets/2501b5fc-8504-4a4b-a417-ae57667dabf5" />
+4. Also there is a member list which can be displayed (this is also how the user leaves the chat).
+<img width="424" height="325" alt="MemberList" src="https://github.com/user-attachments/assets/f7fd8c53-15b0-493c-a50e-7ab9fd1e2bee" />
 
 
 # New Users Page
