@@ -1,0 +1,29 @@
+<div class="chat-room-page">
+
+  <div class="chat-room-header-bar">
+    <div class="header-left">
+      <a class="back-btn" routerLink="/chats/mine" title="Back to My Chats">
+        <i class="material-icons">arrow_back</i>
+      </a>
+      <i class="material-icons header-icon">chat_bubble</i>
+      @if (loading) {
+        <span class="forum-title-skeleton"></span>
+      } @else {
+        <span class="forum-title">{{ forumName }}</span>
+      }
+    </div>
+    <a class="forum-link" [routerLink]="['/forum', forumId]" title="Go to forum posts">
+      <i class="material-icons">forum</i>
+      <span>Forum</span>
+    </a>
+  </div>
+
+  @if (!loading) {
+    <app-chat-panel
+      [forumId]="forumId"
+      [forumName]="forumName"
+      [pageMode]="true">
+    </app-chat-panel>
+  }
+
+</div>

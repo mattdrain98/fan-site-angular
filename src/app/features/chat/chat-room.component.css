@@ -1,0 +1,111 @@
+.chat-room-page {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+/* ── Header Bar ── */
+.chat-room-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: skyblue;
+  padding: 0.75rem 1.1rem;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 4px 12px rgba(135, 206, 235, 0.25);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  min-width: 0;
+}
+
+.header-icon {
+  font-size: 18px !important;
+  flex-shrink: 0;
+}
+
+.forum-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.forum-title-skeleton {
+  width: 140px;
+  height: 1rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.4);
+  animation: shimmer 1.4s infinite;
+  background-size: 200% 100%;
+  background-image: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.3) 25%,
+    rgba(255,255,255,0.5) 50%,
+    rgba(255,255,255,0.3) 75%
+  );
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 50%;
+  padding: 2px;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.back-btn .material-icons {
+  font-size: 20px !important;
+}
+
+.forum-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: skyblue;
+  background: #fff;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.forum-link:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.forum-link .material-icons {
+  font-size: 15px !important;
+}
+
+@media (max-width: 480px) {
+  .forum-link span {
+    display: none;
+  }
+
+  .forum-link {
+    padding: 6px;
+    border-radius: 50%;
+  }
+}

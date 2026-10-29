@@ -9,22 +9,26 @@ import { Subscription } from 'rxjs';
 import { ChatService, ChatMemberDto, RoomMemberInfo } from '../../core/services/chat.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ReportDialogService } from '../../core/services/report-dialog.service';
+import { ConfirmService } from '../../core/services/confirm-dialogue.service';
 
 @Component({
   selector: 'app-chat-panel',
   standalone: true,
   imports: [AsyncPipe, DatePipe, FormsModule, RouterLink],
   templateUrl: './chat-panel.component.html',
-  styleUrl: './chat-panel.component.css'
+  styleUrl: './chat-panel.component.css',
+  host: { '[class.page-mode]': 'pageMode' }
 })
 export class ChatPanelComponent implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() forumId!: number;
   @Input() forumName = 'Chat';
+  @Input() pageMode = false;
   @ViewChild('messageList') messageList!: ElementRef<HTMLDivElement>;
 
   chat = inject(ChatService);
   auth = inject(AuthService);
   private reportDialog = inject(ReportDialogService);
+  private confirm = inject(ConfirmService);
 
   messages$ = this.chat.messages$;
   connected$ = this.chat.connected$;
@@ -53,6 +57,7 @@ export class ChatPanelComponent implements OnInit, OnChanges, OnDestroy, AfterVi
 
   ngOnInit(): void {
     this.initialized = true;
+    if (this.pageMode) this.collapsed = false;
     if (!this.auth.currentUser) return;
     this.connectAndCheck();
   }
@@ -169,8 +174,9 @@ export class ChatPanelComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     this.chat.sendMessage(this.forumId, text).catch(() => {});
   }
 
-  deleteMessage(id: number): void {
-    this.chat.deleteMessage(id).subscribe();
+  async deleteMessage(id: number): Promise<void> {
+    const ok = await this.confirm.confirm('Delete this message?');
+    if (ok) this.chat.deleteMessage(id).subscribe();
   }
 
   reportMessage(msg: { id: number; userId: string; userName: string }): void {
@@ -190,6 +196,7 @@ export class ChatPanelComponent implements OnInit, OnChanges, OnDestroy, AfterVi
   }
 
   toggleCollapse(): void {
+    if (this.pageMode) return;
     this.collapsed = !this.collapsed;
     if (!this.collapsed) {
       this.unreadCount = 0;

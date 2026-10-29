@@ -182,7 +182,8 @@
 
   </div>
 
-  <!-- ── Tab header — always visible ──────────────────────────────────────── -->
+  <!-- ── Tab header — widget mode only ────────────────────────────────────── -->
+  @if (!pageMode) {
   <div class="chat-tab" (click)="toggleCollapse()">
     <div class="tab-left">
       <span class="tab-status" [class.online]="connected$ | async"></span>
@@ -204,5 +205,6 @@
       <i class="material-icons tab-chevron">{{ collapsed ? 'expand_less' : 'expand_more' }}</i>
     </div>
   </div>
+  }
 
 </div>
