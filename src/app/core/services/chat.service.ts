@@ -162,6 +162,10 @@ export class ChatService {
     return this.http.get<{ joined: boolean }>(`${this.base}/${forumId}/joined`);
   }
 
+  getMyChats(): Observable<{ forumId: number; forumName: string; joinedAt: string }[]> {
+    return this.http.get<{ forumId: number; forumName: string; joinedAt: string }[]>(`${this.base}/my-chats`);
+  }
+
   getMembers(forumId: number, page = 1): Observable<{ members: ChatMemberDto[]; totalMembers: number; totalPages: number }> {
     return this.http.get<{ members: ChatMemberDto[]; totalMembers: number; totalPages: number }>(
       `${this.base}/${forumId}/members?page=${page}&pageSize=20`

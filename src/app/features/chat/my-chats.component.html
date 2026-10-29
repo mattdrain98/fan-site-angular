@@ -1,0 +1,61 @@
+<div class="my-chats-page">
+  <div class="my-chats-wrapper">
+
+    <div class="my-chats-header-bar">
+      <div class="my-chats-header-left">
+        <i class="material-icons">chat_bubble</i>
+        <span>Your Chats</span>
+        @if (!loading && chats.length > 0) {
+          <span class="my-chats-count">{{ chats.length }}</span>
+        }
+      </div>
+    </div>
+
+    <div class="my-chats-body">
+
+      @if (loading) {
+        <div class="my-chats-loading">
+          <i class="material-icons spin">refresh</i>
+          <span>Loading your chats…</span>
+        </div>
+
+      } @else if (chats.length === 0) {
+        <div class="my-chats-empty">
+          <i class="material-icons">chat_bubble_outline</i>
+          <p>You haven't joined any chats yet.<br>
+            Browse <a routerLink="/forum">forums</a> and hit <strong>Join Chat</strong> to get started.
+          </p>
+        </div>
+
+      } @else {
+        <ul class="chat-list">
+          @for (chat of chats; track chat.forumId; let i = $index) {
+            <li class="chat-item" [style.animation-delay]="i * 40 + 'ms'">
+              <a class="chat-item-link" [routerLink]="['/forum', chat.forumId]">
+                <div class="chat-icon-wrap">
+                  <i class="material-icons">chat_bubble</i>
+                </div>
+                <div class="chat-item-info">
+                  <span class="chat-forum-name">{{ chat.forumName }}</span>
+                  <span class="chat-joined-date">Joined {{ chat.joinedAt | date:'mediumDate' }}</span>
+                </div>
+                <div class="chat-item-actions">
+                  <span class="open-label">Open Chat</span>
+                  <i class="material-icons open-arrow">chevron_right</i>
+                </div>
+              </a>
+              <button
+                class="leave-btn"
+                [disabled]="leavingId === chat.forumId"
+                (click)="leave(chat, $event)"
+                title="Leave this chat">
+                <i class="material-icons">{{ leavingId === chat.forumId ? 'hourglass_empty' : 'exit_to_app' }}</i>
+              </button>
+            </li>
+          }
+        </ul>
+      }
+
+    </div>
+  </div>
+</div>

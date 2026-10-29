@@ -110,6 +110,10 @@
                    (click)="menuOpen = false; mobileUserOpen = false">
                   <i class="material-icons">article</i><span>Your Posts</span>
                 </a>
+                <a class="nav-link" routerLink="/chats/mine"
+                   (click)="menuOpen = false; mobileUserOpen = false">
+                  <i class="material-icons">chat_bubble</i><span>Your Chats</span>
+                </a>
                 <a class="nav-link" routerLink="/account/change-password"
                    (click)="menuOpen = false; mobileUserOpen = false">
                   <i class="material-icons">lock</i><span>Change Password</span>
@@ -235,6 +239,10 @@
             <a class="dropdown-item" routerLink="/posts/mine"
                (click)="dropdownOpen = false">
               <i class="material-icons">article</i> Your Posts
+            </a>
+            <a class="dropdown-item" routerLink="/chats/mine"
+               (click)="dropdownOpen = false">
+              <i class="material-icons">chat_bubble</i> Your Chats
             </a>
             <a class="dropdown-item" routerLink="/account/change-password"
                (click)="dropdownOpen = false">
