@@ -31,7 +31,7 @@
         <ul class="chat-list">
           @for (chat of chats; track chat.forumId; let i = $index) {
             <li class="chat-item" [style.animation-delay]="i * 40 + 'ms'">
-              <a class="chat-item-link" [routerLink]="['/forum', chat.forumId]">
+              <a class="chat-item-link" [routerLink]="['/chat', chat.forumId]">
                 <div class="chat-icon-wrap">
                   <i class="material-icons">chat_bubble</i>
                 </div>

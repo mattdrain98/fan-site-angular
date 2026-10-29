@@ -594,6 +594,34 @@
   font-weight: 600;
 }
 
+/* ── Page mode overrides (dedicated chat page, not widget) ───────────────── */
+:host(.page-mode) {
+  position: relative;
+  bottom: auto;
+  right: auto;
+  width: 100%;
+  display: block;
+}
+
+:host(.page-mode) .chat-widget {
+  width: 100%;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+:host(.page-mode) .chat-body {
+  max-height: none;
+  height: 65vh;
+  min-height: 400px;
+  border-radius: 0 0 12px 12px;
+  border: 1px solid var(--border, #e2e8f0);
+  border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+:host(.page-mode) .chat-widget.open .chat-body {
+  max-height: none;
+}
+
 /* ── Dark mode ────────────────────────────────────────────────────────────── */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .chat-body {
