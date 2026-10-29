@@ -14,6 +14,7 @@ export const routes: Routes = [
   { path: 'post/create/:forumId', loadComponent: () => import('./features/post/post-create.component').then(m => m.PostCreateComponent) },
   { path: 'post/:id', loadComponent: () => import('./features/post/post-index.component').then(m => m.PostIndexComponent) },
   { path: 'posts/mine', loadComponent: () => import('./features/post/user-posts.component').then(m => m.UserPostsComponent) },
+  { path: 'chats/mine', loadComponent: () => import('./features/chat/my-chats.component').then(m => m.MyChatsComponent) },
   { path: 'top-posts', loadComponent: () => import('./features/post/top-posts.component').then(m => m.TopPostsComponent) },
   { path: 'latest-posts', loadComponent: () => import('./features/post/latest-posts.component').then(m => m.LatestPostsComponent) },
   { path: 'liked', loadComponent: () => import('./features/post/liked-posts.component').then(m => m.LikedPostsComponent) },

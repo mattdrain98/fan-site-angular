@@ -1,0 +1,202 @@
+.my-chats-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.my-chats-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header Bar ── */
+.my-chats-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: skyblue;
+  padding: 0.75rem 1.1rem;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 4px 12px rgba(135, 206, 235, 0.25);
+}
+
+.my-chats-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.my-chats-header-left .material-icons { font-size: 18px !important; }
+
+.my-chats-count {
+  background: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+/* ── Body ── */
+.my-chats-body {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  min-height: 120px;
+}
+
+/* ── Loading ── */
+.my-chats-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 2.5rem 1.5rem;
+  color: #94a3b8;
+  font-size: 0.88rem;
+}
+.my-chats-loading .material-icons { font-size: 18px !important; color: #cbd5e1; }
+
+/* ── Empty ── */
+.my-chats-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: #94a3b8;
+}
+.my-chats-empty .material-icons { font-size: 44px !important; color: #cbd5e1; }
+.my-chats-empty p {
+  font-size: 0.88rem;
+  margin: 0;
+  line-height: 1.6;
+  color: #64748b;
+}
+.my-chats-empty a { color: skyblue; text-decoration: none; font-weight: 600; }
+.my-chats-empty a:hover { text-decoration: underline; }
+
+/* ── List ── */
+.chat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+/* ── Item ── */
+.chat-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  animation: chatFadeIn 0.28s ease both;
+}
+.chat-item:last-child { border-bottom: none; }
+
+@keyframes chatFadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.chat-item-link {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.85rem 1rem 0.85rem 1.1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.12s;
+  min-width: 0;
+}
+.chat-item-link:hover { background: #f8fafc; }
+.chat-item:hover .chat-item-link { background: #f8fafc; }
+
+/* ── Chat icon ── */
+.chat-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(135, 206, 235, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.chat-item-link:hover .chat-icon-wrap { background: rgba(135, 206, 235, 0.28); }
+.chat-icon-wrap .material-icons { font-size: 20px !important; color: skyblue; }
+
+/* ── Info ── */
+.chat-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chat-forum-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-joined-date {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* ── Right actions ── */
+.chat-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  color: #94a3b8;
+  transition: color 0.15s;
+}
+.chat-item-link:hover .chat-item-actions { color: skyblue; }
+
+.open-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.open-arrow { font-size: 18px !important; }
+
+/* ── Leave button ── */
+.leave-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #cbd5e1;
+  padding: 0.85rem 0.9rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+.leave-btn:hover:not(:disabled) { color: #ef4444; }
+.leave-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.leave-btn .material-icons { font-size: 18px !important; }
+
+/* ── Spin ── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.spin { animation: spin 0.8s linear infinite; }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .my-chats-page { padding: 1rem 0.75rem 2rem; }
+  .open-label { display: none; }
+}
